@@ -1,0 +1,123 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Product Marketing Consultant for B2B SaaS | The Growth PMM",
+  description = "Fractional product marketing consultant for post-PMF B2B SaaS. I find where growth is stalling and embed to fix it, across India and the US.",
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const SITE = (Astro.site?.href || "https://thegrowthpmm.com/").replace(/\/$/, "");
+const LINKEDIN = "https://linkedin.com/in/divyasadanandan";
+const KNOWS_ABOUT = [
+  "Product Marketing",
+  "Go-to-Market Strategy",
+  "Positioning",
+  "Messaging",
+  "Growth Strategy",
+  "Lifecycle and Retention Marketing",
+  "Pricing and Packaging",
+  "Marketing Experimentation",
+  "AI in Product Marketing",
+];
+
+// Entity schema (Person + ProfessionalService) emitted on every page so answer
+// engines and search can resolve "Divya Sadanandan" / "TheGrowthPMM" as one entity.
+const entitySchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE}/#divya`,
+      name: "Divya Sadanandan",
+      alternateName: "TheGrowthPMM",
+      url: SITE,
+      image: `${SITE}/og-image.png`,
+      jobTitle: "Fractional Head of Product Marketing",
+      description:
+        "Senior fractional product marketing consultant for post-PMF B2B SaaS startups. I find what's capping growth and embed to fix it.",
+      alumniOf: { "@type": "CollegeOrUniversity", name: "MICA, Ahmedabad" },
+      knowsAbout: KNOWS_ABOUT,
+      award: "Top 100 Product Marketing Influencer (Product Marketing Alliance, 2025)",
+      sameAs: [LINKEDIN],
+      worksFor: { "@id": `${SITE}/#thegrowthpmm` },
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": `${SITE}/#thegrowthpmm`,
+      name: "The Growth PMM",
+      alternateName: "TheGrowthPMM",
+      url: SITE,
+      image: `${SITE}/og-image.png`,
+      description:
+        "Fractional and embedded senior product marketing for post-PMF B2B SaaS startups. Positioning, go-to-market, growth strategy, and AI-native PMM.",
+      founder: { "@id": `${SITE}/#divya` },
+      email: "thegrowthpmm@gmail.com",
+      areaServed: ["India", "United States", "Worldwide"],
+      serviceType: [
+        "Fractional Product Marketing",
+        "Positioning and Messaging Audit",
+        "Go-to-Market Strategy",
+        "Growth Strategy",
+        "AI Product Marketing",
+      ],
+      knowsAbout: KNOWS_ABOUT,
+      sameAs: [LINKEDIN],
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <title>{title}</title>
+
+    <!-- Entity schema: Person + ProfessionalService -->
+    <script type="application/ld+json" set:html={JSON.stringify(entitySchema)} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Analytics placeholder: replace with your script -->
+    <!-- <script defer data-domain="thegrowthpmm.com" src="https://plausible.io/js/script.js"></script> -->
+  </head>
+  <body class="bg-white text-stone-900 font-sans antialiased">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  body {
+    font-family: "Inter", sans-serif;
+  }
+</style>

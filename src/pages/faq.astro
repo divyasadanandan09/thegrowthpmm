@@ -1,0 +1,90 @@
+---
+import Layout from "../layouts/Layout.astro";
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+// TODO: replace with the real Growth Audit Google Form URL before launch.
+const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
+
+const faqs = [
+  {
+    q: "Why not just hire a full-time PMM?",
+    a: "If you can find a senior one, afford the salary, equity, and severance, and wait three to six months for them to ramp, do it. Most post-PMF teams can't justify that yet. With me you get that senior thinking now, on the exact problem stalling growth. I do the work myself instead of handing it to a junior, I start in days rather than months, and it's a flat monthly fee with no full-time commitment.",
+  },
+  {
+    q: "How do we actually work together?",
+    a: "I work as your extended team. We start by finding where growth is breaking, agree on the first fix, and I do the work. Hands-on, not just a strategy deck.",
+  },
+  {
+    q: "What does it cost?",
+    a: "As cliche as it sounds, it depends. Most engagements start around $500. Book a call, tell me what's stalled, and I'll give you a straight scope and the exact cost.",
+  },
+  {
+    q: "What if it's not working out?",
+    a: "I work month to month. If the fit is wrong or the work is done, we stop.",
+  },
+  {
+    q: "Do you only work with SaaS?",
+    a: "Mostly SaaS, because that's where I've spent majority of my career. But if you're post-PMF with paying customers and growth that's stalled, the playbook is adaptable. Let's discuss.",
+  },
+  {
+    q: "What's the free Growth Audit, really?",
+    a: "A real diagnosis of your growth problem. You answer a few questions about your product and get back a read on where it's dropping off and the likely cause. If you want help fixing it, we talk. If not, the report is yours to keep.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="FAQ — The Growth PMM"
+  description="Straight answers about working with The Growth PMM: how a fractional PMM engagement works, what it costs, and who it's for."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <!-- simple top bar -->
+  <div style="border-bottom:1px solid var(--hairline);background:#fff;">
+    <div style="max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+        <span style="width:14px;height:14px;background:var(--navy);border-radius:3px;transform:rotate(45deg);display:inline-block;flex:none;"></span>
+        <span style="font-weight:800;font-size:16px;letter-spacing:-0.3px;color:var(--ink);">The Growth PMM</span>
+      </a>
+      <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="font-size:13px;padding:9px 18px;flex:none;">Book a call</a>
+    </div>
+  </div>
+
+  <main style="background:var(--canvas);">
+    <section>
+      <div style="max-width:760px;margin:0 auto;padding:72px 24px 24px;">
+        <a href="/" style="font-size:14px;font-weight:600;color:var(--navy);">&larr; Back to home</a>
+        <span class="handwritten" style="font-size:24px;display:block;margin-top:18px;">the honest answers</span>
+        <h1 style="font-size:46px;font-weight:800;line-height:1.12;letter-spacing:-1px;margin:8px 0 0;color:var(--ink);">Questions founders actually ask.</h1>
+      </div>
+
+      <div class="faq-list" style="padding:16px 24px 8px;">
+        {faqs.map((item) => (
+          <details class="faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- closing CTA -->
+    <section style="background:var(--cream);">
+      <div style="max-width:760px;margin:0 auto;padding:64px 24px;text-align:center;">
+        <h2 style="font-size:30px;font-weight:800;line-height:1.2;letter-spacing:-0.6px;margin:0;color:var(--ink);">Still deciding? Start with the free Growth Audit.</h2>
+        <p style="font-size:16px;line-height:1.6;color:var(--ink-mute);margin:14px auto 0;max-width:520px;">It scores your product and names the drop-off in 3 minutes. No call required, no catch.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px;">
+          <a href={DIAGNOSTIC} target="_blank" rel="noopener" class="btn-navy" style="font-size:16px;padding:15px 30px;">Get the free Growth Audit</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

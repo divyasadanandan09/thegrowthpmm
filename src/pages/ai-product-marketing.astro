@@ -1,0 +1,162 @@
+---
+import Layout from "../layouts/Layout.astro";
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+
+const faqs = [
+  {
+    q: "What is an AI PMM?",
+    a: "An AI PMM is a product marketer who builds AI into the actual work: synthesizing customer research, drafting and testing messaging, running lifecycle and enablement at a speed a human team can't match by hand. The judgment stays human. The grunt work gets compressed from weeks to days.",
+  },
+  {
+    q: "Can AI replace a product marketer?",
+    a: "No, and anyone selling you that hasn't done the job. AI is fast at the parts that are mechanical: summarizing calls, generating variants, sorting data. Positioning is a decision about what to say no to, and that's a judgment call AI can't make for you. What AI changes is how much one good PMM can get through.",
+  },
+  {
+    q: "What's the difference between hiring a fractional PMM and buying AI tools?",
+    a: "Tools give you output. They don't tell you which output is right for your stage, your market, and the constraint capping your growth. I bring the tools and the judgment to use them, and I'm accountable for whether growth moves. A seat license isn't.",
+  },
+  {
+    q: "Is AI-written marketing copy a problem?",
+    a: "It is when everyone runs the same prompts through the same models and ends up sounding identical. The market stops hearing you. I use AI to move faster on research and drafts, then make sure what ships sounds like you and stakes out a position, not the statistical average of your category.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="AI Product Marketing: what it actually changes | The Growth PMM"
+  description="A working AI PMM's take on what AI changes in product marketing, the workflows worth running, and where AI quietly breaks your positioning. By Divya Sadanandan, fractional Head of Product Marketing."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- top bar -->
+  <div style="border-bottom:1px solid var(--hairline);background:#fff;">
+    <div style="max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <a href="/" style="display:flex;align-items:center;gap:8px;text-decoration:none;">
+        <span style="width:14px;height:14px;background:var(--navy);border-radius:3px;transform:rotate(45deg);display:inline-block;flex:none;"></span>
+        <span style="font-weight:800;font-size:16px;letter-spacing:-0.3px;color:var(--ink);">The Growth PMM</span>
+      </a>
+      <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="font-size:13px;padding:9px 18px;flex:none;">Book a call</a>
+    </div>
+  </div>
+
+  <main style="background:var(--canvas);">
+    <!-- HERO -->
+    <section class="grid-canvas" style="background:var(--hero-bg);border-bottom:1px solid var(--warm-line);">
+      <div style="max-width:880px;margin:0 auto;padding:84px 24px 64px;">
+        <a href="/" style="font-size:14px;font-weight:600;color:var(--navy);">&larr; Back to home</a>
+        <span class="handwritten" style="font-size:26px;display:block;margin-top:20px;color:var(--navy);">no robots-take-your-job hype</span>
+        <h1 style="font-size:52px;font-weight:800;line-height:1.08;letter-spacing:-1.4px;margin:8px 0 0;color:var(--ink);">AI product marketing, minus the hype.</h1>
+        <p style="font-size:19px;line-height:1.6;color:var(--ink-mute);margin:20px 0 0;max-width:640px;">AI didn't replace product marketing. It changed how fast one good PMM can move. I'm Divya Sadanandan, a fractional Head of Product Marketing, and I build AI into the work where it earns its place and keep it out where it quietly breaks things. Here's where the line is.</p>
+      </div>
+    </section>
+
+    <!-- WHAT AI CHANGES -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:880px;margin:0 auto;padding:72px 24px;">
+        <span class="eyebrow">The honest version</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">What AI actually changes in PMM.</h2>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:18px 0 0;">The research-to-message loop used to take weeks. Read the calls, sort the tickets, find the pattern, write the story, test it. AI compresses the mechanical parts of that into days. I can synthesize three hundred sales calls overnight, draft ten messaging angles before lunch, and spend the time that frees up on the part that actually moves growth: deciding which angle is true for your market and killing the other nine.</p>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:16px 0 0;">That's the shift. Not fewer product marketers. More throughput per product marketer, and a higher bar for the ones who only ever did the mechanical parts.</p>
+      </div>
+    </section>
+
+    <!-- WORKFLOWS -->
+    <section style="background:var(--cream);">
+      <div style="max-width:980px;margin:0 auto;padding:72px 24px;">
+        <span class="eyebrow">In practice</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">The AI-native workflows I run.</h2>
+        <p style="font-size:18px;line-height:1.6;color:var(--ink-mute);margin:16px 0 24px;max-width:680px;">Specific, not magic. Each of these used to be a person-week. Now it's a day, and the output is better because I can look at all of the data, not a sample.</p>
+        <div class="channel-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="channel-card" style="background:#fff;">
+            <span style="font-size:18px;flex:none;">🔎</span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Research from real customer data</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">Call transcripts, support tickets, reviews, and win/loss notes synthesized into the actual words your buyers use and the objections that keep recurring.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="font-size:18px;flex:none;">✍️</span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Messaging variants, built to test</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">A spread of angles generated fast, then narrowed by what the market repeats back, not by what sounds clever in a doc.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="font-size:18px;flex:none;">🔄</span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Lifecycle and onboarding at scale</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">Personalized flows and triggers that used to need a content team, shipped by one PMM with the right setup.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="font-size:18px;flex:none;">🗂️</span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Enablement that keeps up with sales</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">Battlecards, one-pagers, and objection handling produced as fast as the market moves, then checked by hand before they ship.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GUARDRAILS -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:880px;margin:0 auto;padding:72px 24px;">
+        <span class="eyebrow">Where it breaks</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">Where AI hurts product marketing.</h2>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:18px 0 0;">Positioning is a decision about what to say no to. AI averages. Point a model at your category and it gives you the most likely sentence, which is the same sentence your competitors get. That's how a whole market ends up sounding identical, and how you become invisible while shipping more copy than ever.</p>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:16px 0 0;">So I keep AI on the inputs and the drafts, and keep a human on the call that matters: what you stand for, and the proof underneath it. AI also makes up numbers when you let it. Every claim that ships gets traced back to something real.</p>
+      </div>
+    </section>
+
+    <!-- PROOF -->
+    <section style="background:var(--blue-tint);">
+      <div style="max-width:880px;margin:0 auto;padding:64px 24px;">
+        <div style="background:#fff;border-radius:16px;padding:36px 40px;border:1px solid var(--hairline);">
+          <span class="sticky-tag gold" style="font-size:13px;padding:8px 16px;">Receipts</span>
+          <p style="font-size:20px;font-weight:700;line-height:1.4;margin:18px 0 0;color:var(--ink);">My AI-native lifecycle workflows were adopted as the org standard at a Series C neobank, and earned a Spot Award twice over.</p>
+          <p style="font-size:15px;color:var(--ink-mute);margin:12px 0 0;">This isn't a deck about AI. It's how I already work, on revenue that showed up.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:760px;margin:0 auto;padding:72px 24px 16px;">
+        <span class="eyebrow">Straight answers</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">AI PMM, answered.</h2>
+      </div>
+      <div class="faq-list" style="padding:16px 24px 8px;">
+        {faqs.map((item) => (
+          <details class="faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section style="background:var(--navy);color:#fff;">
+      <div style="max-width:840px;margin:0 auto;padding:84px 24px;text-align:center;">
+        <span class="handwritten light" style="font-size:26px;display:block;margin-bottom:6px;">let's make it move</span>
+        <h2 style="font-size:38px;font-weight:800;line-height:1.16;letter-spacing:-0.8px;margin:0 auto;max-width:620px;">Want a Senior PMM who already works this way?</h2>
+        <p style="font-size:18px;line-height:1.55;color:var(--on-navy-mute);margin:18px auto 0;max-width:520px;">A 20-minute call, no pitch. Tell me what's stalled and you'll leave with a clear first move.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px;">
+          <a href={BOOKING} target="_blank" rel="noopener" class="btn-outline-navy" style="font-size:17px;padding:16px 34px;">Book a call</a>
+          <a href="/" style="font-size:15px;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:3px;align-self:center;">See the full offer</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
