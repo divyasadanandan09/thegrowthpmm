@@ -1,0 +1,10 @@
+{
+  // Deploys the static Astro build (dist/) as Cloudflare static assets.
+  // Used by the Workers Builds flow: `npm run build` produces dist/, then
+  // `npx wrangler deploy` uploads it. No server-side Worker code.
+  "name": "thegrowthpmm",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
