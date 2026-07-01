@@ -676,6 +676,31 @@ body.scrolled #nav-cta-corner {
   pointer-events: auto;
 }
 
+/* ===== About photo medallion ===== */
+/* Lime halo ring + a thin near-black inner edge around a circular crop,
+   echoing the fill+dark-text lime pattern used everywhere else (buttons,
+   badges) instead of a flat rounded-rect photo. */
+.about-photo-frame {
+  justify-self: end;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1/1;
+  padding: 9px;
+  border-radius: 50%;
+  background: var(--navy);
+  box-shadow: 0 20px 44px rgba(22,24,15,0.22), 0 4px 12px rgba(22,24,15,0.14);
+}
+.about-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  object-position: 50% 22%;
+  border-radius: 50%;
+  border: 3px solid var(--ink-deep);
+}
+
 /* ===== Funnel visual ===== */
 
 .funnel-wrap {
@@ -695,7 +720,7 @@ body.scrolled #nav-cta-corner {
   .hero-grid h1 { font-size: 36px !important; letter-spacing: -0.8px !important; }
   .funnel-wrap { max-width: 220px; margin-top: 8px; }
   .about-grid { grid-template-columns: 1fr !important; }
-  .about-photo { display: block !important; width: 100%; max-width: 260px; margin: 4px 0 4px; }
+  .about-photo-frame { justify-self: start !important; max-width: 168px; margin: 4px 0 20px; }
   .footer-grid { grid-template-columns: 1fr 1fr !important; }
   #nav-links { display: none !important; }
   #nav-toggle { display: flex !important; }

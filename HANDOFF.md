@@ -158,6 +158,20 @@ Divya pointed out two more subheads still wrapping to a 2nd line, asked for `onl
 - **Past-experience logo strip audit**: tried wiring in the existing `public/logos/tcs.svg`, but it's the full stacked "Tata Consultancy Services" lockup (Tata roundel + two lines of text) — illegible at the strip's ~22px height next to the clean Practo/MakeMyTrip wordmarks. Reverted TCS back to a text span. **Open**: need compact horizontal logo files for Fi Money, Raymond, and a simpler TCS mark before the strip can be all-logos; Divya will supply these.
 - Deliberately left as-is: hero body paragraph (5 lines) and About bio paragraph (5 lines) — genuine multi-sentence body copy, not the "one-line intro" pattern; the Growth Audit section subhead (3 lines, ~240 chars) and the closing-band reassurance line (2 lines, centered) — both read as intentional short paragraphs rather than the constrained-by-accident pattern the other fixes addressed.
 
+## Update 2026-07-01 (even later still) — hero tag swap, logo strip finished, About photo medallion
+
+Divya supplied `fi money.svg`, `practo.png`, `raymond.png`, `tcs.jpeg` (dropped at the project root), asked whether the hero's award tag looked out of place, and asked `/impeccable polish` to redo the About photo shape.
+
+- **Hero tag** → "Only 3 slots per month" (was "Top 100 Global PMM, 2025"). The lone award badge read oddly floating above the H1 with nothing to pair against; scarcity ties directly into the "Book a call" CTA below it and reinforces the existing three-clients-a-month positioning.
+- **Past-experience logo strip, finished.** All five are now real logo `<img>`s:
+  - `fi-money.svg` — the supplied icon mark, transparent bg, used as-is.
+  - `raymond.png` — supplied file was white script text on a solid red background; chroma-keyed the red to transparent with Python/PIL, then recolored the preserved (text) pixels to a dark neutral (`#453e35`), since the original white fill would've been invisible against the site's light cream section background. Cropped + resized.
+  - `tcs.png` (new, replaces the old unused `tcs.svg`) — supplied file was a JPEG with a white background; chroma-keyed white to transparent, cropped to content bbox, downsized to a 2x-retina-appropriate size. This is a compact horizontal `tcs` mark + "TATA CONSULTANCY SERVICES" lockup, unlike the old `tcs.svg` (the oversized stacked lockup that was illegible at strip height) — reads cleanly now.
+  - The supplied `practo.png` was redundant (an already-real logo was wired in); left the existing `public/logos/practo.png` untouched.
+  - Raw drop files at the project root were deleted once processed into `public/logos/`.
+- **About photo → circular medallion** (`/impeccable polish`, brand register). Replaced the flat `border-radius:18px` rounded-rect with a new `.about-photo-frame` (240px circle, lime `--navy` fill as a halo ring, `box-shadow:0 20px 44px rgba(22,24,15,.22)`) wrapping `.about-photo` (circular crop via `object-fit:cover`, `object-position:50% 22%` to keep the face centered, 3px `--ink-deep` inner ring for edge definition against the light `--blue-tint` section). Mobile (`<900px`) drops to 168px, left-aligned instead of right. Chosen over an asymmetric/blob mask because it's the cleaner, more "sophisticated portrait medallion" read Divya asked for, and it reuses the existing lime-fill + dark-ring token pattern rather than introducing a new one. Verified at 1470px and ~500px viewports via the dev server.
+- Verified against a live dev server; committed.
+
 ## Current state (top → bottom of `src/pages/index.astro`)
 
 1. **Nav** — floating pill, logo + links (Free report / Services / About me) + "Book a call" (white-on-navy; a `#navbar .btn-navy` rule fixes an earlier dark-text-on-navy bug). Collapses on scroll to a persistent corner "Book a call" that carries the call through mid-page sections.
