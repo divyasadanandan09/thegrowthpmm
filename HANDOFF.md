@@ -114,6 +114,29 @@ Divya asked to change the primary brand colour to **lime `#DBFF00`** and to refr
 
 **`COPY.md` refreshed 2026-07-01** to match the current `.astro` copy across all three pages + global (brand name, hero, services, how-it-works steps, proof, about + right-fit block, growth-audit, FAQ, AI page). The `.astro` files stay the source of truth. The separate `~/Downloads/TheGrowthPMM-COPY.md`, if it still exists, was NOT touched and is stale.
 
+## Update 2026-07-01 (later) — `/impeccable critique` + colorize/typeset/adapt pass
+
+Ran `/impeccable critique` on the live site (scored **33/40 "Good"**; snapshot in `.impeccable/critique/`). Wrote a **`PRODUCT.md`** (register: brand) derived from these docs. The critique's two P1s were "the lime rebrand is only half-landed" and "lime vanishes on the light sections." Shipped fixes:
+
+- **Colorize (commit lime fully).**
+  - **Funnel retinted** from purple→navy→teal to a dark body (`#3c4a1c`→`#22271a`→`#14170e`) with **lime rim contours + lime flow balls + coral drop-off** (glow `#c4d600` top, `#ec6a43` spout). White stage labels stay readable on the dark body. Coral (`#ec6a43` balls, `#cc4117` logo dot) is now the **one deliberate supporting accent = "drop-off"**; palette is **lime + near-black + coral**.
+  - **Sticky tags** → lime/near-black pair (`.purple` = lime fill/dark text, `.gold` = near-black fill/lime text; recognition-band tag switched to `.purple` so it shows on the dark band).
+  - **Lime recurs on the light sections:** `.marker` retinted to lime and applied to "paying users" (hero H1) + "the numbers" (proof H2); lime "A fit if" header on the near-black card; testimonial quote-mark opacity 0.16→0.5; service icon chips unified from coral/gold/blue to pale lime `#eef6c8`.
+- **Typeset.** Added **Bricolage Grotesque** as `--font-display` for `h1,h2,h3` (Inter stays for body/UI; Caveat for accents); global `letter-spacing:-0.03em` on headings (per-heading inline tracking still wins). **Thinned the handwritten kicker** — dropped on Services/Proof/Testimonials so it's no longer above nearly every section.
+- **Adapt.** The floating corner "Book a call" **docks to the bottom** (`bottom:16px`) below 900px — thumb zone, no longer overlaps section headings.
+- **Polish.** Funnel label "Monetisation"→"Monetization". Build compiles, zero console errors, contrast re-checked (hero body 5.0:1, purple tag 6.6:1), no mobile overflow.
+
+**Open (deferred, not in the chosen scope):** the anonymized "Varun" lead testimonial (P3 trust — swap for a real named client); `og-image.png` + real production domain still placeholders; the `/ai-product-marketing` page still uses `.eyebrow` (uppercase) above each section (homepage-scoped critique didn't touch it).
+
+## Update 2026-07-01 (later still) — hero copy reword + logo/favicon lime badge (client-directed)
+
+Divya supplied new hero copy and asked to bring lime into the mark. Shipped:
+- **Hero tags:** collapsed the two tags to a single **"Top 100 Global PMM, 2025"** (the "Fractional Head of PMM" tag was dropped). It's a `.sticky-tag purple` (lime fill).
+- **Hero H1** → **"Unlock your next growth stage. I identify what's holding growth back and fix it."** (was "Stalled growth despite having paying users?"). Shifted from a symptom *question* to an outcome statement. The lime `.marker` moved off "paying users" onto **"holding growth back and fix it."**.
+- **Hero body:** merged the two "Sometimes…" sentences into one list — "Sometimes the fix is sharper positioning, better activation, a tighter GTM, or a stronger launch." (rest unchanged).
+- **Logo + favicon → lime badge.** `Logo.astro` and `public/favicon.svg` now render the funnel mark on a **lime `#DBFF00` rounded-square badge** (near-black `#16180f` funnel bars + coral `#cc4117` dot). Previously the Logo mark was a bare dark funnel with no lime; this pulls the lime fill into the wordmark on both the light nav and the dark footer. The Logo `reverse` variant no longer recolors the mark, only the wordmark (→ white); the badge is identical across variants. Favicon dropped its old navy `#1b2a6b` background.
+- Verified against the live HMR server (rendered H1/tags/favicon) + `npm run build` clean; committed and deployed to Cloudflare.
+
 ## Current state (top → bottom of `src/pages/index.astro`)
 
 1. **Nav** — floating pill, logo + links (Free report / Services / About me) + "Book a call" (white-on-navy; a `#navbar .btn-navy` rule fixes an earlier dark-text-on-navy bug). Collapses on scroll to a persistent corner "Book a call" that carries the call through mid-page sections.
