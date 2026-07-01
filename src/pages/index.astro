@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
 const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
 // TODO: replace with the real Growth Audit Google Form URL before launch.
 const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
@@ -10,9 +11,8 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
 <!-- NAV: full bar at top of page, collapses to a corner CTA on scroll -->
 <div class="nav-wrap" id="nav-top">
   <div id="navbar">
-    <a href="#top" style="display:flex;align-items:center;gap:8px;flex:none;text-decoration:none;">
-      <span style="width:14px;height:14px;background:var(--navy);border-radius:3px;transform:rotate(45deg);display:inline-block;flex:none;"></span>
-      <span style="font-weight:800;font-size:16px;letter-spacing:-0.3px;color:var(--ink);">The Growth PMM</span>
+    <a href="#top" style="display:flex;align-items:center;flex:none;text-decoration:none;">
+      <Logo size={28} wordSize={16} />
     </a>
     <div id="nav-links">
       <a href="#report">Growth Audit</a>
@@ -477,10 +477,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
 <footer style="background:var(--navy);color:#fff;border-top:1px solid var(--navy-tint);">
   <div class="footer-grid" style="max-width:1240px;margin:0 auto;padding:56px 24px 28px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px;">
     <div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="width:16px;height:16px;background:#fff;border-radius:3px;transform:rotate(45deg);display:inline-block;flex:none;"></span>
-        <span style="font-weight:800;font-size:18px;letter-spacing:-0.3px;">The Growth PMM</span>
-      </div>
+      <Logo variant="reverse" size={30} wordSize={18} />
       <p style="font-size:14px;line-height:1.55;color:var(--on-navy-mute);margin:14px 0 0;max-width:280px;">Fractional Head of PMM for post-PMF startups, working with teams wherever they are.</p>
     </div>
     <div>
