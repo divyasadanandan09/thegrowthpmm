@@ -3,7 +3,7 @@
 Editable copy for the whole site. Edit the text after each label, keep the labels intact.
 When you're done, hand this back and I'll apply the changes to the components.
 
-**Synced to the live `.astro` files on 2026-07-01** (lime rebrand + copy refresh). The
+**Synced to the live `.astro` files on 2026-07-01** (latest pass: hero tag → scarcity, hero H1 shortened, Services H2 shortened, "three clients" marker highlight). The
 `.astro` files remain the source of truth; if this deck and the site disagree, the site wins.
 
 Style rules in force: zero em dashes (use periods/commas), `$` not `₹`, second person to the
@@ -38,10 +38,9 @@ BODY = paragraph, CTA = button, NOTE = small text under a button/section.
 - CTA: Book a call
 
 ## Hero
-- TAG 1: Fractional Head of PMM
-- TAG 2: Top 100 PMM, 2025
-- H1: Stalled growth despite having paying users?
-- BODY: I work with founders and teams who have users, traction, and ambition but aren't growing fast enough. Sometimes the fix is sharper positioning. Sometimes it's better activation, a tighter GTM, or a stronger launch. I start with the growth problem, then work backward to what will move it.
+- TAG: Only 3 slots per month
+- H1: Unlock the next growth stage. (lime `.marker` highlight on "next growth stage")
+- BODY: I work with founders and teams who have users, traction, and ambition but aren't growing fast enough. Sometimes the fix is sharper positioning, better activation, a tighter GTM, or a stronger launch. I start with the growth problem, then work backward to what will move it.
 - CTA: Book a call
 - CTA NOTE: A 20-minute call, no pitch. You'll leave with a clear first move.
 - FUNNEL CAPTION: Where are you losing users?
@@ -49,11 +48,11 @@ BODY = paragraph, CTA = button, NOTE = small text under a button/section.
 
 ## Logo strip
 - LABEL: Past experience
-- LOGOS: Fi Money / Practo / MakeMyTrip / Raymond / TCS
+- LOGOS: Fi Money / Practo / MakeMyTrip / Raymond / TCS (all real logo images as of 2026-07-01; previously a mix of images and plain text)
 
 ## Services
 - EYEBROW: PMM, as a service
-- H2: I fix the part of growth that's holding your business back.
+- H2: I fix what's holding your business back.
 - BODY: Most teams bring me in to own their growth strategy, then pull in for positioning or go-to-market when the work calls for it.
 
 ### Featured service
@@ -147,7 +146,7 @@ step badge were dropped 2026-07-01; each step now leads with a plain "Step 1/2/3
 - EYEBROW: why me, why now
 - H2: I help post-PMF founders engineer scalable growth.
 - BODY 1: I've spent twelve-plus years in product marketing and growth, with an MBA from MICA, Ahmedabad and stints at Fi Money (Series C neobank, Associate Director), Practo (Senior PMM, India and APAC), MakeMyTrip, Raymond, and TCS. I've seen the pattern repeating. As a recognized Top 100 Product Marketer, I specialize in identifying the friction in your funnel and building the go-to-market strategies needed to scale.
-- BODY 2: I take only three clients a month. Rest assured, you get undivided attention from me.
+- BODY 2: I take only three clients a month. Rest assured, you get undivided attention from me. (lime `.marker` highlight on "only three clients a month")
 
 ### Is this the right fit? (qualifier block)
 - EYEBROW: let's be honest
