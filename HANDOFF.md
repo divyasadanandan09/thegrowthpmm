@@ -110,7 +110,9 @@ Divya asked to change the primary brand colour to **lime `#DBFF00`** and to refr
 - **Growth Audit** section H2 → "Start with a free Growth Audit."; intro reworded.
 - **`Layout.astro`**: default `title` → "Fractional Head of Product Marketing | The Growth PMM"; default `description`, the Person + ProfessionalService `description`s, and `serviceType[0]` all moved to the "find the bottleneck that's capping revenue" framing.
 
-**Still open (design):** sticky tags + funnel gradient not yet lime; the whitespace left of the shrunk About photo is open (could pull the right-fit heading up beside it). `COPY.md` is even more stale now — `.astro` files are the source of truth.
+**Still open (design):** sticky tags + funnel gradient not yet lime; the whitespace left of the shrunk About photo is open (could pull the right-fit heading up beside it).
+
+**`COPY.md` refreshed 2026-07-01** to match the current `.astro` copy across all three pages + global (brand name, hero, services, how-it-works steps, proof, about + right-fit block, growth-audit, FAQ, AI page). The `.astro` files stay the source of truth. The separate `~/Downloads/TheGrowthPMM-COPY.md`, if it still exists, was NOT touched and is stale.
 
 ## Current state (top → bottom of `src/pages/index.astro`)
 
@@ -152,7 +154,7 @@ Separate page: **`/faq`** (`src/pages/faq.astro`) — NEW. Six short Q&As in a `
 ## Open to-dos / placeholders
 - [x] Resolve **clients-per-month** contradiction — unified to "three" (2026-06-29).
 - [x] Unify **brand spelling** to "The Growth PMM" incl. schema + titles (2026-06-29).
-- [ ] Refresh `COPY.md` (+ the Downloads copy) to match the applied copy; they're stale.
+- [x] Refresh `COPY.md` to match the applied copy (done 2026-07-01). The separate `~/Downloads/TheGrowthPMM-COPY.md`, if present, is still stale.
 - [ ] Replace `DIAGNOSTIC` placeholder in `index.astro` AND `faq.astro` with the real **Google Form URL** (the renamed "Growth Audit"; now only on secondary CTAs).
 - [x] Real **founder photo** in About — `public/divya.jpg` added and rendering (2026-06-29).
 - [x] Gate the funnel SMIL behind `prefers-reduced-motion` — done via `matchMedia` + `pauseAnimations()` (2026-06-29).
