@@ -88,6 +88,30 @@ Ran `/impeccable audit` (14/20) and `/impeccable critique` (31/40). Shipped this
 
 The editable copy decks at `COPY.md` (project) and `~/Downloads/TheGrowthPMM-COPY.md` are now STALE relative to the applied copy. The `.astro` files are the source of truth.
 
+## Update 2026-07-01 — LIME REBRAND + content refresh (client-directed)
+
+Divya asked to change the primary brand colour to **lime `#DBFF00`** and to refresh the homepage copy. This is intentional — **do not "correct" it back to navy.** Older notes in this file and `CLAUDE.md` that say "navy #1b2a6b primary" are now stale.
+
+**Token model (the important part).** Navy played five roles; lime can only do some of them, so the roles were split:
+- `--navy` = **lime `#DBFF00`** (kept the name to avoid renaming ~100 refs; it's a misnomer now). `--navy-press` = `#c4e600` (hover), `--navy-tint` = `#33362a` (hairline on dark surfaces).
+- **NEW `--ink-deep` `#16180f`** = near-black. It took over navy's **dark-surface** role: footer, closing CTA band, Growth Audit card, recognition band, `.compare-card--me`, and the `/ai-product-marketing` closing band.
+- `--on-navy-mute` re-tinted bluish→warm-gray `#b7bfa4` (muted text on the near-black).
+- **Lime is a FILL, never text-on-light.** `.btn-navy` / `#navbar .btn-navy` / mobile-menu CTA text → `--ink` (was `#fff`). `.btn-outline-navy` text → `--ink` (lime border kept). Both closing-band CTAs (home + AI page) were switched from `.btn-outline-navy` to solid `.btn-navy` so lime pops on the near-black.
+- **Accent text on light → dark.** `.eyebrow`, `.handwritten`, `#navbar a:hover`, `.nav-cta-corner .corner-book`, `.badge-outline`, `.step-badge`, the hero funnel caption, the "need other services?" note, and the four big proof numbers ($11M+/7.35x/25%/10 days) all moved to `--ink`/`--ink-deep`. `.handwritten.light` (on dark bands) went gold→**lime** (the signature accent).
+- **Hard-coded navies fixed for coherence:** `::selection` (lime bg, dark text), focus outline (`--ink-deep`), `.grid-canvas` grid lines, the nav-toggle hamburger `stroke`, and `Logo.astro`'s `bar` (`#1b2a6b`→`#16180f`, so the mark stays visible on the white navbar; reverse/white variant unchanged). The two blue-tinted inline button glows (`rgba(27,42,107,…)`) were neutralised to `rgba(22,24,15,…)`.
+- **Left alone:** the hero funnel SVG's own purple→navy→teal gradient (decorative, `#1b2a6b` mid-stop) and the sticky tags (still purple/gold). Both are open options if you want to push lime further. A handful of subtle `rgba(27,42,107,…)` shadows remain in `global.css` (barely visible; low priority).
+
+**Content refresh (all in `index.astro`, matching a client-supplied HTML paste; head/meta+schema updated in `Layout.astro`):**
+- **Hero** H1 → "Stalled growth despite having paying users?"; the oversized colored subline was dropped and folded into one **body-sized** paragraph.
+- **Services** H2 → "I fix the part of growth that's holding your business back."; growth-strategy + positioning-audit + GTM descriptions rewritten.
+- **How it works** intro rewritten; **the step badge (`.process-num` circle) and the "Week 1–2 / Week 3 onward / Ongoing" timing labels were removed** — each card now leads with a plain "STEP 1/2/3" eyebrow (`.process-when`, margin-top zeroed). Titles → Discovery & Audit / Strategy & Execution / Measurement & Scale. `.process-num` CSS is now unused (left in place).
+- **Proof** H2 → "12+ years of experience, backed by the numbers."; the $11M+ stat copy reworded.
+- **About** H2 → "I help post-PMF founders engineer scalable growth."; bio p1 reworded (adds the Top 100 line). **Photo shrunk** ~470px→~260px, right/top-aligned (grid `1.55fr 0.45fr`). **Right-fit block layout revisited**: centered island → left-aligned with a "let's be honest" eyebrow; `.compare-grid` `max-width:900px` (cards ~442px). Copy on the fit/not-fit bullets tweaked.
+- **Growth Audit** section H2 → "Start with a free Growth Audit."; intro reworded.
+- **`Layout.astro`**: default `title` → "Fractional Head of Product Marketing | The Growth PMM"; default `description`, the Person + ProfessionalService `description`s, and `serviceType[0]` all moved to the "find the bottleneck that's capping revenue" framing.
+
+**Still open (design):** sticky tags + funnel gradient not yet lime; the whitespace left of the shrunk About photo is open (could pull the right-fit heading up beside it). `COPY.md` is even more stale now — `.astro` files are the source of truth.
+
 ## Current state (top → bottom of `src/pages/index.astro`)
 
 1. **Nav** — floating pill, logo + links (Free report / Services / About me) + "Book a call" (white-on-navy; a `#navbar .btn-navy` rule fixes an earlier dark-text-on-navy bug). Collapses on scroll to a persistent corner "Book a call" that carries the call through mid-page sections.

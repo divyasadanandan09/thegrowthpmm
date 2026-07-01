@@ -7,7 +7,7 @@ interface Props {
   variant?: "navy" | "reverse"; // navy on light, reverse (white) on navy
 }
 const { size = 28, wordSize = 16, variant = "navy" } = Astro.props;
-const bar = variant === "reverse" ? "#ffffff" : "#1b2a6b";
+const bar = variant === "reverse" ? "#ffffff" : "#16180f";
 const dot = variant === "reverse" ? "#ffb59e" : "#cc4117";
 const word = variant === "reverse" ? "#ffffff" : "var(--ink)";
 ---

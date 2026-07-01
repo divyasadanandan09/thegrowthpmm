@@ -2,7 +2,7 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
-::selection { background: #1b2a6b; color: #fff; }
+::selection { background: var(--navy); color: var(--ink); }
 a { text-decoration: none; }
 /* Balance multi-line headings so they never orphan a single word on the last line. */
 h1, h2, h3 { text-wrap: balance; }
@@ -11,7 +11,7 @@ p { text-wrap: pretty; }
 
 /* Visible, consistent keyboard focus (was relying on UA default). */
 :where(a, button, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--navy);
+  outline: 2px solid var(--ink-deep);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -20,18 +20,22 @@ footer a:focus-visible,
 .btn-outline-navy:focus-visible { outline-color: #fff; }
 
 :root {
-  --navy: #1b2a6b;
-  --navy-press: #2a3a85;
-  --navy-tint: #3a489c;
+  /* Lime is the brand pop: used as fills (buttons, badges, borders) with dark
+     text on top, and as accents on the near-black --ink-deep surfaces.
+     It is never used as text on a light background (unreadable). */
+  --navy: #DBFF00;
+  --navy-press: #c4e600;
+  --navy-tint: #33362a;      /* subtle hairline on the near-black surfaces */
   --ink: #1d1d1d;
   --ink-mute: #5f6470;
+  --ink-deep: #16180f;       /* near-black surface (took over navy's dark-bg role) */
   --canvas: #ffffff;
   --cream: #e7ebf5;
   --blue-tint: #eef2fc;
   --link: #2f5fe0;
   --hairline: #e6e6e6;
   --warm-line: #d6dcec;
-  --on-navy-mute: #b9c2e6;
+  --on-navy-mute: #b7bfa4;   /* muted text on the near-black surfaces */
   /* Cool navy-tinted aurora echoing the funnel (purple -> navy -> teal). */
   --hero-bg: radial-gradient(60% 80% at 14% 8%, #e7ecff 0%, rgba(231,236,255,0) 60%),
              radial-gradient(48% 70% at 88% 16%, #ece4ff 0%, rgba(236,228,255,0) 55%),
@@ -46,7 +50,7 @@ footer a:focus-visible,
 .btn-navy {
   display: inline-block;
   background: var(--navy);
-  color: #fff;
+  color: var(--ink);
   font-weight: 700;
   border-radius: 90px;
   text-decoration: none;
@@ -58,7 +62,7 @@ footer a:focus-visible,
 .btn-outline-navy {
   display: inline-block;
   background: #fff;
-  color: var(--navy);
+  color: var(--ink);
   font-weight: 700;
   border-radius: 90px;
   border: 1.5px solid var(--navy);
@@ -83,7 +87,7 @@ footer a:focus-visible,
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--navy);
+  color: var(--ink-deep);
 }
 
 .finding-row {
@@ -128,7 +132,7 @@ footer a:focus-visible,
   height: 46px;
   border-radius: 50%;
   background: #fff;
-  color: var(--navy);
+  color: var(--ink-deep);
   font-weight: 800;
   font-size: 18px;
   display: flex;
@@ -154,9 +158,9 @@ footer a:focus-visible,
 }
 
 #navbar a { color: var(--ink); transition: color 0.1s; }
-#navbar a:hover { color: var(--navy); }
+#navbar a:hover { color: var(--ink-deep); }
 #mobile-menu a { color: var(--ink); }
-#navbar .btn-navy, #navbar .btn-navy:hover, #mobile-menu .btn-navy { color: #fff; }
+#navbar .btn-navy, #navbar .btn-navy:hover, #mobile-menu .btn-navy { color: var(--ink); }
 /* Keep the pill CTA's transform/shadow transition (the #navbar a rule above would clobber it). */
 #navbar .btn-navy { transition: background 0.15s, transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.15s; }
 
@@ -168,10 +172,10 @@ footer a:hover { opacity: 0.75; }
 .handwritten {
   font-family: 'Caveat', cursive;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--ink-deep);
   line-height: 1;
 }
-.handwritten.light { color: #e9c46a; }
+.handwritten.light { color: var(--navy); }
 
 .marker {
   background-image: linear-gradient(101deg, rgba(217,169,44,0) 0.6%, rgba(217,169,44,0.6) 2.2%, rgba(217,169,44,0.52) 96%, rgba(217,169,44,0) 99.4%);
@@ -202,7 +206,7 @@ footer a:hover { opacity: 0.75; }
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--ink);
   background: var(--blue-tint);
   border: 1px solid #c9d4f5;
   padding: 6px 14px;
@@ -211,8 +215,8 @@ footer a:hover { opacity: 0.75; }
 
 .grid-canvas {
   background-image:
-    linear-gradient(rgba(27,42,107,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(27,42,107,0.05) 1px, transparent 1px);
+    linear-gradient(rgba(22,24,15,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22,24,15,0.05) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
@@ -380,7 +384,7 @@ footer a:hover { opacity: 0.75; }
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: var(--ink-mute);
-  margin: 16px 0 4px;
+  margin: 0 0 6px;
 }
 .process-title {
   font-size: 20px;
@@ -517,9 +521,9 @@ footer a:hover { opacity: 0.75; }
   padding: 28px 24px;
 }
 .compare-card--me {
-  background: var(--navy);
-  border-color: var(--navy);
-  box-shadow: 0 16px 40px rgba(27,42,107,0.22);
+  background: var(--ink-deep);
+  border-color: var(--ink-deep);
+  box-shadow: 0 16px 40px rgba(22,24,15,0.22);
 }
 .compare-head {
   font-size: 13px;
@@ -648,7 +652,7 @@ body.scrolled .nav-wrap {
 #nav-cta-corner .corner-book {
   font-size: 14px;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--ink);
   background: rgba(255,255,255,0.92);
   backdrop-filter: saturate(1.4) blur(12px);
   border: 1px solid var(--hairline);
