@@ -137,6 +137,18 @@ Divya supplied new hero copy and asked to bring lime into the mark. Shipped:
 - **Logo + favicon → lime badge.** `Logo.astro` and `public/favicon.svg` now render the funnel mark on a **lime `#DBFF00` rounded-square badge** (near-black `#16180f` funnel bars + coral `#cc4117` dot). Previously the Logo mark was a bare dark funnel with no lime; this pulls the lime fill into the wordmark on both the light nav and the dark footer. The Logo `reverse` variant no longer recolors the mark, only the wordmark (→ white); the badge is identical across variants. Favicon dropped its old navy `#1b2a6b` background.
 - Verified against the live HMR server (rendered H1/tags/favicon) + `npm run build` clean; committed and deployed to Cloudflare.
 
+## Update 2026-07-01 (even later) — hero H1 tightened, Services H2 shortened, line-wrap fixes
+
+Divya asked for a shorter hero headline and flagged that several sub-heads/section titles were wrapping to two lines when they shouldn't. Shipped:
+- **Hero H1** → **"Unlock the next growth stage."** (was "Unlock your next growth stage. I identify what's holding growth back and fix it."). The second sentence was cut; its "holding growth back and fix it" idea moved onto the Services H2 instead. The lime `.marker` now highlights **"next growth stage"**.
+- **Services H2** → **"I fix what's holding your business back."** (was "I fix the part of growth that's holding your business back.").
+- **Line-wrap fixes** — the wraps weren't from long copy, they were from inline `max-width`/`font-size` values that were narrower than the text needed at desktop widths:
+  - Services subhead ("Most teams bring me in...") `max-width` 620px → 1050px.
+  - About H2 ("I help post-PMF founders engineer scalable growth.") font-size 40px → 36px, letter-spacing -0.8px → -0.7px (its column is the narrower `1.55fr` side of the `about-grid`, not the full section width, so it needed a smaller size to fit on one line rather than a wider column).
+  - Right-fit intro wrapper (`"let's be honest"` eyebrow + "Is this the right fit?" + its subhead) `max-width` 600px → 850px.
+  - Verified each renders as a single line at a 1470px viewport via DOM measurement (`getBoundingClientRect` vs `lineHeight`), not just visually. The hero H1 still wraps to two lines by design (it sits in the narrower text column of the 2-col hero grid next to the funnel graphic) — that's expected, not a bug.
+- Verified against a live dev server + DOM measurements; committed and deployed.
+
 ## Current state (top → bottom of `src/pages/index.astro`)
 
 1. **Nav** — floating pill, logo + links (Free report / Services / About me) + "Book a call" (white-on-navy; a `#navbar .btn-navy` rule fixes an earlier dark-text-on-navy bug). Collapses on scroll to a persistent corner "Book a call" that carries the call through mid-page sections.
