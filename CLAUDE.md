@@ -48,5 +48,6 @@ Single-page marketing site for **Divya Sadanandan** ("TheGrowthPMM"), an indepen
 - `astro.config.mjs` `site:` is still `https://thegrowthpmm.com` (update if domain differs). Schema/canonical/OG URLs all derive from it.
 - `og-image.png` does not exist yet (referenced by OG tags + the `Person`/`ProfessionalService` schema `image`).
 - Analytics script in `Layout.astro` is commented out.
+- **Past-experience logo strip** (`index.astro`, just above Services) is a mix of real logo `<img>`s (Practo, MakeMyTrip) and plain text spans (Fi Money, Raymond, TCS) — Divya wants it standardized to logos for all five. `public/logos/tcs.svg` exists but turned out to be the full stacked "Tata Consultancy Services" lockup (roundel + two text lines), illegible at the strip's ~22px height, so TCS was left as text. Waiting on Divya to supply compact horizontal wordmark files for Fi Money, Raymond, and a better TCS mark (drop them in `public/logos/`, then swap the `<span>`s for `<img>`s matching the Practo/MakeMyTrip pattern).
 
 See `HANDOFF.md` for full decision log and to-dos.

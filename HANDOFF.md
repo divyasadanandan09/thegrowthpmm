@@ -149,6 +149,15 @@ Divya asked for a shorter hero headline and flagged that several sub-heads/secti
   - Verified each renders as a single line at a 1470px viewport via DOM measurement (`getBoundingClientRect` vs `lineHeight`), not just visually. The hero H1 still wraps to two lines by design (it sits in the narrower text column of the 2-col hero grid next to the funnel graphic) — that's expected, not a bug.
 - Verified against a live dev server + DOM measurements; committed and deployed.
 
+## Update 2026-07-01 (latest) — more line-wrap fixes, "three clients" highlight, logo strip audit
+
+Divya pointed out two more subheads still wrapping to a 2nd line, asked for `only three clients a month` to get the lime `.marker` treatment, and flagged the past-experience strip's mixed text/logo styling.
+- **How-it-works subhead** ("I keep it simple: diagnose the constraint...") — natural width (1359px) exceeds the full section width (1192px), so widening `max-width` alone couldn't get it to one line; dropped font-size 18px→15px (max-width 620px→1150px) so it fits on one line with room to spare. This is now visibly smaller than the other section subheads (18px) — a deliberate trade to satisfy "one line," revisit if the size mismatch reads as inconsistent.
+- **Proof subhead** ("Across Fi Money, Practo, MakeMyTrip, and Raymond...") `max-width` 620px → 820px, now one line.
+- **About bio**: `only three clients a month` wrapped in `.marker` (lime highlight), matching the hero/proof marker pattern.
+- **Past-experience logo strip audit**: tried wiring in the existing `public/logos/tcs.svg`, but it's the full stacked "Tata Consultancy Services" lockup (Tata roundel + two lines of text) — illegible at the strip's ~22px height next to the clean Practo/MakeMyTrip wordmarks. Reverted TCS back to a text span. **Open**: need compact horizontal logo files for Fi Money, Raymond, and a simpler TCS mark before the strip can be all-logos; Divya will supply these.
+- Deliberately left as-is: hero body paragraph (5 lines) and About bio paragraph (5 lines) — genuine multi-sentence body copy, not the "one-line intro" pattern; the Growth Audit section subhead (3 lines, ~240 chars) and the closing-band reassurance line (2 lines, centered) — both read as intentional short paragraphs rather than the constrained-by-accident pattern the other fixes addressed.
+
 ## Current state (top → bottom of `src/pages/index.astro`)
 
 1. **Nav** — floating pill, logo + links (Free report / Services / About me) + "Book a call" (white-on-navy; a `#navbar .btn-navy` rule fixes an earlier dark-text-on-navy bug). Collapses on scroll to a persistent corner "Book a call" that carries the call through mid-page sections.
