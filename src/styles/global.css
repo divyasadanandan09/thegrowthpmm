@@ -4,8 +4,9 @@
 html, body { margin: 0; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 ::selection { background: var(--navy); color: var(--ink); }
 a { text-decoration: none; }
+/* Display face (Bricolage Grotesque) carries the headings; Inter stays for UI/body. */
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.03em; }
 /* Balance multi-line headings so they never orphan a single word on the last line. */
-h1, h2, h3 { text-wrap: balance; }
 /* Reduce orphans/ragged breaks in body prose. */
 p { text-wrap: pretty; }
 
@@ -36,6 +37,7 @@ footer a:focus-visible,
   --hairline: #e6e6e6;
   --warm-line: #d6dcec;
   --on-navy-mute: #b7bfa4;   /* muted text on the near-black surfaces */
+  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
   /* Cool navy-tinted aurora echoing the funnel (purple -> navy -> teal). */
   --hero-bg: radial-gradient(60% 80% at 14% 8%, #e7ecff 0%, rgba(231,236,255,0) 60%),
              radial-gradient(48% 70% at 88% 16%, #ece4ff 0%, rgba(236,228,255,0) 55%),
@@ -178,7 +180,7 @@ footer a:hover { opacity: 0.75; }
 .handwritten.light { color: var(--navy); }
 
 .marker {
-  background-image: linear-gradient(101deg, rgba(217,169,44,0) 0.6%, rgba(217,169,44,0.6) 2.2%, rgba(217,169,44,0.52) 96%, rgba(217,169,44,0) 99.4%);
+  background-image: linear-gradient(101deg, rgba(219,255,0,0) 0.6%, rgba(219,255,0,0.85) 2.2%, rgba(219,255,0,0.72) 96%, rgba(219,255,0,0) 99.4%);
   border-radius: 0.7em 0.3em 0.6em 0.2em;
   padding: 0.04em 0.18em;
   -webkit-box-decoration-break: clone;
@@ -197,8 +199,10 @@ footer a:hover { opacity: 0.75; }
   box-shadow: 0 4px 10px rgba(0,0,0,0.12);
   white-space: nowrap;
 }
-.sticky-tag.purple { background: #6b4fa0; transform: rotate(-3deg); }
-.sticky-tag.gold   { background: #d9a92c; color: #2a1f00; transform: rotate(2deg); }
+/* Two-tone brand tags: lime fill (dark text) + near-black fill (lime text).
+   Class names kept (.purple/.gold) to avoid churn; they no longer mean those hues. */
+.sticky-tag.purple { background: var(--navy); color: var(--ink); transform: rotate(-3deg); }
+.sticky-tag.gold   { background: var(--ink-deep); color: var(--navy); transform: rotate(2deg); }
 
 .badge-outline {
   display: inline-flex;
@@ -418,7 +422,7 @@ footer a:hover { opacity: 0.75; }
   font-size: 120px;
   line-height: 1;
   color: var(--navy);
-  opacity: 0.16;
+  opacity: 0.5;
   pointer-events: none;
 }
 .testimonial-lead blockquote {
@@ -533,7 +537,7 @@ footer a:hover { opacity: 0.75; }
   color: var(--ink-mute);
   margin: 0 0 20px;
 }
-.compare-card--me .compare-head { color: #fff; }
+.compare-card--me .compare-head { color: var(--navy); }
 .compare-card ul {
   list-style: none;
   margin: 0;
@@ -702,9 +706,11 @@ body.scrolled #nav-cta-corner {
   .steps-flow .step-line { display: none; }
   .steps-flow .step-top { margin-bottom: 12px; }
   .step-desc { max-width: none; }
-  #nav-cta-corner { gap: 5px; }
+  /* Dock the persistent CTA to the bottom on mobile: thumb-reachable, and it
+     no longer overlaps section headings scrolling under the top-right corner. */
+  #nav-cta-corner { top: auto; bottom: 16px; gap: 5px; }
   #nav-cta-corner .corner-book { font-size: 12px; padding: 8px 12px; }
-  #nav-cta-corner .btn-navy { font-size: 12px; padding: 9px 14px; }
+  #nav-cta-corner .btn-navy { font-size: 13px; padding: 11px 18px; box-shadow: 0 8px 22px rgba(22,24,15,0.28); }
   .service-row { gap: 12px; }
   .service-icon { width: 36px; height: 36px; font-size: 16px; border-radius: 10px; }
   .service-num { display: none; }
