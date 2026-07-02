@@ -779,7 +779,6 @@ body.scrolled #nav-cta-corner {
   .service-num { display: none; }
   .channel-grid { grid-template-columns: 1fr; }
   .other-services { grid-template-columns: 1fr !important; }
-  .ownership-row { grid-template-columns: 1fr !important; }
   .ba-before, .ba-after { padding: 13px 15px; font-size: 14px; }
   .proof-strip { grid-template-columns: 1fr !important; }
   .proof-stat + .proof-stat { border-left: none; border-top: 1px solid var(--hairline); }
