@@ -210,7 +210,7 @@ Divya supplied a complete new copy deck. **The homepage repositioned from "I fix
 
 **CSS:** added mobile rules `.ownership-row { grid-template-columns: 1fr }` and a `.ba-table` font tighten (`global.css`, in the `max-width:900px` block). `.other-services` already stacks on mobile, so the 4-card grid handles mobile for free.
 
-**Verified:** `npm run build` clean; live dev server checked (hero, new sections 2/3, services, how-it-works, proof, about all render; before/after table = header + 5 rows; ownership row + punchline confirmed via DOM). Committed + deployed to Cloudflare.
+**Verified:** `npm run build` clean; live dev server checked (hero, new sections 2/3, services, how-it-works, proof, about all render; before/after table = header + 5 rows; ownership row + punchline confirmed via DOM). Committed + pushed to `main`. **Cloudflare deploy:** if Workers Builds is git-connected (per `wrangler.jsonc`), the push auto-deploys; otherwise run `npx wrangler deploy` from an authed terminal (`wrangler login` first). The sandbox couldn't deploy (no CF token).
 
 **Open after this pass:** nav still links only Growth Audit / Services / About (the two new sections have no nav anchors — fine, but could add); several `global.css` blocks are now dead (`.module--featured`, `.channel-grid`, `.channel-card`, plus the older `.service-row`/`.audit-step`/`.process-num`) and could be pruned; the About "three clients a month" marker line is gone (decide if it should return); `Layout.astro` title/meta/schema still say "Fractional Head of Product Marketing | The Growth PMM" and describe the old framing — **worth realigning to the new "first PMM leader" positioning** in a follow-up.
 
