@@ -712,6 +712,44 @@ body.scrolled #nav-cta-corner {
   aspect-ratio: 420/410;
 }
 
+/* ===== Section 3: Before / After ===== */
+/* The transformation reads from the treatment, not an arrow: the Before column
+   is struck-through and muted (the state you're leaving), the After column sits
+   on a pale-lime tint in strong ink (the state once PMM has an owner). */
+.ba-table {
+  max-width: 900px;
+  margin: 30px 0 0;
+  background: var(--canvas);
+  border: 1px solid var(--warm-line);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.ba-row { display: grid; grid-template-columns: 1fr 1fr; }
+.ba-row + .ba-row { border-top: 1px solid var(--warm-line); }
+.ba-before, .ba-after { padding: 17px 26px; font-size: 16px; line-height: 1.35; }
+.ba-before {
+  color: var(--ink-mute);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(95, 100, 112, 0.45);
+}
+.ba-after {
+  background: #f5fbd6;
+  color: var(--ink-deep);
+  font-weight: 700;
+  border-left: 1px solid var(--warm-line);
+}
+.ba-head .ba-before, .ba-head .ba-after {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.ba-head .ba-before { color: var(--ink-mute); }
+
 /* ===== Mobile-first tightening ===== */
 
 @media (max-width: 900px) {
@@ -742,7 +780,7 @@ body.scrolled #nav-cta-corner {
   .channel-grid { grid-template-columns: 1fr; }
   .other-services { grid-template-columns: 1fr !important; }
   .ownership-row { grid-template-columns: 1fr !important; }
-  .ba-table [style*="grid-template-columns"] { font-size: 14px; }
+  .ba-before, .ba-after { padding: 13px 15px; font-size: 14px; }
   .proof-strip { grid-template-columns: 1fr !important; }
   .proof-stat + .proof-stat { border-left: none; border-top: 1px solid var(--hairline); }
   .process-grid { grid-template-columns: 1fr !important; }
