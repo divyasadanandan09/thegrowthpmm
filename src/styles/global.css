@@ -666,8 +666,9 @@ body.scrolled .nav-wrap {
 }
 #nav-cta-corner .corner-book:hover { background: #fff; }
 #nav-cta-corner .btn-navy {
-  font-size: 14px;
-  padding: 11px 20px;
+  font-size: 13px;
+  padding: 10px 18px;
+  white-space: nowrap;
   box-shadow: 0 10px 24px rgba(27,42,107,0.22);
 }
 body.scrolled #nav-cta-corner {
