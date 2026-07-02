@@ -701,16 +701,15 @@ body.scrolled #nav-cta-corner {
   border: 3px solid var(--ink-deep);
 }
 
-/* ===== Funnel visual ===== */
+/* ===== Hero positioning diagram ===== */
 
-.funnel-wrap {
+.diagram-wrap {
   position: relative;
   width: 100%;
-  max-width: 280px;
+  max-width: 380px;
   margin: 0 auto;
-  aspect-ratio: 1/1;
+  aspect-ratio: 420/410;
 }
-/* Funnel balls (flow + leaks) are animated inline via SVG/SMIL in index.astro. */
 
 /* ===== Mobile-first tightening ===== */
 
@@ -718,7 +717,7 @@ body.scrolled #nav-cta-corner {
   body { padding-top: 64px; }
   .hero-grid { grid-template-columns: 1fr !important; padding: 24px 20px 56px !important; }
   .hero-grid h1 { font-size: 36px !important; letter-spacing: -0.8px !important; }
-  .funnel-wrap { max-width: 220px; margin-top: 8px; }
+  .diagram-wrap { max-width: 260px; margin-top: 8px; }
   .about-grid { grid-template-columns: 1fr !important; }
   .about-photo-frame { justify-self: start !important; max-width: 168px; margin: 4px 0 20px; }
   .footer-grid { grid-template-columns: 1fr 1fr !important; }
@@ -741,6 +740,8 @@ body.scrolled #nav-cta-corner {
   .service-num { display: none; }
   .channel-grid { grid-template-columns: 1fr; }
   .other-services { grid-template-columns: 1fr !important; }
+  .ownership-row { grid-template-columns: 1fr !important; }
+  .ba-table [style*="grid-template-columns"] { font-size: 14px; }
   .proof-strip { grid-template-columns: 1fr !important; }
   .proof-stat + .proof-stat { border-left: none; border-top: 1px solid var(--hairline); }
   .process-grid { grid-template-columns: 1fr !important; }
@@ -762,8 +763,7 @@ body.scrolled #nav-cta-corner {
   h2 { font-size: 28px !important; }
 }
 
-/* Honor reduced-motion: kill transitions, hover lifts, and the nav fade.
-   The funnel SMIL is paused separately in index.astro. */
+/* Honor reduced-motion: kill transitions, hover lifts, and the nav fade. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

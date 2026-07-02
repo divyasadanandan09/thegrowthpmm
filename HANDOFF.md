@@ -172,15 +172,57 @@ Divya supplied `fi money.svg`, `practo.png`, `raymond.png`, `tcs.jpeg` (dropped 
 - **About photo → circular medallion** (`/impeccable polish`, brand register). Replaced the flat `border-radius:18px` rounded-rect with a new `.about-photo-frame` (240px circle, lime `--navy` fill as a halo ring, `box-shadow:0 20px 44px rgba(22,24,15,.22)`) wrapping `.about-photo` (circular crop via `object-fit:cover`, `object-position:50% 22%` to keep the face centered, 3px `--ink-deep` inner ring for edge definition against the light `--blue-tint` section). Mobile (`<900px`) drops to 168px, left-aligned instead of right. Chosen over an asymmetric/blob mask because it's the cleaner, more "sophisticated portrait medallion" read Divya asked for, and it reuses the existing lime-fill + dark-ring token pattern rather than introducing a new one. Verified at 1470px and ~500px viewports via the dev server.
 - Verified against a live dev server; committed.
 
+## Update 2026-07-02 — hero funnel replaced with a positioning diagram (client-directed)
+
+Divya is taking a **different positioning route** for the hero and asked to replace the funnel graphic with a visual that *teaches* the positioning: **Product Marketing is the missing leadership function connecting Product, Sales, and Marketing after PMF.** Ran the hero framing through the LLM council first (Claude + GPT-5.2); the standing critique was that the old funnel + "Unlock the next growth stage" H1 pattern-matched to "generic growth consultant," not "senior PMM leader" — this diagram is the fix on the visual side.
+
+**What shipped (`index.astro` hero right column + `.diagram-wrap` in `global.css`):**
+- Removed the animated 3D funnel SVG **and** its `prefers-reduced-motion` SMIL-pause `<script>` (the new visual is static, nothing to pause). Renamed `.funnel-wrap` → `.diagram-wrap` (aspect-ratio `420/410`, `max-width:380px` desktop / `260px` mobile).
+- **New diagram = hub-and-spoke.** Three team nodes as **fully transparent outline chips** (Product top, Sales + Marketing bottom) + thin near-black connectors converging into a central **lime "The Growth PMM" badge** (rotated -2°). This makes the *brand* the connective piece ("I am the missing function"), not the generic discipline.
+- **Playful, on-brand, using the site's own vocabulary:** a **Caveat "the missing piece"** annotation with a **curly two-loop hand-drawn arrow** pointing at the hub, and a **matching Caveat caption** below ("Between product-market fit and scalable growth.") — the caption is deliberately the same handwritten voice so it reads *with* the annotation. The PMF→growth positioning now lives in that caption instead of a competing visual axis.
+- **Design decisions:** dropped the enclosing **white card** (floats on the hero bg over `.grid-canvas`, more editorial); dropped the earlier "Product Marketing / The connective function" center label per Divya. **Coral is now absent from the hero** (nothing represents drop-off anymore) → the hero is pure **lime + near-black**; coral still lives lower on the page (logo dot, service icon chips). Chips are outline-only (`stroke #5f6470 @ 0.4`, no fill, no shadow).
+- Iteration history this session: v1 was a white-card "PMF→Growth rail + PMM card + 3 converging teams" (two ideas at once, too busy); simplified to the hub after deciding the hub is the single ownable idea. Center text went "Product Marketing" → **"The Growth PMM"**.
+- Verified on the live dev server at desktop (1440) + mobile (390), no console errors. **Not yet committed/deployed** as of this writing.
+
+**Update (same session):** the arrow was recut so the two loops sit in the open wedge **above-right of the pill** (annotation "the missing piece" moved up to `y=120`, arrow curls down to the pill's right edge). It no longer overwrites the pill text or the annotation. The H1/copy question flagged below was then answered by the full overhaul in the next entry.
+
+## Update 2026-07-02 (copy overhaul) — full homepage positioning rewrite (client-directed)
+
+Divya supplied a complete new copy deck. **The homepage repositioned from "I fix your stalled growth" (which read as a generic growth consultant) to "the first Product Marketing leader you bring in before you're ready to hire a full-time one," for post-PMF B2B SaaS founders.** This is the positioning-route change the diagram entry above anticipated, now carried through the whole page. All edits in `index.astro` (+ two mobile rules in `global.css`); build clean, zero em dashes preserved.
+
+**Hero.** H1 → "The first Product Marketing leader your company needs, before you're ready to hire one." (lime `.marker` on "before you're ready to hire one"; font 54→42px since it's longer). Added a **bold sub-line** ("You've built a product customers pay for. Now let's build predictable growth.") above the body paragraph ("I partner with post-product-market-fit B2B SaaS founders to build the positioning, messaging, GTM strategy, and cross-functional alignment that turn early traction into scalable growth, without the cost of a full-time PMM executive."). Tag, CTA, reassurance line, and the positioning diagram all unchanged.
+
+**Two NEW sections between the logo strip and Services:**
+- **Section 2 — "Growth didn't get harder. Your company got more complex."** (`background:--canvas`). Narrative: founders own everything pre-PMF, but those jobs get too interconnected to stay founder-led. A 3-up **`.ownership-row`** (Product builds / Marketing generates demand / Sales closes deals) then a lime-left-border punchline "Yet nobody owns the story that connects them. That's when growth starts slowing."
+- **Section 3 — "Why founders bring me in."** (`background:--cream`). A **`.ba-table`** Before → After comparison, 5 rows (Founder owns positioning → Clear PMM ownership, etc.), white card, hairline rows, lime-agnostic (uses a "→" glyph, dark text).
+
+**Services → "What we'll build together."** Replaced the featured-module + channel-grid + other-services structure with **four equal outcome cards** in the `.other-services` 2×2 grid: Positioning customers instantly understand / Product launches that drive adoption / Messaging that helps Sales close faster / A repeatable growth engine. The `.module--featured`, `.channel-grid`, the "where most teams start" sticky-tag, and the old Positioning-audit/GTM cards are **gone from markup** (their CSS lingers in `global.css`, now unused).
+
+**How it works → "How we work together."** Steps rewritten: Understand your growth constraints / Build the Product Marketing foundation / Enable your team to scale. Intro trimmed.
+
+**Other section retitles/rewrites:**
+- **Proof** H2 → "The impact of 12+ years of better Product Marketing." (marker on "better Product Marketing"); subhead → "Across multiple high-growth companies like Fi Money, Practo, MakeMyTrip, and Raymond...". Stat cards unchanged.
+- **Testimonials** H2 → "Trusted by founders and growth teams building their next stage of growth." (quotes unchanged; "Varun" still a placeholder).
+- **About** eyebrow → "twelve years in, one lesson", H2 → "Why I do this.", copy fully rewritten to the "most companies don't struggle because they build the wrong product... that's the gap Product Marketing fills... I work with post-PMF companies as their first Product Marketing leader" story. **The old "I take only three clients a month" bio line was dropped** (scarcity now lives only in the hero tag) — re-add if you want it back in the bio. Photo medallion + right-fit block unchanged structurally.
+- **Right-fit** H3 → "Are we a good fit?"; columns → "Yes, if" (5 items) / "Probably not, if" (4 items), all copy per the new deck.
+- **Growth Audit** H2 → "Start with a Growth Audit." (dropped "free"); subhead rewritten to the pre-hire "focused strategy session" framing; card label "What's in your report" → "You'll walk away with" (4 items: biggest PMM gap / root cause / one first move / recommended priorities); CTA "Get your Growth Audit".
+- **Closing band** eyebrow → "the honest version", H2 → "You don't need a full-time Head of Product Marketing yet. You probably do need someone thinking like one." (50→40px), sub → "Let's identify what's slowing your growth and build the Product Marketing foundation your company needs next."
+
+**CSS:** added mobile rules `.ownership-row { grid-template-columns: 1fr }` and a `.ba-table` font tighten (`global.css`, in the `max-width:900px` block). `.other-services` already stacks on mobile, so the 4-card grid handles mobile for free.
+
+**Verified:** `npm run build` clean; live dev server checked (hero, new sections 2/3, services, how-it-works, proof, about all render; before/after table = header + 5 rows; ownership row + punchline confirmed via DOM). Committed + deployed to Cloudflare.
+
+**Open after this pass:** nav still links only Growth Audit / Services / About (the two new sections have no nav anchors — fine, but could add); several `global.css` blocks are now dead (`.module--featured`, `.channel-grid`, `.channel-card`, plus the older `.service-row`/`.audit-step`/`.process-num`) and could be pruned; the About "three clients a month" marker line is gone (decide if it should return); `Layout.astro` title/meta/schema still say "Fractional Head of Product Marketing | The Growth PMM" and describe the old framing — **worth realigning to the new "first PMM leader" positioning** in a follow-up.
+
 ## Current state (top → bottom of `src/pages/index.astro`, refreshed 2026-07-01)
 
 1. **Nav** — floating pill, logo (lime badge) + links (Growth Audit / Services / About me) + "Book a call". Collapses on scroll to a persistent corner "Book a call" (`#nav-cta-corner`) that carries the call through mid-page sections and docks to the bottom on mobile. Mobile menu adds Proof, AI PMM, FAQ.
 2. **Hero** — call-led.
    - Tag: "Only 3 slots per month" (`.sticky-tag purple`, lime fill).
-   - H1: "Unlock the next growth stage." (lime `.marker` on "next growth stage"). Wraps to 2 lines by design (narrow text column next to the funnel graphic).
+   - H1: "Unlock the next growth stage." (lime `.marker` on "next growth stage"). Wraps to 2 lines by design (narrow text column next to the diagram).
    - Body: one paragraph naming the failure modes (positioning, activation, GTM, launch), ending "I start with the growth problem, then work backward to what will move it."
    - Single CTA "Book a call" + reassurance line ("A 20-minute call, no pitch...").
-   - 3D funnel SVG on the right, dark body + lime rim contours + coral drop-off balls, caption "Where are you losing users?"
+   - **Positioning diagram** on the right (replaced the funnel 2026-07-02): hub-and-spoke, transparent Product/Sales/Marketing outline chips converging into a lime "The Growth PMM" hub badge, Caveat "the missing piece" annotation + two-loop hand-drawn arrow, Caveat caption "Between product-market fit and scalable growth." No white card, no coral (see the 2026-07-02 update above).
 3. **Logo strip** — Fi Money, Practo, MakeMyTrip, Raymond, TCS, all real logo `<img>`s.
 4. **Services** — eyebrow "PMM, as a service", H2 "I fix what's holding your business back." **Growth strategy** is the featured module (`.module--featured`, "where most teams start" tag, 4-card channel grid); **Positioning audit** and **Go-to-market** sit below as secondary `.other-services` cards. Modular framing, no 1-2-3 numbering.
 5. **How it works (`#how-it-works`)** — eyebrow "how we'd actually work", H2 "From first call to shipped fix, here's how it goes." Three steps (Discovery & Audit / Strategy & Execution / Measurement & Scale), each a plain "STEP 1/2/3" eyebrow (no circular badge, no week-based timing labels). Inline "Book a call" CTA.
@@ -198,16 +240,16 @@ Separate pages: **`/faq`** (`src/pages/faq.astro`) — six short Q&As in a `<det
 - **Anti-AI style guide** at `/Users/divyaabhilash/Documents/Claude/Claude Cowork/About Me/anti-ai-writing-style.md` is enforced. Notably Rule 1: max one em dash per page — there are currently **zero**; keep it that way (use periods/commas). Also killed: prose semicolons, rule-of-three padding.
 - Positioning frame = **April Dunford** (alternatives → unique value → who it's for). Headlines were revisited against it.
 
-## Funnel visual (rebuilt 2026-06-24)
-- Balls are now **inline SVG `<circle>` + SMIL** (`<animateMotion>`), not CSS divs. Flow balls (translucent white) enter wide at the rim and converge to the spout, staying contained. Leak balls (coral) peel off at three different stages (Activation, Conversion, Retention) and fall out of the funnel.
-- Old `.funnel-dot` / `.funnel-drip` CSS + keyframes were removed from `global.css`.
+## Hero visual — history
+- **2026-07-02 → positioning diagram (current).** The funnel was replaced by a static hub-and-spoke SVG (`.diagram-wrap`). See the 2026-07-02 update above for the full spec and rationale.
+- **2026-06-24 → 2026-07-02: animated 3D funnel (removed).** Was inline SVG `<circle>` + SMIL `<animateMotion>` (lime flow balls converging to the spout, coral leak balls peeling off at Activation/Conversion/Retention), gated behind `prefers-reduced-motion` via a small `pauseAnimations()` script. Both the SVG and that script are gone now. The older `.funnel-dot` / `.funnel-drip` CSS was already removed back in the 2026-06-24 rebuild.
 
 ## Key decisions (don't undo without intent)
 - **Call-led** (see top of file).
 - Primary CTA label = **"Book a call"** (standardized; was "Book a strategy call").
 - Report capture stays the existing **Google Form** for now (no Formspree, no on-site interactive quiz — both were considered and declined). Pricing stays **off the site** (call only). FAQ on its own page.
 - **"Is this the right fit?" qualifier** (inside About, not a standalone comparison section anymore since 2026-06-30) is **qualitative** (no dollar figures).
-- Playful/scrapbook elements (handwritten accents, sticky tags, funnel, the lime `.marker` highlighter) are intentional and used in moderation, not on every section.
+- Playful/scrapbook elements (handwritten accents, sticky tags, the hero positioning diagram's Caveat annotation + two-loop arrow, the lime `.marker` highlighter) are intentional and used in moderation, not on every section.
 
 ## Open to-dos / placeholders
 - [x] Resolve **clients-per-month** contradiction — unified to "three" (2026-06-29).
