@@ -214,26 +214,64 @@ Divya supplied a complete new copy deck. **The homepage repositioned from "I fix
 
 **Open after this pass:** nav still links only Growth Audit / Services / About (the two new sections have no nav anchors — fine, but could add); several `global.css` blocks are now dead (`.module--featured`, `.channel-grid`, `.channel-card`, plus the older `.service-row`/`.audit-step`/`.process-num`) and could be pruned; the About "three clients a month" marker line is gone (decide if it should return); `Layout.astro` title/meta/schema still say "Fractional Head of Product Marketing | The Growth PMM" and describe the old framing — **worth realigning to the new "first PMM leader" positioning** in a follow-up.
 
-## Current state (top → bottom of `src/pages/index.astro`, refreshed 2026-07-01)
+## Update 2026-07-02 (later) — critique-driven refinement + repositioning polish
 
-1. **Nav** — floating pill, logo (lime badge) + links (Growth Audit / Services / About me) + "Book a call". Collapses on scroll to a persistent corner "Book a call" (`#nav-cta-corner`) that carries the call through mid-page sections and docks to the bottom on mobile. Mobile menu adds Proof, AI PMM, FAQ.
+A long iterative session (client-directed + two `/impeccable critique` passes). Everything below is on `main`, builds clean, detector clean. **Deploy still pending** (sandbox has no Cloudflare auth — see the deploy note at the end of the earlier 2026-07-02 entry).
+
+**Hero visual — arrow recut.** The diagram's "the missing piece" hand-drawn arrow was overlapping the pill text; recut so the annotation + curl sit in the open wedge **above-right** of the badge. Clean now.
+
+**Hero repositioning (client copy).**
+- H1 → **"The Product Marketing leader you need, before you're ready to hire one."** (was "The first Product Marketing leader your company needs…"; lime `.marker` on "before you're ready to hire one").
+- Body trimmed and de-jargoned: ICP phrase → **"post-product-market-fit startups"**, "full-time PMM executive" → **"full-time hire"**.
+- Scarcity tag → **"Only 3 clients per month"** (was "slots").
+- Reassurance → **"A 20-minute call. You'll leave with a clear first move."**
+
+**Primary CTA → "Book free consultation"** (was "Book a call"), standardized on the homepage AND `/faq` + `/ai-product-marketing`. Button padding/font were tightened so the longer label reads as a slim pill, not a slab. The floating corner + mobile-menu CTAs match.
+
+**Nav reordered + renamed → Services / Free Growth Audit / About me** (desktop pill + mobile menu; "Growth Audit" → "Free Growth Audit").
+
+**Copy tweaks.** How-it-works H2 → "How we'd actually work." (its eyebrow dropped). Closing band H2 split: "You don't need a full-time Head of Product Marketing yet." with **"You probably do need someone thinking like one."** as a reduced-size **lime** subheading. Dropped trailing lines: Testimonials H2 → "Trusted by founders and growth teams." (dropped "building their next stage of growth"), Proof subhead dropped "Every number here is from real work.", Growth Audit subhead trimmed to one sentence, the right-fit intro line removed. Proof 7.35x stat dropped the "best contribution-margin run on record" clause.
+
+**`/impeccable critique` #1 (scored 31/40 → after fixes, re-scored 34/40 on #2). Fixes shipped:**
+- **Side-stripe border removed** (a hard AI-slop ban the detector caught) from the Section-2 punchline.
+- **Services de-slopped:** the "4 identical cards" became a **featured `.module--featured` "A repeatable growth engine"** ("the outcome we build toward" tag) + a **3-up `.other-services`** grid (Positioning / Product launches / Messaging).
+- **Emoji → monoline SVG icons** everywhere (Services ×4, Recognition band ×3 in lime, and later `/ai-product-marketing` ×4). All decorative icons are `aria-hidden`.
+- **Section 2 mini-cards → staggered unaligned text fragments** (then removed entirely in the merge below).
+- **Hero body trimmed** (see above).
+- **`Layout.astro` title/meta/schema realigned** to the "Product Marketing leader you bring in before you hire a full-time one" framing (was the stale "Fractional Head of PMM / bottleneck capping revenue").
+- **Proof stat labels → sentence case** (dropped `text-transform:uppercase` + tracking on the 4 category labels + "Also on record"; they were the uppercase-tracked eyebrow-tell above metrics).
+
+**Section 3 (Before/After) polished, then merged with Section 2.**
+- Polish: **arrows removed**; the **Before column is struck-through + muted**, the **After column is pale-lime + bold ink** (transformation reads from treatment, not a "→"). Repeated inline styles moved into `.ba-table` / `.ba-before` / `.ba-after` classes.
+- **Merge (per critique P2):** Section 2 (complexity) and Section 3 (before/after) argued the same point back-to-back, so they're now **one section** — H2 "Growth didn't get harder. Your company got more complex." (one line at desktop) → tight lead paragraph with the lime `.marker` on "nobody owns the story that connects them" → "Here's the shift once Product Marketing has an owner." → the Before/After table. The staggered `.ownership-row` fragments and the standalone punchline block were cut (the fragments duplicated the hero diagram). `.ownership-row` CSS removed.
+
+**Line-unwrap.** The merged H2 now sits on **one line** at desktop (removed the 820px column cap) and its lead paragraph spans full width (2 lines, not 3). Body prose elsewhere is deliberately left at readable widths.
+
+**`/impeccable critique` #2 — secondary pages.** Critiqued `/ai-product-marketing` (29/40 pre-fix) and `/faq` (33/40). Both had drifted from the homepage's evolved system. **Fixed:** AI PMM's 4 uppercase `.eyebrow` kickers → **handwritten Caveat** kickers, its emoji → monoline SVG, and "Book a call" → "Book free consultation" on both pages. `.eyebrow` (uppercase) CSS still exists but is now **unused on every page**.
+
+Snapshots for all three targets are in `.impeccable/critique/` (slugs `src-pages-index-astro`, `src-pages-ai-product-marketing-astro`, `src-pages-faq-astro`).
+
+## Current state (top → bottom of `src/pages/index.astro`, refreshed 2026-07-02)
+
+1. **Nav** — floating pill, logo (lime badge) + links (**Services / Free Growth Audit / About me**) + "Book free consultation". Collapses on scroll to a persistent corner "Book free consultation" (`#nav-cta-corner`) that docks to the bottom on mobile. Mobile menu: Services / Free Growth Audit / About me, then Proof / AI PMM / FAQ.
 2. **Hero** — call-led.
-   - Tag: "Only 3 slots per month" (`.sticky-tag purple`, lime fill).
-   - H1: "Unlock the next growth stage." (lime `.marker` on "next growth stage"). Wraps to 2 lines by design (narrow text column next to the diagram).
-   - Body: one paragraph naming the failure modes (positioning, activation, GTM, launch), ending "I start with the growth problem, then work backward to what will move it."
-   - Single CTA "Book a call" + reassurance line ("A 20-minute call, no pitch...").
-   - **Positioning diagram** on the right (replaced the funnel 2026-07-02): hub-and-spoke, transparent Product/Sales/Marketing outline chips converging into a lime "The Growth PMM" hub badge, Caveat "the missing piece" annotation + two-loop hand-drawn arrow, Caveat caption "Between product-market fit and scalable growth." No white card, no coral (see the 2026-07-02 update above).
+   - Tag: **"Only 3 clients per month"** (`.sticky-tag purple`, lime fill).
+   - H1: **"The Product Marketing leader you need, before you're ready to hire one."** (lime `.marker` on "before you're ready to hire one").
+   - Bold sub-line ("You've built a product customers pay for. Now let's build predictable growth.") + a trimmed body paragraph ("I partner with post-product-market-fit startups to build the positioning, messaging, and GTM… without the cost of a full-time hire.").
+   - Single CTA "Book free consultation" + reassurance "A 20-minute call. You'll leave with a clear first move."
+   - **Positioning diagram** on the right: hub-and-spoke, transparent Product/Sales/Marketing outline chips converging into a lime "The Growth PMM" hub badge, Caveat "the missing piece" annotation + recut hand-drawn arrow (top-right wedge), Caveat caption "Between product-market fit and scalable growth." No white card, no coral.
 3. **Logo strip** — Fi Money, Practo, MakeMyTrip, Raymond, TCS, all real logo `<img>`s.
-4. **Services** — eyebrow "PMM, as a service", H2 "I fix what's holding your business back." **Growth strategy** is the featured module (`.module--featured`, "where most teams start" tag, 4-card channel grid); **Positioning audit** and **Go-to-market** sit below as secondary `.other-services` cards. Modular framing, no 1-2-3 numbering.
-5. **How it works (`#how-it-works`)** — eyebrow "how we'd actually work", H2 "From first call to shipped fix, here's how it goes." Three steps (Discovery & Audit / Strategy & Execution / Measurement & Scale), each a plain "STEP 1/2/3" eyebrow (no circular badge, no week-based timing labels). Inline "Book a call" CTA.
-6. **Proof (`#proof`)** — eyebrow "does it actually work?", H2 "12+ years of experience, backed by the numbers." One divided `.proof-strip` panel (4 stats: $11M+ / 7.35x / 25% / 10 days) + "Also on record" + a near-black Recognition band (Top 100 Product Marketing Influencer, Master of Margin, Spot Award ×2).
-7. **Testimonials (`#testimonials`)** — eyebrow "in their words", H2 "What people say after working with me." Editorial layout: one featured anonymized lead quote ("Varun" — still a placeholder to swap for a real named client) with an oversized Caveat quote mark, then two real LinkedIn recs (Samarth Bhatnagar, Priyadarshi Dasgupta) borderless under a hairline. Inline "Book a call" CTA.
-8. **About + why me (merged) (`#about`)** — eyebrow "why me, why now", H2 "I help post-PMF founders engineer scalable growth." Bio (MBA MICA, career stops, Top 100 line) + "I take only three clients a month" (lime `.marker`). Circular photo **medallion** on the right (lime halo ring + ink-deep inner ring, see the 2026-07-01 "even later still" update above). Closes with the **"Is this the right fit?"** qualifier block: "let's be honest" eyebrow, H3, 2-col compare grid (near-black "A fit if" ✓ card / white "Not a fit if" ✗ card).
-9. **Growth Audit (`#report`)** — the soft option, late on the page: eyebrow "not ready for a call yet?", H2 "Start with a free Growth Audit." One near-black card holds the 3-step flow + the "What's in your report" checklist. CTA still points at the `DIAGNOSTIC` Google Form placeholder.
-10. **Closing CTA band** — eyebrow "the fix is closer than you think", H2 "Find what's capping your growth, and start scaling again." (wraps 2 lines, centered, by design — `max-width:760px`). Sells the call, single CTA "Book a call".
-11. **Footer** — links incl. FAQ + AI PMM; email thegrowthpmm@gmail.com, LinkedIn.
+4. **Problem → transformation (merged Sections 2+3, `--cream` bg)** — H2 "Growth didn't get harder. Your company got more complex." (one line at desktop) → lead paragraph (lime `.marker` on "nobody owns the story that connects them") → "Here's the shift once Product Marketing has an owner." → the **`.ba-table` Before → After** table (struck-through muted Before column / pale-lime bold After column, no arrows).
+5. **Services (`#services`)** — handwritten kicker "the work itself", H2 "What we'll build together." A **featured `.module--featured` "A repeatable growth engine"** ("the outcome we build toward" tag) + a 3-up `.other-services` grid (Positioning customers instantly understand / Product launches that drive adoption / Messaging that helps Sales close faster). Monoline SVG icons.
+6. **How it works (`#how-it-works`)** — H2 "How we'd actually work." (no eyebrow). Three steps (Understand your growth constraints / Build the Product Marketing foundation / Enable your team to scale), each a plain "STEP 1/2/3". Inline "Book free consultation" CTA.
+7. **Proof (`#proof`)** — H2 "The impact of 12+ years of better Product Marketing." (marker on "better Product Marketing"), subhead "Across multiple high-growth companies like Fi Money, Practo, MakeMyTrip, and Raymond." Divided `.proof-strip` (4 stats: $11M+ / 7.35x / 25% / 10 days, **sentence-case** category labels) + "Also on record" + a near-black Recognition band (Top 100 Influencer, Master of Margin, Spot Award ×2, monoline lime icons).
+8. **Testimonials (`#testimonials`)** — H2 "Trusted by founders and growth teams." Editorial: one featured lead quote ("Varun" — still a placeholder) + two real LinkedIn recs (Samarth Bhatnagar, Priyadarshi Dasgupta). Inline "Book free consultation" CTA.
+9. **About + why me (`#about`)** — kicker "twelve years in, one lesson", H2 "Why I do this." Story bio (Fi Money/Practo/MakeMyTrip/Raymond, the "gap Product Marketing fills" thesis). Circular photo **medallion** on the right. **Note: the old "I take only three clients a month" marker line was dropped** (scarcity now only in the hero tag). Closes with the **"Are we a good fit?"** block: "let's be honest" kicker, H3, 2-col compare grid ("Yes, if" ✓ 5 items / "Probably not, if" ✗ 4 items).
+10. **Growth Audit (`#report`)** — soft option: kicker "not ready for a call yet?", H2 "Start with a Growth Audit." Near-black card with a "You'll walk away with" list. CTA points at the `DIAGNOSTIC` Google Form **placeholder**.
+11. **Closing CTA band** — kicker "the honest version", H2 "You don't need a full-time Head of Product Marketing yet." + lime subheading "You probably do need someone thinking like one." Single CTA "Book free consultation".
+12. **Footer** — links incl. FAQ + AI PMM; email thegrowthpmm@gmail.com, LinkedIn.
 
-Separate pages: **`/faq`** (`src/pages/faq.astro`) — six short Q&As in a `<details>` accordion. **`/ai-product-marketing`** — the "leading voice of AI PMM" pillar page (POV, workflows, guardrails, proof, 4-Q FAQ). Both linked from footer + mobile menu, both carry `FAQPage` JSON-LD.
+Separate pages: **`/faq`** (`src/pages/faq.astro`) — six Q&As in a `<details>` accordion, handwritten kicker, "Book free consultation" CTA. **`/ai-product-marketing`** — the AI PMM pillar page (POV, workflows with monoline icons, guardrails, proof, 4-Q FAQ), **handwritten Caveat kickers** (was uppercase `.eyebrow`), "Book free consultation" CTA. Both linked from footer + mobile menu, both carry `FAQPage` JSON-LD.
 
 ## Copy & voice
 - **Voice:** second person ("you/your") to the reader; first person ("I") when Divya describes herself.
@@ -246,10 +284,10 @@ Separate pages: **`/faq`** (`src/pages/faq.astro`) — six short Q&As in a `<det
 
 ## Key decisions (don't undo without intent)
 - **Call-led** (see top of file).
-- Primary CTA label = **"Book a call"** (standardized; was "Book a strategy call").
+- Primary CTA label = **"Book free consultation"** (standardized site-wide 2026-07-02; was "Book a call", earlier "Book a strategy call").
 - Report capture stays the existing **Google Form** for now (no Formspree, no on-site interactive quiz — both were considered and declined). Pricing stays **off the site** (call only). FAQ on its own page.
 - **"Is this the right fit?" qualifier** (inside About, not a standalone comparison section anymore since 2026-06-30) is **qualitative** (no dollar figures).
-- Playful/scrapbook elements (handwritten accents, sticky tags, the hero positioning diagram's Caveat annotation + two-loop arrow, the lime `.marker` highlighter) are intentional and used in moderation, not on every section.
+- Playful/scrapbook elements (handwritten Caveat kickers, sticky tags, the hero positioning diagram's Caveat annotation + hand-drawn arrow, the lime `.marker` highlighter) are intentional and used in moderation. Icons are **monoline SVG, never emoji** (2026-07-02).
 
 ## Open to-dos / placeholders
 - [x] Resolve **clients-per-month** contradiction — unified to "three" (2026-06-29).
@@ -261,13 +299,17 @@ Separate pages: **`/faq`** (`src/pages/faq.astro`) — six short Q&As in a `<det
 - [ ] Replace `DIAGNOSTIC` placeholder in `index.astro` AND `faq.astro` with the real **Google Form URL** (the renamed "Growth Audit"; now only on secondary CTAs).
 - [ ] Replace the **anonymized "Varun" lead testimonial** with a real named client quote (Samarth Bhatnagar and Priyadarshi Dasgupta are already real; Varun is the one remaining placeholder — biggest open trust lever).
 - [ ] Add the **Google Calendar intake questions** (see the 2026-06-25 section above).
-- [ ] Confirm/replace domain in `astro.config.mjs` (`site:`) + add `og-image.png` (also used by the schema `image`).
+- [ ] Confirm/replace domain in `astro.config.mjs` (`site:` still `thegrowthpmm.pages.dev`) — Divya owns **thegrowthpmm.com** (registered at Namecheap); needs Cloudflare custom-domain setup + the `site:` swap so canonical/OG/schema URLs update. `public/og-image.png` **now exists** (was a placeholder).
+- [ ] **Deploy the current `main` to Cloudflare** — many commits (2026-07-02 session) are pushed but the sandbox couldn't `wrangler deploy` (no CF auth). Run `npx wrangler deploy` from an authed terminal, or rely on Workers Builds if git-connected.
+- [x] **`Layout.astro` title/meta/schema realigned** to the "Product Marketing leader you hire before a full-time one" positioning (2026-07-02).
+- [x] **Secondary pages brought in line** with the homepage system (handwritten kickers, monoline icons, unified CTA) (2026-07-02).
+- [x] **CTA label** revisited → changed to **"Book free consultation"** site-wide (2026-07-02).
 - [ ] Enable analytics (commented-out in `Layout.astro`).
 - [ ] Build out the **AEO content cluster** beyond `/ai-product-marketing` (more answer-first pages: "fractional PMM vs full-time hire", "diagnosing stalled growth post-PMF", etc.). Consider adding "AI PMM" to the main nav pill, not just the footer.
-- [ ] Unused CSS: `.service-row` / `.service-num` / `.service-icon`, `.audit-step`, and now `.process-num` (dropped from markup 2026-07-01) can be removed from `global.css`.
+- [ ] Unused CSS to prune: `.service-row` / `.service-num` / `.service-icon`, `.audit-step`, `.process-num`, and now **`.eyebrow`** (uppercase kicker, unused everywhere since 2026-07-02) and **`.ownership-row`** (fragments removed in the section merge). Note `.module--featured` is back IN USE (Services featured card) and `.channel-grid`/`.channel-card` are IN USE on `/ai-product-marketing` — don't prune those.
 - [ ] FAQ page closing still leads with the report (intentional soft path) — revisit if you want it call-led too.
-- [ ] Revisit whether **"Book a call"** stays the CTA label as-is, or a variant like "Book my 20-min call" is worth testing (raised 2026-07-01; no change made, just flagged).
 
 ## Verify notes
 - Use `preview_*` tools. Hero/top screenshots are reliable; deep-scroll sometimes comes back blank, so verify lower sections via DOM (`getBoundingClientRect`, computed styles).
 - The ~800px preview width triggers mobile rules on a wide canvas (awkward in-between). Check real breakpoints (375 / 1280) instead.
+- **Screenshot/scroll drift (seen 2026-07-02):** `preview_screenshot` can render a viewport ~1 section *below* where `window.scrollY` reports, so scrolling to an element then screenshotting often misses it. Two reliable workarounds: (a) **DOM measurement** — `getComputedStyle` + `getBoundingClientRect` for line counts, colors, aria attrs (set the viewport to 1440 first via `preview_resize`; `window.innerWidth` confirms it, and measurements are then at desktop even though the screenshot renders narrower); (b) the **transform-scale trick** — temporarily `transform: scale(1.1–2.1)` + `transform-origin: top left` on the target section (pins it to the top-left corner so the screenshot catches it), then revert. Used both extensively this session.
