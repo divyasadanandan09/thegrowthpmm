@@ -32,19 +32,27 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
   <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="text-align:center;margin-top:8px;padding:12px;">Book free consultation</a>
 </div>
 <div id="nav-cta-corner">
+  <button id="corner-menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M2 5h16M2 10h16M2 15h16" stroke="#16180f" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
   <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy">Book free consultation</a>
 </div>
 <script>
   const toggle = document.getElementById("nav-toggle");
+  const cornerToggle = document.getElementById("corner-menu-toggle");
   const menu = document.getElementById("mobile-menu");
   const closeMenu = () => {
     menu?.classList.remove("open");
     toggle?.setAttribute("aria-expanded", "false");
+    cornerToggle?.setAttribute("aria-expanded", "false");
   };
-  toggle?.addEventListener("click", () => {
-    const isOpen = menu?.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", String(!!isOpen));
-  });
+  const openState = (isOpen) => {
+    toggle?.setAttribute("aria-expanded", String(!!isOpen));
+    cornerToggle?.setAttribute("aria-expanded", String(!!isOpen));
+  };
+  toggle?.addEventListener("click", () => openState(menu?.classList.toggle("open")));
+  // Keeps the menu reachable on mobile once the top pill has collapsed on scroll.
+  cornerToggle?.addEventListener("click", () => openState(menu?.classList.toggle("open")));
   menu?.querySelectorAll("a").forEach((a) =>
     a.addEventListener("click", closeMenu)
   );

@@ -696,6 +696,9 @@ body.scrolled .nav-wrap {
   white-space: nowrap;
   box-shadow: 0 10px 24px rgba(27,42,107,0.22);
 }
+/* Corner menu button: hidden on desktop (the pill carries the links); shown on
+   mobile once the pill collapses on scroll, so the menu stays reachable. */
+#corner-menu-toggle { display: none; }
 body.scrolled #nav-cta-corner {
   opacity: 1;
   transform: translateY(0);
@@ -796,9 +799,19 @@ body.scrolled #nav-cta-corner {
   .step-desc { max-width: none; }
   /* Dock the persistent CTA to the bottom on mobile: thumb-reachable, and it
      no longer overlaps section headings scrolling under the top-right corner. */
-  #nav-cta-corner { top: auto; bottom: 16px; gap: 5px; }
+  #nav-cta-corner { top: auto; bottom: 16px; gap: 8px; }
   #nav-cta-corner .corner-book { font-size: 12px; padding: 8px 12px; }
   #nav-cta-corner .btn-navy { font-size: 13px; padding: 11px 18px; box-shadow: 0 8px 22px rgba(22,24,15,0.28); }
+  #corner-menu-toggle {
+    display: flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; flex: none; padding: 0;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(1.4) blur(12px);
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    box-shadow: 0 8px 22px rgba(22,24,15,0.18);
+    cursor: pointer;
+  }
   .service-row { gap: 12px; }
   .service-icon { width: 36px; height: 36px; font-size: 16px; border-radius: 10px; }
   .service-num { display: none; }
@@ -824,6 +837,9 @@ body.scrolled #nav-cta-corner {
   .footer-grid { grid-template-columns: 1fr !important; }
   h1 { font-size: 32px !important; }
   h2 { font-size: 28px !important; }
+  /* Justify reads as word-gaps/rivers on the narrow phone column; left-align
+     here while keeping the justified block look on tablet/desktop. */
+  main p { text-align: left; }
 }
 
 /* Honor reduced-motion: kill transitions, hover lifts, and the nav fade. */
