@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+
+// Blog index. AI PMM is the first post; add new entries to the top of this list.
+const posts = [
+  {
+    href: "/ai-product-marketing",
+    tag: "AI PMM",
+    title: "AI product marketing, minus the hype.",
+    excerpt:
+      "What AI actually changes in product marketing, the workflows worth running, and where AI quietly breaks your positioning.",
+  },
+];
+---
+
+<Layout
+  title="Blog | The Growth PMM"
+  description="Notes on product marketing, positioning, GTM, and AI PMM for post-PMF startups. By Divya Sadanandan, fractional Head of Product Marketing."
+>
+  <!-- top bar -->
+  <div style="border-bottom:1px solid var(--hairline);background:#fff;">
+    <div style="max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <a href="/" style="display:flex;align-items:center;text-decoration:none;">
+        <Logo size={28} wordSize={16} />
+      </a>
+      <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="font-size:13px;padding:9px 18px;flex:none;">Book free consultation</a>
+    </div>
+  </div>
+
+  <main style="background:var(--canvas);">
+    <section class="grid-canvas" style="background:var(--hero-bg);border-bottom:1px solid var(--warm-line);">
+      <div style="max-width:880px;margin:0 auto;padding:84px 24px 64px;">
+        <a href="/" style="font-size:14px;font-weight:600;color:var(--ink);">&larr; Back to home</a>
+        <span class="handwritten" style="font-size:26px;display:block;margin-top:20px;color:var(--ink-deep);">thinking out loud</span>
+        <h1 style="font-size:52px;font-weight:800;line-height:1.08;letter-spacing:-1.4px;margin:8px 0 0;color:var(--ink);">The Blog.</h1>
+        <p style="font-size:19px;line-height:1.6;color:var(--ink-mute);margin:20px 0 0;max-width:640px;text-align:left;">Notes on product marketing, positioning, GTM, and AI PMM for post-PMF startups. Written from the actual work, not the playbook everyone reposts.</p>
+      </div>
+    </section>
+
+    <section style="background:var(--canvas);">
+      <div style="max-width:880px;margin:0 auto;padding:56px 24px 84px;">
+        <div style="display:flex;flex-direction:column;gap:18px;">
+          {posts.map((post) => (
+            <a href={post.href} class="blog-card">
+              <span class="sticky-tag gold" style="font-size:11px;padding:6px 12px;align-self:flex-start;">{post.tag}</span>
+              <h2 style="font-size:26px;font-weight:800;line-height:1.18;letter-spacing:-0.5px;margin:16px 0 0;color:var(--ink);">{post.title}</h2>
+              <p style="font-size:16px;line-height:1.6;color:var(--ink-mute);margin:10px 0 0;text-align:left;">{post.excerpt}</p>
+              <span style="font-size:14px;font-weight:700;color:var(--ink);margin-top:16px;display:inline-block;">Read the piece &rarr;</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: 30px 32px;
+    box-shadow: 0 1px 3px rgba(27,42,107,0.05);
+    transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.15s, border-color 0.15s;
+  }
+  .blog-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px rgba(27,42,107,0.12);
+    border-color: var(--navy);
+  }
+</style>

@@ -44,7 +44,7 @@ Single-page marketing site for **Divya Sadanandan** ("TheGrowthPMM"), an indepen
 - Every section eyebrow (handwritten) should read coherently *into* its heading, not duplicate it.
 - **Voice:** second person ("you/your") to the reader; first person ("I") when Divya describes herself. Anti-AI Rule 1 is strict here — keep the page at **zero em dashes** (use periods/commas).
 - Revenue/impact metrics use **$** consistently (no ₹).
-- Contact email: **thegrowthpmm@gmail.com**. Brand mark: **"The Growth PMM"** (with spaces) everywhere visible — nav, footer logo + copyright, all page `<title>`s, the comparison card. The JSON-LD `ProfessionalService` uses `name: "The Growth PMM"` + `alternateName: "TheGrowthPMM"` so the one-word form still resolves (unified 2026-06-29).
+- Contact email: **divya@thegrowthpmm.com** (changed 2026-07-03 from thegrowthpmm@gmail.com; updated in the footer mailto + the `ProfessionalService` schema `email`). Brand mark: **"The Growth PMM"** (with spaces) everywhere visible — nav, footer logo + copyright, all page `<title>`s, the comparison card. The JSON-LD `ProfessionalService` uses `name: "The Growth PMM"` + `alternateName: "TheGrowthPMM"` so the one-word form still resolves (unified 2026-06-29).
 
 ## Open placeholders (must be filled before launch)
 - `DIAGNOSTIC` const in `index.astro` (and `faq.astro`) = `[PLACEHOLDER: Growth Funnel Diagnostic Google Form link]` — the report's Google Form URL. Now powers the **secondary report CTAs** only.

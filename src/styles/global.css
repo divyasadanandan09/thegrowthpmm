@@ -9,6 +9,9 @@ h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacin
 /* Balance multi-line headings so they never orphan a single word on the last line. */
 /* Reduce orphans/ragged breaks in body prose. */
 p { text-wrap: pretty; }
+/* Justify reading paragraphs into clean blocks (client-directed). Only multi-line
+   paragraphs are affected; centered promo lines opt out via inline text-align. */
+main p { text-align: justify; text-justify: inter-word; }
 
 /* Visible, consistent keyboard focus (was relying on UA default). */
 :where(a, button, summary, [tabindex]):focus-visible {
@@ -574,6 +577,22 @@ footer a:hover { opacity: 0.75; }
   color: #fff;
 }
 
+/* "Are we a good fit?" block. Aligns to the bio column width above it, and each
+   card sizes to its own content (top-aligned) so the shorter "not a fit" list
+   doesn't strand dead space at the bottom of a force-stretched card. A hairline
+   note anchors that card and doubles as a soft, on-brand call nudge. */
+.fit-head { max-width: 900px; }
+.fit-grid { max-width: 920px; align-items: start; gap: 18px; }
+.fit-note {
+  margin: 22px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--hairline);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  text-align: left;
+}
+
 /* ===== Floating nav ===== */
 
 .nav-wrap {
@@ -600,14 +619,17 @@ body.scrolled .nav-wrap {
   border: 1px solid var(--hairline);
   border-radius: 90px;
   box-shadow: 0 10px 30px rgba(27,42,107,0.14);
-  padding: 8px 8px 8px 18px;
+  padding: 8px 8px 8px 20px;
   display: flex;
   align-items: center;
-  gap: 22px;
-  max-width: 640px;
+  gap: 20px;
+  max-width: 720px;
   width: 100%;
 }
-#nav-links { display: flex; gap: 20px; font-size: 14px; font-weight: 600; flex: 1; }
+/* Keep links on one line each (was wrapping "Free Growth Audit" / "About me"
+   into stacked words in the cramped pill). */
+#nav-links { display: flex; gap: 18px; font-size: 14px; font-weight: 600; flex: 1; justify-content: center; }
+#nav-links a { white-space: nowrap; }
 #nav-toggle {
   display: none;
   background: none;
