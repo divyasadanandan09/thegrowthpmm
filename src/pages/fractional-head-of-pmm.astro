@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+
+const faqs = [
+  {
+    q: "What is a fractional Head of PMM?",
+    a: "A senior product marketing leader who owns your positioning, messaging, launches, and go-to-market on a part-time, embedded basis. You get the judgment of someone who has run PMM at scale, focused on the specific thing capping your growth, without the cost or commitment of a full-time executive hire.",
+  },
+  {
+    q: "When should I hire a fractional Head of PMM instead of a full-time one?",
+    a: "When you have paying customers and real traction, but growth has become less predictable and no single person owns the story that connects Product, Sales, and Marketing. If you can find a senior full-time PMM, afford the salary and equity, and wait three to six months for them to ramp, hire one. Most post-PMF teams aren't there yet. A fractional lead gives you that seniority now, on the problem in front of you.",
+  },
+  {
+    q: "How is this different from an agency or a generalist consultant?",
+    a: "An agency executes campaigns you brief. A generalist advises from the outside. I work as your embedded Product Marketing leader: I diagnose where growth is stalling, decide what to build, and do the work with your team. I'm accountable for whether growth moves, not for volume of deliverables.",
+  },
+  {
+    q: "What does a fractional PMM engagement cost?",
+    a: "It depends on scope. Most engagements start around $500, month to month, with no long lock-in. Book a call, tell me what's stalled, and I'll give you a straight scope and the cost before you commit.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<Layout
+  title="What a fractional Head of PMM does (and when you need one) | The Growth PMM"
+  description="A plain-spoken guide to the fractional Head of Product Marketing: what the role is, the signs you need one, how it compares to a full-time hire, and what it costs. By Divya Sadanandan."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- top bar -->
+  <div style="border-bottom:1px solid var(--hairline);background:#fff;">
+    <div style="max-width:1100px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <a href="/" style="display:flex;align-items:center;text-decoration:none;">
+        <Logo size={28} wordSize={16} />
+      </a>
+      <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="font-size:13px;padding:9px 18px;flex:none;">Book free consultation</a>
+    </div>
+  </div>
+
+  <main style="background:var(--canvas);">
+    <!-- HERO -->
+    <section class="grid-canvas" style="background:var(--hero-bg);border-bottom:1px solid var(--warm-line);">
+      <div style="max-width:880px;margin:0 auto;padding:84px 24px 64px;">
+        <a href="/blog" style="font-size:14px;font-weight:600;color:var(--ink);">&larr; Back to blog</a>
+        <span class="handwritten" style="font-size:26px;display:block;margin-top:20px;color:var(--ink-deep);">before the full-time hire</span>
+        <h1 style="font-size:52px;font-weight:800;line-height:1.08;letter-spacing:-1.4px;margin:8px 0 0;color:var(--ink);">The fractional Head of PMM, explained.</h1>
+        <p style="font-size:19px;line-height:1.6;color:var(--ink-mute);margin:20px 0 0;max-width:640px;">You've found product-market fit and the customers are real. Then growth gets harder to predict, and nobody owns the story that ties Product, Sales, and Marketing together. That's the job a fractional Head of Product Marketing does, before you're ready to hire a full-time one.</p>
+      </div>
+    </section>
+
+    <!-- WHAT IT IS -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:880px;margin:0 auto;padding:72px 24px;">
+        <span class="handwritten" style="font-size:24px;display:block;color:var(--ink-deep);">the short version</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">What a fractional Head of PMM actually is.</h2>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:18px 0 0;">A fractional Head of Product Marketing is a senior PMM leader who works with you part-time and embedded, not from the outside. You get someone who has owned positioning, launches, and go-to-market at scale, pointed at the exact constraint slowing your growth. I do the work myself instead of handing it to a junior, I start in days rather than months, and it's a flat monthly fee with no full-time commitment.</p>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-deep);font-weight:600;margin:16px 0 0;">Full-time seniority, on the problem in front of you, without the full-time bet.</p>
+      </div>
+    </section>
+
+    <!-- SIGNS -->
+    <section style="background:var(--cream);">
+      <div style="max-width:980px;margin:0 auto;padding:72px 24px;">
+        <span class="handwritten" style="font-size:24px;display:block;color:var(--ink-deep);">how you know</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">The signs you need one.</h2>
+        <p style="font-size:18px;line-height:1.6;color:var(--ink-mute);margin:16px 0 24px;max-width:680px;">If a few of these sound familiar, the constraint is usually Product Marketing, not the product.</p>
+        <div class="channel-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="channel-card" style="background:#fff;">
+            <span style="flex:none;line-height:0;margin-top:1px;" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16180f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Growth got less predictable</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">The early traction was real, but the same effort no longer moves the numbers the way it used to.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="flex:none;line-height:0;margin-top:1px;" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16180f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 4.5 1.5c0 1.5-2 2-2 3"/><path d="M12 17h.01"/></svg></span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Customers don't get your value</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">You know why you're better. It isn't landing, so the market defaults to price or to the incumbent.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="flex:none;line-height:0;margin-top:1px;" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16180f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V9"/><path d="M6 15l6-6 6 6"/><path d="M5 5h14"/></svg></span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Launches don't drive adoption</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">You ship features, but they land as announcements. Usage and revenue don't follow the release.</p>
+            </div>
+          </div>
+          <div class="channel-card" style="background:#fff;">
+            <span style="flex:none;line-height:0;margin-top:1px;" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16180f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h8"/><circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 11l10-4M7 13l10 4"/></svg></span>
+            <div>
+              <p style="font-weight:700;font-size:15px;margin:0;">Every team tells a different story</p>
+              <p style="font-size:14px;color:var(--ink-mute);margin:3px 0 0;line-height:1.5;">Sales says one thing, the site says another, Product builds toward a third. No one owns the through-line.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VS FULL-TIME -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:880px;margin:0 auto;padding:72px 24px;">
+        <span class="handwritten" style="font-size:24px;display:block;color:var(--ink-deep);">the honest comparison</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">Fractional or full-time?</h2>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:18px 0 0;">A full-time Head of PMM is the right call once the role is big enough to fill five days a week and you can carry the salary, equity, and ramp. For most post-PMF teams that day is coming, but it isn't here yet. Hiring ahead of it is expensive, and hiring the wrong senior person is worse.</p>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-mute);margin:16px 0 0;">Fractional closes that gap. You get the senior thinking now, the foundation gets built, and your team learns to run it. When the work is genuinely a full-time job, you hire for it with a clear brief instead of a guess, and often a system already in place.</p>
+        <p style="font-size:18px;line-height:1.65;color:var(--ink-deep);font-weight:600;margin:16px 0 0;">You don't need a full-time Head of Product Marketing yet. You probably do need someone thinking like one.</p>
+      </div>
+    </section>
+
+    <!-- PROOF -->
+    <section style="background:var(--blue-tint);">
+      <div style="max-width:880px;margin:0 auto;padding:64px 24px;">
+        <div style="background:#fff;border-radius:16px;padding:36px 40px;border:1px solid var(--hairline);">
+          <span class="sticky-tag gold" style="font-size:13px;padding:8px 16px;">Receipts</span>
+          <p style="font-size:20px;font-weight:700;line-height:1.4;margin:18px 0 0;color:var(--ink);">Experimentation programs I ran generated $11M+ in annual revenue at a Series C neobank, and repositioning work lifted qualified conversion 25%.</p>
+          <p style="font-size:15px;color:var(--ink-mute);margin:12px 0 0;">Twelve-plus years across Fi Money, Practo, MakeMyTrip, and Raymond. A Top 100 Global Product Marketing Influencer, 2025. This is how I work, on revenue that showed up.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section style="background:var(--canvas);">
+      <div style="max-width:760px;margin:0 auto;padding:72px 24px 16px;">
+        <span class="handwritten" style="font-size:24px;display:block;color:var(--ink-deep);">straight answers</span>
+        <h2 style="font-size:34px;font-weight:800;line-height:1.18;letter-spacing:-0.6px;margin:12px 0 0;">Fractional PMM, answered.</h2>
+      </div>
+      <div class="faq-list" style="padding:16px 24px 8px;">
+        {faqs.map((item) => (
+          <details class="faq-item">
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- CLOSING CTA -->
+    <section style="background:var(--ink-deep);color:#fff;">
+      <div style="max-width:840px;margin:0 auto;padding:84px 24px;text-align:center;">
+        <span class="handwritten light" style="font-size:26px;display:block;margin-bottom:6px;">let's find the constraint</span>
+        <h2 style="font-size:38px;font-weight:800;line-height:1.16;letter-spacing:-0.8px;margin:0 auto;max-width:620px;">Think a fractional Head of PMM is what you need?</h2>
+        <p style="font-size:18px;line-height:1.55;color:var(--on-navy-mute);margin:18px auto 0;max-width:520px;text-align:center;">A 20-minute call, no pitch. Tell me what's stalled and you'll leave with a clear first move.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:30px;">
+          <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy" style="font-size:17px;padding:16px 34px;">Book free consultation</a>
+          <a href="/" style="font-size:15px;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:3px;align-self:center;">See the full offer</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

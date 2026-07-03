@@ -47,10 +47,14 @@ Single-page marketing site for **Divya Sadanandan** ("TheGrowthPMM"), an indepen
 - Contact email: **divya@thegrowthpmm.com** (changed 2026-07-03 from thegrowthpmm@gmail.com; updated in the footer mailto + the `ProfessionalService` schema `email`). Brand mark: **"The Growth PMM"** (with spaces) everywhere visible — nav, footer logo + copyright, all page `<title>`s, the comparison card. The JSON-LD `ProfessionalService` uses `name: "The Growth PMM"` + `alternateName: "TheGrowthPMM"` so the one-word form still resolves (unified 2026-06-29).
 
 ## Open placeholders (must be filled before launch)
-- `DIAGNOSTIC` const in `index.astro` (and `faq.astro`) = `[PLACEHOLDER: Growth Funnel Diagnostic Google Form link]` — the report's Google Form URL. Now powers the **secondary report CTAs** only.
+- `DIAGNOSTIC` const in `index.astro` (and `faq.astro`) = **final** as of 2026-07-03 (`https://forms.gle/HTwdNSTiyyXQYsxb7`). Powers the secondary Growth-Audit CTAs.
 - **Booking qualification:** native Google Calendar intake questions were chosen (2026-06-25) but can't be set from code. The 3 questions + setup steps are in `HANDOFF.md`; Divya adds them in Calendar's booking form.
-- `astro.config.mjs` `site:` is still `https://thegrowthpmm.pages.dev` (the Cloudflare Pages URL). Divya owns **thegrowthpmm.com** (registered at Namecheap) but it isn't wired to Cloudflare yet; set up the custom domain, then swap `site:` so schema/canonical/OG URLs update.
-- `public/og-image.png` **now exists** (referenced by OG tags + the `Person`/`ProfessionalService` schema `image`).
+- `astro.config.mjs` `site:` is now **`https://thegrowthpmm.com`** (live on Cloudflare, swapped 2026-07-03); canonical/OG/schema URLs resolve to the real domain, and `og:image`/`twitter:image` were made absolute (`${SITE}/og-image.png`).
+- `public/og-image.png` exists and is the lime-brand card (regenerated 2026-07-03).
 - Analytics script in `Layout.astro` is commented out.
+
+## Blog (added 2026-07-03)
+- `src/pages/blog.astro` — `/blog` index; `posts` array (newest first). Footer "Blog" links here. Currently two posts.
+- `src/pages/fractional-head-of-pmm.astro` — `/fractional-head-of-pmm` pillar ("The fractional Head of PMM, explained."): what it is / signs you need one (4 monoline-icon cards) / fractional vs full-time / receipts / 4-Q FAQ + `FAQPage` JSON-LD / closing CTA. AEO target for "fractional Head of PMM". Mirrors the `/ai-product-marketing` structure and voice.
 
 See `HANDOFF.md` for full decision log and to-dos.
