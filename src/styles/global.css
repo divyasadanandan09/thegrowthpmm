@@ -582,10 +582,13 @@ footer a:hover { opacity: 0.75; }
    doesn't strand dead space at the bottom of a force-stretched card. A hairline
    note anchors that card and doubles as a soft, on-brand call nudge. */
 .fit-head { max-width: 900px; }
-.fit-grid { max-width: 920px; align-items: start; gap: 18px; }
+.fit-grid { max-width: 920px; align-items: stretch; gap: 20px; }
+/* Equal-height matched pair: cards flex-column so the shorter "not a fit" card
+   stretches to the taller one and its note anchors to the base. */
+.fit-grid .compare-card { display: flex; flex-direction: column; }
 .fit-note {
-  margin: 22px 0 0;
-  padding-top: 16px;
+  margin-top: auto;
+  padding-top: 18px;
   border-top: 1px solid var(--hairline);
   font-size: 13.5px;
   line-height: 1.55;
