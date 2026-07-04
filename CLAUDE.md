@@ -9,6 +9,7 @@ Single-page marketing site for **Divya Sadanandan** ("TheGrowthPMM"), an indepen
 ## Key files
 - `src/pages/index.astro` — the whole homepage (nav, hero, logo strip, problem, services, how-it-works, proof, testimonials, why-me comparison, about, the free report as a soft section, closing CTA, footer).
 - `src/pages/faq.astro` — separate FAQ page at `/faq` (six Q&As in a `<details>` accordion), linked from footer + mobile menu. Carries `FAQPage` JSON-LD.
+- `src/pages/404.astro` — custom 404 (added 2026-07-04): on-brand dead-end page, links home + booking.
 - `src/pages/ai-product-marketing.astro` — AEO / thought-leadership pillar at `/ai-product-marketing` (AI PMM point of view, the workflows, guardrails, proof, a 4-Q FAQ). The "leading voice of AI PMM" content home. Linked from footer + mobile menu. Carries `FAQPage` JSON-LD.
 - `src/styles/global.css` — design system: navy palette CSS vars, `.handwritten` (Caveat accents + `.light` variant), `.sticky-tag`, `.module` (Services cards), `.channel-grid`, `.compare-*` (Why-me: alternatives get ✗, `.compare-card--me` gets ✓), `.process-*` (How it works steps), `.testimonial-lead` + `.testimonial-pair` (editorial testimonials: a featured pull-quote with an oversized Caveat quote mark, then two borderless recs under a hairline — not cards, changed 2026-06-29), `.steps-flow` + `.report-checklist` (report card), `.funnel-*`, responsive rules, `.marker` (lime highlighter, in active use — see Design system below). (`.service-row`, `.audit-step` linger but are unused.)
 - `src/layouts/Layout.astro` — `<head>`, fonts (Inter + Caveat), meta/OG, and the global **JSON-LD entity graph** (`Person` Divya Sadanandan + `ProfessionalService` TheGrowthPMM) emitted on every page so answer engines resolve the entity.
@@ -49,7 +50,7 @@ Single-page marketing site for **Divya Sadanandan** ("TheGrowthPMM"), an indepen
 ## Open placeholders (must be filled before launch)
 - `DIAGNOSTIC` const in `index.astro` (and `faq.astro`) = **final** as of 2026-07-03 (`https://forms.gle/HTwdNSTiyyXQYsxb7`). Powers the secondary Growth-Audit CTAs.
 - **Booking qualification:** native Google Calendar intake questions were chosen (2026-06-25) but can't be set from code. The 3 questions + setup steps are in `HANDOFF.md`; Divya adds them in Calendar's booking form.
-- `astro.config.mjs` `site:` is now **`https://thegrowthpmm.com`** (live on Cloudflare, swapped 2026-07-03); canonical/OG/schema URLs resolve to the real domain, and `og:image`/`twitter:image` were made absolute (`${SITE}/og-image.png`).
+- `astro.config.mjs` `site:` is now **`https://www.thegrowthpmm.com`** (live on Cloudflare, swapped 2026-07-03; **www, not apex** — the apex doesn't redirect to www yet, so canonical/OG/schema all point at www to avoid a dead image URL). `og:image`/`twitter:image` were made absolute (`${SITE}/og-image.png`). **Apex→www redirect is still an open to-do** — see `HANDOFF.md`.
 - `public/og-image.png` exists and is the lime-brand card (regenerated 2026-07-03).
 - Analytics script in `Layout.astro` is commented out.
 

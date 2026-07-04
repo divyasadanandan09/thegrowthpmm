@@ -12,6 +12,10 @@ p { text-wrap: pretty; }
 /* Justify reading paragraphs into clean blocks (client-directed). Only multi-line
    paragraphs are affected; centered promo lines opt out via inline text-align. */
 main p { text-align: justify; text-justify: inter-word; }
+/* Justify is for wide single-column prose only. In narrow columns (service and
+   process cards, the proof stat strip, the recognition band) it opens visible
+   word-gaps at desktop, so those stay left-aligned. */
+.module p, .process-step p, .proof-strip p, .proof-bottom p, .recognition-band p { text-align: left; }
 
 /* Visible, consistent keyboard focus (was relying on UA default). */
 :where(a, button, summary, [tabindex]):focus-visible {
@@ -285,8 +289,8 @@ footer a:hover { opacity: 0.75; }
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #e6f5ef;
-  color: #007a5a;
+  background: var(--navy);
+  color: var(--ink-deep);
   font-size: 13px;
   font-weight: 800;
   display: flex;
@@ -831,6 +835,8 @@ body.scrolled #nav-cta-corner {
   .proof-bottom > div:last-child { border-left: none !important; padding-left: 0 !important; border-top: 1px solid var(--hairline); padding-top: 24px; margin-top: 8px; }
   .recognition-band { flex-direction: column !important; align-items: flex-start !important; }
   .recognition-band > div:nth-child(3) { display: none !important; }
+  /* Clear the bottom-docked corner CTA so it doesn't sit over the copyright line. */
+  footer { padding-bottom: 72px; }
   section, header, footer { padding-left: 0; padding-right: 0; }
 }
 @media (max-width: 600px) {

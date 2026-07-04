@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Logo from "../components/Logo.astro";
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+---
+
+<Layout
+  title="Page not found | The Growth PMM"
+  description="That page doesn't exist. Head back to the homepage or book a free consultation."
+>
+  <main>
+    <section class="grid-canvas" style="background:var(--hero-bg);min-height:100vh;display:flex;align-items:center;">
+      <div style="max-width:640px;margin:0 auto;padding:80px 24px;text-align:center;">
+        <div style="display:flex;justify-content:center;">
+          <a href="/" style="display:inline-flex;text-decoration:none;" aria-label="The Growth PMM home">
+            <Logo size={32} wordSize={17} />
+          </a>
+        </div>
+        <span class="handwritten" style="font-size:26px;display:block;margin-top:44px;">well, this is a dead end</span>
+        <h1 style="font-size:44px;font-weight:800;line-height:1.14;letter-spacing:-1px;margin:10px 0 0;color:var(--ink);">This page doesn't exist.</h1>
+        <p style="font-size:17px;line-height:1.6;color:var(--ink-mute);margin:18px auto 0;max-width:460px;text-align:center;">The link is broken or the page has moved. The good news: everything worth reading is one click away.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:32px;">
+          <a href="/" class="btn-navy" style="font-size:15px;padding:13px 24px;">Back to the homepage</a>
+          <a href={BOOKING} target="_blank" rel="noopener" class="btn-outline-navy" style="font-size:15px;padding:13px 24px;">Book free consultation</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
