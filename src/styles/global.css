@@ -175,6 +175,8 @@ footer a:focus-visible,
 
 footer a { color: #fff; transition: opacity 0.1s; display: inline-block; padding-block: 3px; }
 footer a:hover { opacity: 0.75; }
+/* Clearance so the bottom-docked floating CTA doesn't cover the footer tagline. */
+footer { padding-bottom: 64px; }
 
 /* ===== Playful canvas accents ===== */
 
@@ -586,10 +588,16 @@ footer a:hover { opacity: 0.75; }
    doesn't strand dead space at the bottom of a force-stretched card. A hairline
    note anchors that card and doubles as a soft, on-brand call nudge. */
 .fit-head { max-width: 900px; }
-.fit-grid { max-width: 920px; align-items: stretch; gap: 20px; }
+/* Extended to full section width + leaner: the wider box lets the bullet lists
+   wrap onto fewer lines, so the cards read as slim horizontal panels rather than
+   tall blocks. */
+.fit-grid { max-width: none; align-items: stretch; gap: 20px; }
 /* Equal-height matched pair: cards flex-column so the shorter "not a fit" card
    stretches to the taller one and its note anchors to the base. */
-.fit-grid .compare-card { display: flex; flex-direction: column; }
+.fit-grid .compare-card { display: flex; flex-direction: column; padding: 22px 26px; }
+.fit-grid .compare-head { margin-bottom: 14px; }
+.fit-grid .compare-card ul { gap: 11px; }
+.fit-grid .fit-note { padding-top: 14px; }
 .fit-note {
   margin-top: auto;
   padding-top: 18px;
@@ -671,14 +679,14 @@ body.scrolled .nav-wrap {
 /* Persistent corner CTA, shown only once scrolled past the hero */
 #nav-cta-corner {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  bottom: 24px;
+  right: 24px;
   z-index: 61;
   display: flex;
   align-items: center;
   gap: 6px;
   opacity: 0;
-  transform: translateY(-12px);
+  transform: translateY(12px);
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
@@ -747,30 +755,69 @@ body.scrolled #nav-cta-corner {
 /* ===== Section 3: Before / After ===== */
 /* The transformation reads from the treatment, not an arrow: the Before column
    is struck-through and muted (the state you're leaving), the After column sits
-   on a pale-lime tint in strong ink (the state once PMM has an owner). */
+   on a pale-lime band in strong ink (the state once PMM has an owner). Each pair
+   carries the site's own ✗ / ✓ vocabulary (same as "Are we a good fit?") so the
+   fix reads at a glance, and rows lift subtly on hover. */
 .ba-table {
   max-width: 900px;
   margin: 30px 0 0;
-  background: var(--canvas);
+  background: #fff;
   border: 1px solid var(--warm-line);
-  border-radius: 16px;
+  border-radius: 20px;
   overflow: hidden;
+  box-shadow: 0 18px 44px rgba(22,24,15,0.10);
 }
 .ba-row { display: grid; grid-template-columns: 1fr 1fr; }
 .ba-row + .ba-row { border-top: 1px solid var(--warm-line); }
-.ba-before, .ba-after { padding: 17px 26px; font-size: 16px; line-height: 1.35; }
+.ba-before, .ba-after { padding: 18px 26px; font-size: 16px; line-height: 1.35; }
 .ba-before {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: var(--ink-mute);
+}
+.ba-before span, .ba-after span {
+  text-decoration: inherit;
+}
+.ba-row:not(.ba-head) .ba-before span {
   text-decoration: line-through;
   text-decoration-thickness: 1px;
   text-decoration-color: rgba(95, 100, 112, 0.45);
 }
 .ba-after {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: #f5fbd6;
   color: var(--ink-deep);
   font-weight: 700;
   border-left: 1px solid var(--warm-line);
 }
+/* ✗ / ✓ marks, reusing the compare-card chip language */
+.ba-row:not(.ba-head) .ba-before::before,
+.ba-row:not(.ba-head) .ba-after::before {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+}
+.ba-row:not(.ba-head) .ba-before::before {
+  content: "\2717";
+  background: #efe7e4;
+  color: #b08a7e;
+}
+.ba-row:not(.ba-head) .ba-after::before {
+  content: "\2713";
+  background: var(--navy);
+  color: var(--ink-deep);
+}
+.ba-row:not(.ba-head):hover .ba-before { background: #faf9f6; }
+.ba-row:not(.ba-head):hover .ba-after { background: #eef7c4; }
 .ba-head .ba-before, .ba-head .ba-after {
   padding-top: 14px;
   padding-bottom: 14px;
