@@ -337,6 +337,17 @@ Client asked to shorten several sections **on mobile only** — the homepage was
 - **About bio, leaned out** — the middle explainer paragraph ("One lesson has stayed consistent...") got a new `.about-lean-hide` class, hidden on mobile only. Mobile keeps the credibility line, the "That's the gap Product Marketing fills" punchline, and the closing positioning paragraph; desktop keeps all four paragraphs as before.
 - Verified via DOM/computed-style checks at 390px (all five rules apply, accordion toggles correctly via a real label click, first stat starts expanded/others collapsed) and at 1440px (`moduleDesc`/`processDesc`/`fitHead`/`fitGrid`/`aboutLeanHide` all compute back to their normal display, chevron stays hidden) — plus a full mobile screenshot. Zero console errors. Not yet committed.
 
+## Update 2026-07-05 (latest) — OG image made playful (`/impeccable polish`)
+
+Client felt `public/og-image.png` was flat and asked for more fun via design elements, without going off-brand. The card was still using Arial (Black/Bold/Regular) and a plain rounded-rect marker highlight + perfectly-aligned pills — none of that matched the live site's actual system, which is exactly why it read flat. Fix pulled the real brand fonts and reused the site's own already-established playful vocabulary rather than inventing new decoration:
+
+- **Real fonts, not Arial.** Downloaded the variable TTFs the site actually uses (`Bricolage Grotesque`, `Inter`, `Caveat`) into `scratchpad/fonts/` (gitignored-worthy, not committed as project assets — regenerate via the URLs in `scratchpad/make_og.py`'s git history if missing) and switched the wordmark/headline to Bricolage Grotesque, subtext to Inter, and the new handwritten touches to Caveat.
+- **Marker highlight redrawn as a hand-swiped shape** (a slightly wavy polygon with feathered alpha edges + a −1.4° rotation) instead of a perfect `rounded_rectangle`, echoing the site's own `.marker` (irregular border-radius + gradient fade). A small coral dot closes the highlighted phrase, echoing the logo/funnel coral accent.
+- **"Top 100 PMM, 2025" rotated corner stamp** (near-black fill, lime text, +5°) — reuses the exact rotated rubber-stamp treatment as the Before/After `.ba-stamp` and `.sticky-tag`, applied to a credential that's already real and used elsewhere on the site (hero tag / Recognition band), not a new invented shape. A small Caveat "(genuinely)" sits under it at a slightly different tilt.
+- **Footer role pill tilted −3°** (was perfectly axis-aligned) plus a Caveat handwritten note "not a full-time bet" with a hand-drawn curly arrow pointing at it — the same annotation language as the hero diagram's "the missing piece" arrow.
+- Helper `rotated_paste()` added to `make_og.py`: draws each element on an exact-content-bounds transparent layer, rotates with `expand=True`, and pastes so the *unrotated* center lands at the intended anchor (avoids the size-mismatch bug where padding a layer larger than its content shifts the rotation center).
+- Regenerated `public/og-image.png` (1200×630); `dist/og-image.png` will pick it up on the next `npm run build` (static asset copy).
+
 ## Current state (top → bottom of `src/pages/index.astro`, refreshed 2026-07-02)
 
 1. **Nav** — floating pill, logo (lime badge) + links (**Services / Free Growth Audit / About me**) + "Book free consultation". Collapses on scroll to a persistent corner "Book free consultation" (`#nav-cta-corner`) that docks to the bottom on mobile. Mobile menu: Services / Free Growth Audit / About me, then Proof / AI PMM / FAQ.
