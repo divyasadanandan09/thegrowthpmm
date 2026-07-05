@@ -1,79 +1,17 @@
 # robots.txt — thegrowthpmm.com
 #
-# Intent: let search engines and AI *answer* engines read and cite the site
-# (they send traffic and surface the brand), while opting out of AI *training*
-# scrapers (which copy content but send nothing back).
+# Policy: allow everything. This is a marketing site whose goal is maximum
+# discovery, so every crawler — search engines AND AI bots (answer engines
+# and training crawlers alike) — is welcome to read and cite the content.
 #
-# NOTE: This file only takes effect if Cloudflare's "Manage your robots.txt"
-# setting is turned OFF. While that setting is on, Cloudflare generates and
-# serves its own robots.txt and this file is ignored.
+# This deliberately permits AI training too (GPTBot, Google-Extended, etc.).
+# For a brochure site, being read/cited by ChatGPT, Gemini, Perplexity and
+# Claude is worth far more than opting out of training datasets.
+#
+# NOTE: This file only takes effect while Cloudflare's "Manage your robots.txt"
+# setting is turned OFF ("Disable robots.txt configuration"). If it gets set
+# back to "Instruct AI bots to not scrape content," Cloudflare serves its own
+# managed robots.txt at the edge and this file is ignored.
 
-# ---------------------------------------------------------------------------
-# Default: every bot may crawl everything. Regular search crawlers
-# (Googlebot, Bingbot, DuckDuckBot, etc.) are covered here and need no
-# entry of their own.
-# ---------------------------------------------------------------------------
 User-agent: *
 Allow: /
-
-# ---------------------------------------------------------------------------
-# AI answer / search engines — explicitly welcome. These read the site to
-# answer users live and cite/link back, so they aid discovery.
-# ---------------------------------------------------------------------------
-
-# OpenAI — ChatGPT search results
-User-agent: OAI-SearchBot
-Allow: /
-
-# OpenAI — ChatGPT live browsing (triggered when a user asks it to fetch a page)
-User-agent: ChatGPT-User
-Allow: /
-
-# Perplexity — answer index
-User-agent: PerplexityBot
-Allow: /
-
-# Perplexity — live user-triggered fetches
-User-agent: Perplexity-User
-Allow: /
-
-# Anthropic — Claude web search / citations
-User-agent: ClaudeBot
-Allow: /
-
-# Apple — Siri / Spotlight search (NOT the -Extended training variant below)
-User-agent: Applebot
-Allow: /
-
-# ---------------------------------------------------------------------------
-# AI *training* scrapers — opted out. These harvest content to train models
-# and generally don't cite or drive traffic back.
-# ---------------------------------------------------------------------------
-
-# OpenAI — model training crawler
-User-agent: GPTBot
-Disallow: /
-
-# Google — Gemini model training (separate from Googlebot search, which stays allowed)
-User-agent: Google-Extended
-Disallow: /
-
-# Apple — Apple Intelligence training (separate from Applebot search, allowed above)
-User-agent: Applebot-Extended
-Disallow: /
-
-# Common Crawl — feeds many third-party training datasets
-User-agent: CCBot
-Disallow: /
-
-# ByteDance / TikTok scraper
-User-agent: Bytespider
-Disallow: /
-
-# Meta — AI training crawler
-User-agent: meta-externalagent
-Disallow: /
-
-# Amazon — broad AI/Alexa crawler
-User-agent: Amazonbot
-Disallow: /
