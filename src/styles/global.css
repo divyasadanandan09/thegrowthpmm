@@ -363,6 +363,12 @@ footer { padding-bottom: 64px; }
 }
 .proof-stat { padding: 32px; }
 .proof-stat + .proof-stat { border-left: 1px solid var(--hairline); }
+/* Mobile-only accordion hooks (checkbox hack). Inert on desktop: checkbox stays
+   hidden, label renders like the old plain <p>, chevron stays hidden, and
+   .proof-desc is never touched outside the ≤900px query below. */
+.proof-toggle { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+.proof-toggle-label { display: block; }
+.proof-chevron { display: none; flex: none; transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); }
 
 /* ===== How it works (process steps) ===== */
 
@@ -775,9 +781,22 @@ body.scrolled #nav-cta-corner {
    on a pale-lime band in strong ink (the state once PMM has an owner). Each pair
    carries the site's own ✗ / ✓ vocabulary (same as "Are we a good fit?") so the
    fix reads at a glance, and rows lift subtly on hover. */
+.ba-wrap { position: relative; margin: 52px 0 0; max-width: 900px; }
+/* Rubber-stamp corner tag, reusing the sticky-tag rotated-note vocabulary
+   (same pattern as the process-num overlap in How it works) — leans into the
+   "resolved ledger" idea so the card reads as a closed case, not a plain table. */
+.ba-wrap .ba-stamp {
+  position: absolute;
+  top: -16px;
+  right: 28px;
+  z-index: 1;
+  transform: rotate(-6deg);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ba-wrap:hover .ba-stamp { transform: rotate(-3deg) scale(1.05); }
 .ba-table {
   max-width: 900px;
-  margin: 30px 0 0;
+  margin: 0;
   background: #fff;
   border: 1px solid var(--warm-line);
   border-radius: 20px;
@@ -786,7 +805,7 @@ body.scrolled #nav-cta-corner {
 }
 .ba-row { display: grid; grid-template-columns: 1fr 1fr; }
 .ba-row + .ba-row { border-top: 1px solid var(--warm-line); }
-.ba-before, .ba-after { padding: 18px 26px; font-size: 16px; line-height: 1.35; }
+.ba-before, .ba-after { padding: 18px 26px; font-size: 16px; line-height: 1.35; transition: background 0.32s ease; }
 .ba-before {
   display: flex;
   align-items: center;
@@ -810,7 +829,9 @@ body.scrolled #nav-cta-corner {
   font-weight: 700;
   border-left: 1px solid var(--warm-line);
 }
-/* ✗ / ✓ marks, reusing the compare-card chip language */
+/* ✗ / ✓ marks, reusing the compare-card chip language. Alternating tilt gives
+   them a hand-stamped feel; each pair straightens and pops on its row's hover,
+   echoing the process-num badge treatment in How it works. */
 .ba-row:not(.ba-head) .ba-before::before,
 .ba-row:not(.ba-head) .ba-after::before {
   flex: none;
@@ -822,7 +843,11 @@ body.scrolled #nav-cta-corner {
   justify-content: center;
   font-size: 12px;
   font-weight: 800;
+  transform: rotate(var(--chip-tilt, 0deg));
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.ba-row:nth-child(odd) { --chip-tilt: 8deg; }
+.ba-row:nth-child(even) { --chip-tilt: -8deg; }
 .ba-row:not(.ba-head) .ba-before::before {
   content: "\2717";
   background: #efe7e4;
@@ -833,8 +858,11 @@ body.scrolled #nav-cta-corner {
   background: var(--navy);
   color: var(--ink-deep);
 }
+.ba-row:not(.ba-head):hover { position: relative; z-index: 1; }
 .ba-row:not(.ba-head):hover .ba-before { background: #faf9f6; }
 .ba-row:not(.ba-head):hover .ba-after { background: #eef7c4; }
+.ba-row:not(.ba-head):hover .ba-before::before,
+.ba-row:not(.ba-head):hover .ba-after::before { transform: rotate(0deg) scale(1.15); }
 .ba-head .ba-before, .ba-head .ba-after {
   padding-top: 14px;
   padding-bottom: 14px;
@@ -886,6 +914,8 @@ body.scrolled #nav-cta-corner {
   .channel-grid { grid-template-columns: 1fr; }
   .other-services { grid-template-columns: 1fr !important; }
   .ba-before, .ba-after { padding: 13px 15px; font-size: 14px; }
+  .ba-wrap { margin-top: 40px; }
+  .ba-wrap .ba-stamp { top: -13px; right: 14px; font-size: 11px; padding: 6px 13px; }
   .proof-strip { grid-template-columns: 1fr !important; }
   .proof-stat + .proof-stat { border-left: none; border-top: 1px solid var(--hairline); }
   .process-grid { grid-template-columns: 1fr !important; }
@@ -905,6 +935,22 @@ body.scrolled #nav-cta-corner {
   /* Clear the bottom-docked corner CTA so it doesn't sit over the copyright line. */
   footer { padding-bottom: 72px; }
   section, header, footer { padding-left: 0; padding-right: 0; }
+
+  /* --- Mobile-only length trims (2026-07-05, client-directed). Desktop untouched. --- */
+  /* Services: titles only, drop the explainer line under each. */
+  .module-desc { display: none; }
+  /* How it works: titles only, drop the step explainer line. */
+  .process-desc { display: none; }
+  /* Impact stats: each explainer collapses behind a chevron; first stat starts open. */
+  .proof-toggle-label { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
+  .proof-chevron { display: inline-flex; }
+  .proof-desc { display: none; margin-top: 4px; }
+  .proof-toggle:checked ~ .proof-desc { display: block; }
+  .proof-toggle:checked ~ .proof-toggle-label .proof-chevron { transform: rotate(180deg); }
+  /* Drop the "Are we a good fit?" table entirely. */
+  .fit-head, .fit-grid { display: none; }
+  /* Why work with me: drop the middle explainer paragraph, keep the credibility line + punchline + positioning line. */
+  .about-lean-hide { display: none; }
 }
 @media (max-width: 600px) {
   .footer-grid { grid-template-columns: 1fr !important; }
