@@ -71,7 +71,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
   <div class="hero-grid" style="max-width:1240px;margin:0 auto;padding:140px 24px 80px;display:grid;grid-template-columns:1.5fr 0.8fr;gap:48px;align-items:center;position:relative;">
     <div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-        <span class="sticky-tag purple">Top 100 PMM, 2025</span>
+        <span class="sticky-tag purple">Top 100 Global PMM, 2025</span>
       </div>
       <h1 style="font-size:38px;font-weight:800;line-height:1.16;letter-spacing:-0.9px;margin:0;max-width:730px;color:var(--ink);">Product Marketing that turns early traction into <span class="marker">scalable growth.</span></h1>
       <p style="font-size:20px;font-weight:600;line-height:1.4;color:var(--ink);margin:18px 0 0;max-width:624px;text-align:justify;text-justify:inter-word;">The first Product Marketing leader you'll need before you're ready to hire one.</p>
@@ -118,8 +118,8 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
 
           <!-- handwritten annotation + curly two-loop hand-drawn arrow (kept clear of the pill + labels, sits in the open wedge above-right) -->
           <text x="344" y="120" text-anchor="middle" font-family="'Caveat', cursive" font-size="23" font-weight="700" fill="#16180f" transform="rotate(-6 344 120)">the missing piece</text>
-          <path d="M356,134 C368,140 366,154 354,154 C344,154 346,140 358,142 C370,144 368,160 354,164 C340,168 322,168 306,167" fill="none" stroke="#16180f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M306,167 L315,166 M306,167 L310,174" fill="none" stroke="#16180f" stroke-width="1.6" stroke-linecap="round" />
+          <path class="diagram-arrow" d="M356,134 C368,140 366,154 354,154 C344,154 346,140 358,142 C370,144 368,160 354,164 C340,168 322,168 306,167" fill="none" stroke="#16180f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" pathLength="1" />
+          <path class="diagram-arrowhead" d="M306,167 L315,166 M306,167 L310,174" fill="none" stroke="#16180f" stroke-width="1.6" stroke-linecap="round" />
 
           <!-- caption: same handwritten voice, so it reads with the annotation -->
           <text x="210" y="384" text-anchor="middle" font-family="'Caveat', cursive" font-size="21" font-weight="700" fill="#16180f">Between product-market fit and scalable growth.</text>
@@ -149,7 +149,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
     <div>
       <h2 style="font-size:42px;font-weight:800;line-height:1.14;letter-spacing:-0.9px;margin:0;">Growth didn't get harder. Your company got more complex.</h2>
       <p style="font-size:19px;line-height:1.6;color:var(--ink-mute);margin:22px 0 0;">When you're building toward product-market fit, founders own positioning, messaging, launches, and GTM. As you scale, those jobs become too complex to stay founder-led, and <span class="marker">nobody owns the story that connects them.</span> That's when growth slows.</p>
-      <p style="font-size:18px;line-height:1.6;color:var(--ink-deep);font-weight:600;margin:26px 0 0;">Here's the shift once Product Marketing has an owner.</p>
+      <p style="font-size:18px;line-height:1.6;color:var(--ink-deep);font-weight:600;margin:26px 0 0;text-align:center;">Here's the shift once Product Marketing has an owner.</p>
     </div>
     <div class="ba-wrap">
       <span class="sticky-tag gold ba-stamp" aria-hidden="true">Resolved</span>
@@ -193,7 +193,6 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
     </div>
     <div style="margin-top:36px;">
       <div class="module module--featured">
-        <span class="sticky-tag gold" style="position:absolute;top:-14px;left:24px;">the outcome we build toward</span>
         <div class="module-head">
           <span class="module-icon" style="background:#eef6c8;" aria-hidden="true">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16180f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-5 3 3 7-8"/><path d="M17 8h4v4"/></svg>
@@ -390,7 +389,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
 <!-- ABOUT + WHY ME (merged) -->
 <section id="about" style="background:var(--blue-tint);">
   <div style="max-width:1240px;margin:0 auto;padding:92px 24px;">
-    <div class="about-grid" style="display:grid;grid-template-columns:1.55fr 0.45fr;gap:48px;align-items:start;">
+    <div class="about-grid" style="display:grid;grid-template-columns:1.55fr 0.45fr;gap:48px;align-items:center;">
       <div>
         <h2 style="font-size:36px;font-weight:800;line-height:1.16;letter-spacing:-0.7px;margin:0;">Why work with me.</h2>
         <p style="font-size:18px;line-height:1.62;color:var(--ink-mute);margin:20px 0 0;">I've spent more than a decade leading Product Marketing across companies like Fi Money, Practo, MakeMyTrip, and Raymond, among others.</p>
@@ -399,8 +398,11 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
         <p style="font-size:18px;line-height:1.62;color:var(--ink-mute);margin:16px 0 0;">Today, I work with post-PMF companies as their <span class="marker">first Product Marketing leader,</span> helping founders build the strategy, systems, and alignment they need before investing in a full in-house PMM function.</p>
       </div>
       <!-- Save the chosen photo (gold-saree portrait) as public/divya.jpg for this to render. -->
-      <div class="about-photo-frame">
-        <img src="/divya.jpg" alt="Divya Sadanandan, fractional Head of Product Marketing" class="about-photo" width="480" height="480" loading="lazy" decoding="async" />
+      <div class="about-photo-col">
+        <div class="about-photo-frame">
+          <img src="/divya.jpg" alt="Divya Sadanandan, fractional Head of Product Marketing" class="about-photo" width="480" height="480" loading="lazy" decoding="async" />
+        </div>
+        <p style="text-align:center;margin:16px 0 0;font-weight:700;color:var(--ink-deep);">Divya Sadanandan<br /><span style="font-weight:500;color:var(--ink-mute);">The Growth PMM</span></p>
       </div>
     </div>
 

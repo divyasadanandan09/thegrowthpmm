@@ -744,10 +744,13 @@ body.scrolled #nav-cta-corner {
 /* Lime halo ring + a thin near-black inner edge around a circular crop,
    echoing the fill+dark-text lime pattern used everywhere else (buttons,
    badges) instead of a flat rounded-rect photo. */
-.about-photo-frame {
+.about-photo-col {
   justify-self: end;
   width: 100%;
   max-width: 240px;
+}
+.about-photo-frame {
+  width: 100%;
   aspect-ratio: 1/1;
   padding: 9px;
   border-radius: 50%;
@@ -775,13 +778,36 @@ body.scrolled #nav-cta-corner {
   aspect-ratio: 420/410;
 }
 
+/* Curly "the missing piece" arrow: draws in on a loop, then holds, echoing a
+   hand sketching the annotation before pointing back at the hub. */
+.diagram-arrow {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: diagram-arrow-draw 3.6s ease-in-out infinite;
+}
+.diagram-arrowhead {
+  transform-origin: 306px 167px;
+  opacity: 0;
+  animation: diagram-arrowhead-pop 3.6s ease-in-out infinite;
+}
+@keyframes diagram-arrow-draw {
+  0% { stroke-dashoffset: 1; }
+  45%, 78% { stroke-dashoffset: 0; }
+  95%, 100% { stroke-dashoffset: 1; }
+}
+@keyframes diagram-arrowhead-pop {
+  0%, 42% { opacity: 0; transform: scale(0.6); }
+  50%, 78% { opacity: 1; transform: scale(1); }
+  95%, 100% { opacity: 0; transform: scale(0.6); }
+}
+
 /* ===== Section 3: Before / After ===== */
 /* The transformation reads from the treatment, not an arrow: the Before column
    is struck-through and muted (the state you're leaving), the After column sits
    on a pale-lime band in strong ink (the state once PMM has an owner). Each pair
    carries the site's own ✗ / ✓ vocabulary (same as "Are we a good fit?") so the
    fix reads at a glance, and rows lift subtly on hover. */
-.ba-wrap { position: relative; margin: 52px 0 0; max-width: 900px; }
+.ba-wrap { position: relative; margin: 52px auto 0; max-width: 900px; }
 /* Rubber-stamp corner tag, reusing the sticky-tag rotated-note vocabulary
    (same pattern as the process-num overlap in How it works) — leans into the
    "resolved ledger" idea so the card reads as a closed case, not a plain table. */
@@ -805,7 +831,7 @@ body.scrolled #nav-cta-corner {
 }
 .ba-row { display: grid; grid-template-columns: 1fr 1fr; }
 .ba-row + .ba-row { border-top: 1px solid var(--warm-line); }
-.ba-before, .ba-after { padding: 18px 26px; font-size: 16px; line-height: 1.35; transition: background 0.32s ease; }
+.ba-before, .ba-after { padding: 11px 26px; font-size: 16px; line-height: 1.35; transition: background 0.32s ease; }
 .ba-before {
   display: flex;
   align-items: center;
@@ -882,7 +908,7 @@ body.scrolled #nav-cta-corner {
   .hero-grid h1 { font-size: 36px !important; letter-spacing: -0.8px !important; }
   .diagram-wrap { max-width: 260px; margin-top: 8px; }
   .about-grid { grid-template-columns: 1fr !important; }
-  .about-photo-frame { justify-self: start !important; max-width: 168px; margin: 4px 0 20px; }
+  .about-photo-col { justify-self: start !important; max-width: 168px; margin: 4px 0 20px; }
   .footer-grid { grid-template-columns: 1fr 1fr !important; }
   #nav-links { display: none !important; }
   #nav-toggle { display: flex !important; }
