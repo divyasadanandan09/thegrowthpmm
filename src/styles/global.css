@@ -6,6 +6,9 @@ html, body { margin: 0; overflow-x: hidden; -webkit-font-smoothing: antialiased;
 a { text-decoration: none; }
 /* Display face (Bricolage Grotesque) carries the headings; Inter stays for UI/body. */
 h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.03em; }
+/* Hero H1 opts out of balance so its first line fills the column width (matching the
+   justified sub-head/body below it) instead of breaking into two even-length lines. */
+.hero-h1 { text-wrap: wrap; }
 /* Balance multi-line headings so they never orphan a single word on the last line. */
 /* Reduce orphans/ragged breaks in body prose. */
 p { text-wrap: pretty; }
