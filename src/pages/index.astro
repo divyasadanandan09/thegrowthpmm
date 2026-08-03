@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Logo from "../components/Logo.astro";
+import LogoCarousel from "../components/LogoCarousel.astro";
+import GrowthAuditQuiz from "../components/GrowthAuditQuiz.astro";
 const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
-// Growth Audit intake form (final).
-const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
 ---
 
 <Layout>
@@ -129,19 +129,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
   </div>
 </header>
 
-<!-- LOGO STRIP -->
-<section style="background:var(--cream);border-top:1px solid var(--warm-line);border-bottom:1px solid var(--warm-line);">
-  <div style="max-width:1240px;margin:0 auto;padding:28px 24px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
-    <span style="font-size:12px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:#726551;white-space:nowrap;">Past experience</span>
-    <div style="flex:1;min-width:260px;display:flex;gap:28px;flex-wrap:wrap;align-items:center;">
-      <img src="/logos/fi-money.svg" alt="Fi Money" width="22" height="22" loading="lazy" decoding="async" style="height:22px;width:22px;filter:grayscale(1);opacity:0.75;" />
-      <img src="/logos/practo.png" alt="Practo" width="80" height="22" loading="lazy" decoding="async" style="height:22px;width:auto;filter:grayscale(1);opacity:0.75;" />
-      <img src="/logos/makemytrip.svg" alt="MakeMyTrip" width="96" height="26" loading="lazy" decoding="async" style="height:26px;width:auto;filter:grayscale(1);opacity:0.75;" />
-      <img src="/logos/raymond.png" alt="Raymond" width="65" height="22" loading="lazy" decoding="async" style="height:22px;width:auto;filter:grayscale(1);opacity:0.75;" />
-      <img src="/logos/tcs.png" alt="TCS" width="77" height="22" loading="lazy" decoding="async" style="height:22px;width:auto;filter:grayscale(1);opacity:0.75;" />
-    </div>
-  </div>
-</section>
+<LogoCarousel />
 
 <!-- PROBLEM -> TRANSFORMATION: the complexity shift resolved by the before/after -->
 <section style="background:var(--cream);">
@@ -445,22 +433,7 @@ const DIAGNOSTIC = "https://forms.gle/HTwdNSTiyyXQYsxb7";
       <p style="font-size:18px;line-height:1.6;color:var(--ink-mute);margin:18px 0 0;text-align:center;">Before hiring your first Product Marketing leader or making another growth investment, understand what's actually limiting your growth.</p>
     </div>
 
-    <div class="audit-card" style="background:var(--ink-deep);border-radius:18px;padding:48px 40px;margin-top:44px;color:#fff;">
-      <div>
-        <p style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--on-navy-mute);margin:0 0 22px;text-align:center;">You'll walk away with</p>
-        <ul class="report-checklist">
-          <li class="report-item" style="color:#fff;"><span class="report-check">&#10003;</span><span>Your biggest Product Marketing gap.</span></li>
-          <li class="report-item" style="color:#fff;"><span class="report-check">&#10003;</span><span>The likely root cause beneath the gap.</span></li>
-          <li class="report-item" style="color:#fff;"><span class="report-check">&#10003;</span><span>One concrete first move to fix it.</span></li>
-          <li class="report-item" style="color:#fff;"><span class="report-check">&#10003;</span><span>Recommended priorities from there.</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <div style="text-align:center;margin-top:32px;">
-      <a href={DIAGNOSTIC} target="_blank" rel="noopener" class="btn-navy" style="font-size:17px;padding:16px 32px;box-shadow:0 6px 22px rgba(22,24,15,0.22);">Get your Growth Audit</a>
-      <p style="font-size:13px;color:var(--ink-mute);margin:12px 0 0;text-align:center;">Just 3 minutes</p>
-    </div>
+    <GrowthAuditQuiz />
   </div>
 </section>
 

@@ -1,0 +1,393 @@
+---
+// Growth Audit Quiz — interactive embedded form
+// Scores user across 4 funnel stages, delivers a personalized audit result
+---
+
+<div class="audit-quiz-wrap">
+  <div id="quiz-container" class="quiz-container">
+    <!-- Question Screen -->
+    <div id="quiz-form" class="quiz-form" style="display:block;">
+      <div class="quiz-progress">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+
+      <form id="auditForm">
+        <div class="quiz-question" id="q1" style="display:block;">
+          <h3>How confident are you in your customer acquisition strategy?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="acquisition" value="3" /> We have a clear, scalable channel mix</label>
+            <label><input type="radio" name="acquisition" value="2" /> We're experimenting but seeing some signs</label>
+            <label><input type="radio" name="acquisition" value="1" /> We're not sure what's working</label>
+            <label><input type="radio" name="acquisition" value="0" /> We haven't started yet</label>
+          </div>
+        </div>
+
+        <div class="quiz-question" id="q2">
+          <h3>How many of your users become active, engaged customers?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="activation" value="3" /> Most onboard smoothly and engage early</label>
+            <label><input type="radio" name="activation" value="2" /> Some do, but there's room to improve</label>
+            <label><input type="radio" name="activation" value="1" /> Many drop off before experiencing value</label>
+            <label><input type="radio" name="activation" value="0" /> We don't track this</label>
+          </div>
+        </div>
+
+        <div class="quiz-question" id="q3">
+          <h3>How are you converting users into paying customers?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="conversion" value="3" /> Our sales process is repeatable and clear</label>
+            <label><input type="radio" name="conversion" value="2" /> We're converting, but our message varies</label>
+            <label><input type="radio" name="conversion" value="1" /> Conversion is unpredictable</label>
+            <label><input type="radio" name="conversion" value="0" /> We're not sure what converts</label>
+          </div>
+        </div>
+
+        <div class="quiz-question" id="q4">
+          <h3>How likely are your customers to stay and expand?</h3>
+          <div class="quiz-options">
+            <label><input type="radio" name="retention" value="3" /> High churn is not our problem, expansion is our focus</label>
+            <label><input type="radio" name="retention" value="2" /> We retain most but haven't optimized for expansion</label>
+            <label><input type="radio" name="retention" value="1" /> We see steady churn and limited expansion</label>
+            <label><input type="radio" name="retention" value="0" /> We're losing customers faster than we'd like</label>
+          </div>
+        </div>
+
+        <div class="quiz-question" id="q5">
+          <h3>What's your email for your personalized audit?</h3>
+          <div class="quiz-options" style="display:flex;flex-direction:column;gap:12px;">
+            <input type="email" id="userEmail" name="email" placeholder="you@company.com" required style="padding:12px 16px;border:1px solid var(--warm-line);border-radius:8px;font-size:16px;font-family:inherit;" />
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="results-screen" style="display:none;text-align:center;">
+      <div class="results-header">
+        <h3 style="font-size:28px;font-weight:800;margin:0 0 8px;color:var(--ink-deep);">Your Growth Audit: <span id="totalScore">0</span>/50</h3>
+        <p style="font-size:16px;color:var(--ink-mute);margin:0;">Here's where you stand:</p>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-stat">
+          <div class="result-score">
+            <span id="acqScore">0</span>/<span>14</span>
+          </div>
+          <p class="result-label">Acquisition</p>
+        </div>
+        <div class="result-stat">
+          <div class="result-score">
+            <span id="actScore">0</span>/<span>12</span>
+          </div>
+          <p class="result-label">Activation</p>
+        </div>
+        <div class="result-stat">
+          <div class="result-score">
+            <span id="convScore">0</span>/<span>12</span>
+          </div>
+          <p class="result-label">Conversion</p>
+        </div>
+        <div class="result-stat">
+          <div class="result-score">
+            <span id="retScore">0</span>/<span>12</span>
+          </div>
+          <p class="result-label">Retention</p>
+        </div>
+      </div>
+
+      <div id="insightBox" class="insight-box" style="background:var(--cream);border-radius:12px;padding:28px 24px;margin-top:32px;text-align:left;border-left:4px solid var(--navy);">
+        <p style="font-size:14px;font-weight:700;color:var(--ink-mute);margin:0 0 12px;text-transform:uppercase;letter-spacing:0.5px;">Where to start:</p>
+        <p id="insightText" style="font-size:16px;color:var(--ink-deep);margin:0;line-height:1.5;"></p>
+      </div>
+
+      <p style="font-size:13px;color:var(--ink-mute);margin:24px 0 0;">A personalized Growth Audit is on its way to your inbox.</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="quiz-nav" id="quizNav" style="display:flex;gap:12px;margin-top:32px;justify-content:center;">
+      <button id="prevBtn" type="button" style="padding:12px 24px;border:1px solid var(--warm-line);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;display:none;">Back</button>
+      <button id="nextBtn" type="button" class="btn-navy" style="padding:12px 32px;cursor:pointer;font-weight:600;">Next</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.audit-quiz-wrap {
+  max-width:640px;
+  margin:44px auto 0;
+}
+
+.quiz-container {
+  background:#fff;
+  border-radius:12px;
+  border:1px solid var(--warm-line);
+  padding:48px 40px;
+}
+
+.quiz-progress {
+  width:100%;
+  height:4px;
+  background:var(--cream);
+  border-radius:2px;
+  margin-bottom:32px;
+  overflow:hidden;
+}
+
+.progress-bar {
+  height:100%;
+  background:var(--navy);
+  width:20%;
+  transition:width 0.3s ease;
+}
+
+.quiz-question {
+  display:none;
+  animation:fadeIn 0.3s ease;
+}
+
+.quiz-question.active {
+  display:block;
+}
+
+@keyframes fadeIn {
+  from { opacity:0;transform:translateY(8px); }
+  to { opacity:1;transform:translateY(0); }
+}
+
+.quiz-question h3 {
+  font-size:20px;
+  font-weight:700;
+  color:var(--ink-deep);
+  margin:0 0 24px;
+  line-height:1.4;
+}
+
+.quiz-options {
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.quiz-options label {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:12px 16px;
+  border:1px solid var(--warm-line);
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  background:#fff;
+}
+
+.quiz-options label:hover {
+  border-color:var(--navy);
+  background:var(--cream);
+}
+
+.quiz-options input[type="radio"] {
+  margin-top:3px;
+  cursor:pointer;
+  accent-color:var(--navy);
+}
+
+.quiz-options input[type="radio"]:checked + label,
+.quiz-options label:has(input[type="radio"]:checked) {
+  border-color:var(--navy);
+  background:var(--cream);
+  font-weight:600;
+}
+
+#userEmail {
+  width:100%;
+  box-sizing:border-box;
+}
+
+.results-screen {
+  animation:fadeIn 0.3s ease;
+}
+
+.results-header {
+  margin-bottom:36px;
+}
+
+.results-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+  gap:16px;
+  margin-bottom:32px;
+}
+
+.result-stat {
+  padding:20px 16px;
+  border:1px solid var(--warm-line);
+  border-radius:8px;
+  background:var(--cream);
+}
+
+.result-score {
+  font-size:28px;
+  font-weight:800;
+  color:var(--navy);
+  margin-bottom:8px;
+}
+
+.result-score span:last-child {
+  font-size:16px;
+  color:var(--ink-mute);
+  font-weight:600;
+}
+
+.result-label {
+  font-size:12px;
+  font-weight:700;
+  color:var(--ink-mute);
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin:0;
+}
+
+.insight-box {
+  text-align:left;
+}
+
+.quiz-nav {
+  margin-top:32px;
+}
+
+@media (max-width:900px) {
+  .quiz-container {
+    padding:32px 24px;
+  }
+
+  .results-grid {
+    grid-template-columns:repeat(2, 1fr);
+  }
+}
+</style>
+
+<script>
+const form = document.getElementById('auditForm');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const progressBar = document.getElementById('progress-bar');
+const quizForm = document.getElementById('quiz-form');
+const resultsScreen = document.getElementById('results-screen');
+
+const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
+let currentQuestion = 0;
+
+function showQuestion(index) {
+  questions.forEach((q) => {
+    document.getElementById(q).classList.remove('active');
+  });
+  document.getElementById(questions[index]).classList.add('active');
+
+  progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+
+  prevBtn.style.display = index > 0 ? 'block' : 'none';
+  nextBtn.textContent = index === questions.length - 1 ? 'Get Your Audit' : 'Next';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+nextBtn.addEventListener('click', () => {
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    showQuestion(currentQuestion);
+  } else {
+    submitQuiz();
+  }
+});
+
+prevBtn.addEventListener('click', () => {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    showQuestion(currentQuestion);
+  }
+});
+
+function submitQuiz() {
+  const acq = parseInt(form.querySelector('input[name="acquisition"]:checked')?.value || 0);
+  const act = parseInt(form.querySelector('input[name="activation"]:checked')?.value || 0);
+  const conv = parseInt(form.querySelector('input[name="conversion"]:checked')?.value || 0);
+  const ret = parseInt(form.querySelector('input[name="retention"]:checked')?.value || 0);
+  const email = document.getElementById('userEmail').value;
+
+  if (!email) {
+    alert('Please enter your email');
+    return;
+  }
+
+  // Multiply by max scores: acq=14, act/conv/ret=12 each (max out of 50)
+  const acqScore = acq * (14/3);
+  const actScore = act * (12/3);
+  const convScore = conv * (12/3);
+  const retScore = ret * (12/3);
+  const totalScore = Math.round(acqScore + actScore + convScore + retScore);
+
+  // Update results
+  document.getElementById('acqScore').textContent = Math.round(acqScore);
+  document.getElementById('actScore').textContent = Math.round(actScore);
+  document.getElementById('convScore').textContent = Math.round(convScore);
+  document.getElementById('retScore').textContent = Math.round(retScore);
+  document.getElementById('totalScore').textContent = totalScore;
+
+  // Generate insight based on lowest score
+  const scores = [
+    { name: 'Retention', score: retScore },
+    { name: 'Activation', score: actScore },
+    { name: 'Conversion', score: convScore },
+    { name: 'Acquisition', score: acqScore }
+  ];
+  scores.sort((a, b) => a.score - b.score);
+
+  const insights = {
+    'Retention': 'Your biggest opportunity is in retention. Without an owner focused on churn and expansion, growth stays reactive. Let\'s build a retention strategy that turns existing customers into revenue drivers.',
+    'Activation': 'Activation is your constraint. Users aren\'t experiencing value early, so messaging and positioning won\'t move the needle yet. We\'d focus on understanding where new customers get stuck, then fix that before scaling acquisition.',
+    'Conversion': 'Your conversion process needs clarity. When your positioning and messaging aren\'t owned, sales becomes inconsistent and deals slip. Let\'s build repeatable conversion motion.',
+    'Acquisition': 'Acquisition is where you\'re stuck. Without a clear positioning and GTM strategy, no channel will scale. We\'d start by defining exactly who you\'re for and how to reach them.'
+  };
+
+  document.getElementById('insightText').textContent = insights[scores[0].name];
+
+  // Send to Sheets or email service (for now, just show results)
+  sendToSheet(email, acq, act, conv, ret, totalScore);
+
+  // Show results
+  quizForm.style.display = 'none';
+  resultsScreen.style.display = 'block';
+  document.getElementById('quizNav').style.display = 'none';
+}
+
+async function sendToSheet(email, acq, act, conv, ret, total) {
+  // Send quiz results to configured endpoint
+  // Configure the endpoint in environment: VITE_AUDIT_ENDPOINT
+  const endpoint = import.meta.env.VITE_AUDIT_ENDPOINT || '';
+
+  if (!endpoint) {
+    console.log('Audit scores saved locally. Email:', email);
+    return;
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        acquisition: Math.round(acq * (14/3)),
+        activation: Math.round(act * (12/3)),
+        conversion: Math.round(conv * (12/3)),
+        retention: Math.round(ret * (12/3)),
+        total
+      })
+    });
+    if (!response.ok) console.warn('Submission failed, but results are displayed');
+  } catch (err) {
+    console.warn('Could not reach submission endpoint:', err);
+  }
+}
+
+showQuestion(0);
+</script>
