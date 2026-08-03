@@ -1,6 +1,12 @@
 ---
 // Growth Audit Quiz — interactive embedded form
 // Scores user across 4 funnel stages, delivers a personalized audit result
+//
+// CONFIGURATION:
+// Set VITE_AUDIT_ENDPOINT in .env or wrangler.jsonc to enable email delivery:
+// VITE_AUDIT_ENDPOINT = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/usercontent"
+//
+// Setup guide: See GOOGLE_APPS_SCRIPT_SETUP.md
 ---
 
 <div class="audit-quiz-wrap">
