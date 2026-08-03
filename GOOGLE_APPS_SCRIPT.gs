@@ -53,45 +53,66 @@ function sendAuditEmail(data) {
   scores.sort((a, b) => a.score - b.score);
   const focus = scores[0];
 
-  const emailTemplate = `
-Hi there,
+  const htmlTemplate = `
+    <html>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #16180f; max-width: 600px; margin: 0 auto;">
+        <div style="background: #f5f5f5; padding: 40px 20px;">
+          <div style="background: white; border-radius: 12px; padding: 40px; box-shadow: 0 2px 8px rgba(22, 24, 15, 0.1);">
 
-Thanks for taking the Growth Audit. Here's your personalized breakdown:
+            <!-- Header -->
+            <h1 style="margin: 0 0 8px; font-size: 28px; font-weight: 800; letter-spacing: -0.5px; color: #16180f;">Your Growth Audit: <span style="color: #DBFF00;">${total}/50</span></h1>
+            <p style="margin: 0 0 32px; font-size: 16px; color: #726551;">Here's where you stand across the funnel:</p>
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Your Growth Audit Score: ${total}/50
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            <!-- Scores Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 0 32px;">
+              <div style="background: #e7ebf5; border-radius: 8px; padding: 20px; text-align: center;">
+                <div style="font-size: 32px; font-weight: 800; color: #DBFF00; margin: 0 0 8px;">${acquisition}</div>
+                <div style="font-size: 12px; font-weight: 700; color: #726551; text-transform: uppercase; letter-spacing: 0.5px;">Acquisition / 14</div>
+              </div>
+              <div style="background: #e7ebf5; border-radius: 8px; padding: 20px; text-align: center;">
+                <div style="font-size: 32px; font-weight: 800; color: #DBFF00; margin: 0 0 8px;">${activation}</div>
+                <div style="font-size: 12px; font-weight: 700; color: #726551; text-transform: uppercase; letter-spacing: 0.5px;">Activation / 12</div>
+              </div>
+              <div style="background: #e7ebf5; border-radius: 8px; padding: 20px; text-align: center;">
+                <div style="font-size: 32px; font-weight: 800; color: #DBFF00; margin: 0 0 8px;">${conversion}</div>
+                <div style="font-size: 12px; font-weight: 700; color: #726551; text-transform: uppercase; letter-spacing: 0.5px;">Conversion / 12</div>
+              </div>
+              <div style="background: #e7ebf5; border-radius: 8px; padding: 20px; text-align: center;">
+                <div style="font-size: 32px; font-weight: 800; color: #DBFF00; margin: 0 0 8px;">${retention}</div>
+                <div style="font-size: 12px; font-weight: 700; color: #726551; text-transform: uppercase; letter-spacing: 0.5px;">Retention / 12</div>
+              </div>
+            </div>
 
-Acquisition:  ${acquisition}/14
-Activation:   ${activation}/12
-Conversion:   ${conversion}/12
-Retention:    ${retention}/12
+            <!-- Insight Box -->
+            <div style="background: #e7ebf5; border-left: 4px solid #DBFF00; border-radius: 8px; padding: 24px; margin: 0 0 32px;">
+              <p style="margin: 0 0 12px; font-size: 12px; font-weight: 700; color: #726551; text-transform: uppercase; letter-spacing: 0.8px;">Where to start: ${focus.name}</p>
+              <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #16180f; font-weight: 500;">${focus.msg}</p>
+            </div>
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Where to start: ${focus.name}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            <!-- CTA -->
+            <div style="text-align: center; margin: 0 0 24px;">
+              <a href="https://calendar.app.google/LXLo1623kmwa7NWr6" style="display: inline-block; background: #DBFF00; color: #16180f; padding: 14px 32px; border-radius: 24px; text-decoration: none; font-weight: 600; font-size: 16px;">Book a free 20-minute consultation</a>
+            </div>
 
-${focus.msg}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Ready to dig deeper? Let's talk.
-
-Book a free 20-minute consultation to walk through your specific situation:
-https://calendar.app.google/LXLo1623kmwa7NWr6
-
-Looking forward to talking,
-Divya
-The Growth PMM
+            <!-- Footer -->
+            <div style="border-top: 1px solid #d6dcec; padding-top: 24px; text-align: center; color: #726551; font-size: 13px;">
+              <p style="margin: 0;">Questions? Reply to this email or reach out to divya@thegrowthpmm.com</p>
+              <p style="margin: 8px 0 0;">The Growth PMM</p>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
   `;
 
   MailApp.sendEmail(
     email,
     'Your Growth Audit Results: ' + total + '/50',
-    emailTemplate,
+    'Your audit score is ' + total + '/50. Reply to see the formatted version.',
     {
       name: 'The Growth PMM',
-      replyTo: 'divya@thegrowthpmm.com'
+      replyTo: 'divya@thegrowthpmm.com',
+      htmlBody: htmlTemplate
     }
   );
 }
