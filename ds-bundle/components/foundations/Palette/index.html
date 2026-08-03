@@ -1,0 +1,40 @@
+<!-- @dsCard group="Foundations" name="Color palette" subtitle="Lime + near-black + coral. Lime is fill-only." -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color palette</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; max-width: 760px; }
+  .sw { border: 1px solid var(--hairline); border-radius: 12px; overflow: hidden; }
+  .sw .chip { height: 78px; }
+  .sw .meta { padding: 9px 11px; }
+  .sw .name { font-weight: 700; font-size: 13px; }
+  .sw .hex  { font-size: 12px; color: var(--ink-mute); font-family: ui-monospace, monospace; }
+  .sw .role { font-size: 11.5px; color: var(--ink-mute); margin-top: 3px; line-height: 1.35; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 22px; max-width: 640px; }
+  .rule { margin-top: 22px; font-size: 13px; color: var(--ink); background: var(--blue-tint); border-radius: 10px; padding: 12px 14px; max-width: 640px; }
+</style>
+</head>
+<body>
+  <h2>Color palette</h2>
+  <p class="lede">Lime (<code>--navy</code>, a misnomer kept from before the rebrand) + near-black + coral. Cool navy-tinted neutrals.</p>
+  <div class="grid">
+    <div class="sw"><div class="chip" style="background:var(--navy)"></div><div class="meta"><div class="name">--navy (lime)</div><div class="hex">#DBFF00</div><div class="role">Brand pop. Fill only, dark text on top.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--navy-press)"></div><div class="meta"><div class="name">--navy-press</div><div class="hex">#c4e600</div><div class="role">Lime, pressed/hover.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--ink-deep)"></div><div class="meta"><div class="name">--ink-deep</div><div class="hex">#16180f</div><div class="role">Near-black surface (dark sections).</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--ink)"></div><div class="meta"><div class="name">--ink</div><div class="hex">#1d1d1d</div><div class="role">Primary text.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--ink-mute)"></div><div class="meta"><div class="name">--ink-mute</div><div class="hex">#5f6470</div><div class="role">Muted / secondary text.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--canvas);box-shadow:inset 0 0 0 1px var(--hairline)"></div><div class="meta"><div class="name">--canvas</div><div class="hex">#ffffff</div><div class="role">Page background.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--cream)"></div><div class="meta"><div class="name">--cream</div><div class="hex">#e7ebf5</div><div class="role">Tinted section background.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--blue-tint)"></div><div class="meta"><div class="name">--blue-tint</div><div class="hex">#eef2fc</div><div class="role">Pale tint fill.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--coral)"></div><div class="meta"><div class="name">--coral</div><div class="hex">#cc4117</div><div class="role">Supporting accent = "drop-off" only.</div></div></div>
+    <div class="sw"><div class="chip" style="background:var(--link)"></div><div class="meta"><div class="name">--link</div><div class="hex">#2f5fe0</div><div class="role">Hyperlinks only, not brand.</div></div></div>
+  </div>
+  <div class="rule"><strong>Rule:</strong> lime is <em>never</em> text on a light background (~1.1:1, unreadable). Use it as a fill with dark <code>--ink</code> text, or as an accent on the near-black <code>--ink-deep</code> surfaces.</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+/* The Growth PMM — design tokens
+   Source of truth: src/styles/global.css :root block.
+   Palette = lime + near-black + coral (LIME REBRAND 2026-07-01).
+
+   IMPORTANT NAMING QUIRK: --navy is the LIME pop (#DBFF00), not navy. The token
+   kept its old name to avoid renaming it everywhere; treat "--navy" as "brand lime". */
+:root {
+  /* --- Brand lime (fill-only; dark text on top; NEVER lime text on a light bg) --- */
+  --navy: #DBFF00;        /* brand lime pop: buttons, badge chips, featured borders */
+  --navy-press: #c4e600;  /* lime, pressed/hover state */
+  --navy-tint: #33362a;   /* subtle hairline on near-black surfaces */
+
+  /* --- Ink / text --- */
+  --ink: #1d1d1d;         /* primary text on light */
+  --ink-mute: #5f6470;    /* muted/secondary text */
+  --ink-deep: #16180f;    /* near-black surface (footer, closing band, dark cards) */
+  --on-navy-mute: #b7bfa4;/* muted text on the near-black surfaces */
+
+  /* --- Surfaces / neutrals (cool, navy-tinted) --- */
+  --canvas: #ffffff;      /* page background */
+  --cream: #e7ebf5;       /* tinted section background */
+  --blue-tint: #eef2fc;   /* pale tint fill (outline-button hover, badges) */
+
+  /* --- Lines --- */
+  --hairline: #e6e6e6;    /* default hairline on white */
+  --warm-line: #d6dcec;   /* cool hairline on tinted sections */
+
+  /* --- Links --- */
+  --link: #2f5fe0;        /* the ONE blue: hyperlinks only, not brand */
+
+  /* --- Type --- */
+  --font-display: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif; /* headings */
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;            /* body / UI */
+  --font-hand: 'Caveat', cursive;                                        /* playful accents */
+
+  /* --- Supporting accent: coral = "drop-off" only --- */
+  --coral: #cc4117;       /* logo dot; the meaning is "where growth stalls" */
+  --coral-soft: #ec6a43;  /* funnel drop-off balls */
+
+  /* --- Cool aurora used behind the hero (echoes the funnel: purple -> navy -> teal) --- */
+  --hero-bg:
+    radial-gradient(60% 80% at 14% 8%, #e7ecff 0%, rgba(231,236,255,0) 60%),
+    radial-gradient(48% 70% at 88% 16%, #ece4ff 0%, rgba(236,228,255,0) 55%),
+    radial-gradient(62% 92% at 72% 96%, #e3eff0 0%, rgba(227,239,240,0) 60%),
+    #e7ebf5;
+}

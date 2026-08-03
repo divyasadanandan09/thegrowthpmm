@@ -1,0 +1,7 @@
+/* The Growth PMM — web fonts.
+   The live site loads these from Google Fonts (see src/layouts/Layout.astro):
+     - Bricolage Grotesque (600/700/800) — display face for all headings
+     - Inter (400–800) — body + UI
+     - Caveat (600/700) — handwritten/scrapbook accents
+   Kept as an @import so any rendered design pulls the real faces. */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap');

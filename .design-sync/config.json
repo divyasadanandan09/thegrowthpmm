@@ -1,0 +1,6 @@
+{
+  "projectId": "00d174ee-432d-4317-bb7a-234268fb4ae2",
+  "projectName": "The Growth PMM — Design Language",
+  "shape": "tokens-conventions",
+  "note": "Hand-authored off-script sync. thegrowthpmm is an Astro static site with no bundleable component library (one Logo.astro + page-level inline markup), so the standard converter does not apply. This sync ships design tokens, fonts, the class vocabulary in styles.css, brand-rule conventions, and preview cards for the Design System pane. No _ds_bundle.js, no _ds_sync.json anchor: the next sync re-verifies from scratch, which is correct for a hand-authored layout."
+}

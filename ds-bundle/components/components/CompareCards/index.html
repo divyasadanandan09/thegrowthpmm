@@ -1,0 +1,39 @@
+<!-- @dsCard group="Components" name="Compare cards" subtitle=".compare-card / .compare-card--me — good-fit vs. not-a-fit" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compare cards</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; background: var(--cream); }
+  h2 { font-size: 22px; margin: 0 0 4px; color: var(--ink); }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 24px; max-width: 620px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 640px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+  <h2>Compare cards</h2>
+  <p class="lede">Used for "Are we a good fit?" — the dark <code>--me</code> card carries the answer being sold; the light card is the alternative.</p>
+  <div class="grid">
+    <div class="compare-card">
+      <div class="compare-head">Probably not, if</div>
+      <ul>
+        <li><span class="compare-mark">✗</span>You need someone full-time, in the room every day.</li>
+        <li><span class="compare-mark">✗</span>You haven't found product-market fit yet.</li>
+        <li><span class="compare-mark">✗</span>You want execution only, no strategic ownership.</li>
+      </ul>
+    </div>
+    <div class="compare-card compare-card--me">
+      <div class="compare-head">Yes, if</div>
+      <ul>
+        <li><span class="compare-mark">✓</span>You have early traction and need it to compound.</li>
+        <li><span class="compare-mark">✓</span>Nobody owns the positioning story yet.</li>
+        <li><span class="compare-mark">✓</span>You want senior GTM leadership without a full-time hire.</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" name="Buttons" subtitle=".btn-navy (primary) / .btn-outline-navy / .btn-tint" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buttons</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 24px; max-width: 620px; }
+  .row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .row .cap { width: 150px; font-size: 12px; color: var(--ink-mute); font-family: ui-monospace, monospace; }
+  .dark { background: var(--ink-deep); padding: 20px; border-radius: 12px; }
+</style>
+</head>
+<body>
+  <h2>Buttons</h2>
+  <p class="lede">Pill-shaped, all three. <code>.btn-navy</code> is the primary CTA everywhere — lime fill with <strong>dark</strong> text, never white on lime.</p>
+
+  <div class="row"><span class="cap">.btn-navy</span><a href="#" class="btn-navy">Book free consultation</a></div>
+  <div class="row"><span class="cap">.btn-outline-navy</span><a href="#" class="btn-outline-navy">Get FREE growth audit</a></div>
+  <div class="row"><span class="cap">.btn-tint</span><a href="#" class="btn-tint">Learn more</a></div>
+
+  <div class="dark" style="margin-top:22px;">
+    <div class="row" style="margin-bottom:0;"><span class="cap" style="color:var(--on-navy-mute)">.btn-navy on dark</span><a href="#" class="btn-navy">Book free consultation</a></div>
+  </div>
+</body>
+</html>

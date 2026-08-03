@@ -1,0 +1,141 @@
+/* =========================================================================
+   The Growth PMM — styles.css
+   This is the entry point. A rendered design receives only this file's
+   transitive @import closure, so fonts + tokens are pulled in here first,
+   then the reusable class vocabulary follows.
+   Palette: lime (#DBFF00, named --navy) + near-black (#16180f) + coral.
+   ========================================================================= */
+@import "./fonts/fonts.css";
+@import "./tokens/tokens.css";
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html, body { margin: 0; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--canvas);
+  line-height: 1.55;
+}
+a { text-decoration: none; color: var(--link); }
+::selection { background: var(--navy); color: var(--ink); }
+
+/* Display face carries the headings; Inter stays for UI/body. */
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -0.03em; }
+p { text-wrap: pretty; }
+
+/* Visible, consistent keyboard focus. */
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--ink-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Buttons (pill shape; lime is fill-only) ---------- */
+/* Primary CTA. Lime fill, DARK ink text (never white on lime). */
+.btn-navy {
+  display: inline-block;
+  padding: 11px 20px;
+  background: var(--navy);
+  color: var(--ink);
+  font-weight: 700;
+  border-radius: 90px;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s cubic-bezier(0.22,1,0.36,1), box-shadow 0.15s;
+}
+.btn-navy:hover  { background: var(--navy-press); transform: translateY(-1px); }
+.btn-navy:active { transform: translateY(0); }
+
+/* Secondary: white fill, lime hairline border. */
+.btn-outline-navy {
+  display: inline-block;
+  padding: 11px 20px;
+  background: #fff;
+  color: var(--ink);
+  font-weight: 700;
+  border-radius: 90px;
+  border: 1.5px solid var(--navy);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn-outline-navy:hover { background: var(--blue-tint); }
+
+/* Tertiary: pale tint fill. */
+.btn-tint {
+  display: inline-block;
+  padding: 11px 20px;
+  background: var(--blue-tint);
+  color: var(--ink);
+  font-weight: 700;
+  border-radius: 90px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.btn-tint:hover { background: #e2e8fa; }
+
+/* ---------- Sticky tags (rotated rubber-stamp notes) ---------- */
+.sticky-tag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 4px;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  white-space: nowrap;
+}
+/* Two-tone brand tags. Class names kept (.purple/.gold) but the hues are retired:
+   .purple = lime fill + dark text; .gold = near-black fill + lime text. */
+.sticky-tag.purple { background: var(--navy);     color: var(--ink); transform: rotate(-3deg); }
+.sticky-tag.gold   { background: var(--ink-deep);  color: var(--navy); transform: rotate(2deg); }
+
+/* ---------- Handwritten accent (Caveat) ---------- */
+.handwritten { font-family: var(--font-hand); font-weight: 700; color: var(--ink-deep); line-height: 1; }
+.handwritten.light { color: var(--navy); } /* only on dark surfaces */
+
+/* ---------- Lime highlighter marker (inline emphasis on light bg) ---------- */
+.marker {
+  background-image: linear-gradient(101deg,
+    rgba(219,255,0,0) 0.6%, rgba(219,255,0,0.85) 2.2%,
+    rgba(219,255,0,0.72) 96%, rgba(219,255,0,0) 99.4%);
+  border-radius: 0.7em 0.3em 0.6em 0.2em;
+  padding: 0.04em 0.18em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- Eyebrow (uppercase utility label) ---------- */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-deep);
+}
+
+/* ---------- Module card (services) ---------- */
+.module {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: 16px;
+  padding: 28px 30px;
+  box-shadow: 0 1px 3px rgba(27,42,107,0.05);
+}
+.module--featured { position: relative; border-color: var(--navy); box-shadow: 0 10px 34px rgba(27,42,107,0.12); }
+.module-head  { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.module-icon  { flex: none; width: 40px; height: 40px; border-radius: 11px; display: flex; align-items: center; justify-content: center; background: var(--blue-tint); }
+.module-title { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.2px; }
+.module-desc  { font-size: 15px; line-height: 1.55; color: var(--ink-mute); margin: 0; }
+
+/* ---------- Compare cards (good-fit ✓ / not-a-fit ✗) ---------- */
+.compare-card { position: relative; background: #fff; border: 1px solid var(--hairline); border-radius: 16px; padding: 28px 24px; }
+.compare-card--me { background: var(--ink-deep); border-color: var(--ink-deep); box-shadow: 0 16px 40px rgba(22,24,15,0.22); } /* the dark "yes, if" card */
+.compare-head { font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--ink-mute); margin: 0 0 20px; }
+.compare-card--me .compare-head { color: var(--navy); }
+.compare-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.compare-card li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; line-height: 1.45; color: var(--ink); }
+.compare-card--me li { color: #fff; }
+.compare-mark { flex: none; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; margin-top: 1px; background: #fbe4dd; color: #d24f2e; } /* ✗ */
+.compare-card--me .compare-mark { background: #2bb673; color: #fff; } /* ✓ */

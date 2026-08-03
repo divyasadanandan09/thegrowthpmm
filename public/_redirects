@@ -1,0 +1,2 @@
+# Redirect apex domain to www
+https://thegrowthpmm.com/* https://www.thegrowthpmm.com/:splat 301

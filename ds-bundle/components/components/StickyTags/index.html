@@ -1,0 +1,46 @@
+<!-- @dsCard group="Components" name="Sticky tags & marker" subtitle=".sticky-tag.purple/.gold, .marker, .handwritten" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sticky tags & marker</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 24px; max-width: 620px; }
+  .row { display: flex; align-items: center; gap: 22px; margin-bottom: 20px; flex-wrap: wrap; }
+  .cap { font-size: 12px; color: var(--ink-mute); font-family: ui-monospace, monospace; margin-bottom: 8px; }
+  .dark { background: var(--ink-deep); padding: 22px; border-radius: 12px; display: inline-block; }
+  .big { font-size: 24px; font-family: var(--font-display); font-weight: 800; margin: 0; }
+</style>
+</head>
+<body>
+  <h2>Sticky tags, marker, handwritten</h2>
+  <p class="lede">Rotated "rubber-stamp" notes and a lime highlighter — the scrapbook layer of the brand. Class names <code>.purple</code>/<code>.gold</code> are historical; they mean lime/near-black now.</p>
+
+  <div class="row">
+    <div><div class="cap">.sticky-tag.purple (lime fill, dark text)</div><span class="sticky-tag purple">Only 3 clients / month</span></div>
+    <div class="dark"><div class="cap" style="color:var(--on-navy-mute)">.sticky-tag.gold (near-black fill, lime text)</div><span class="sticky-tag gold">Top 100 PMM, 2025</span></div>
+  </div>
+
+  <div class="row">
+    <div>
+      <div class="cap">.marker — lime highlighter, light bg only</div>
+      <p class="big">Turns early traction into <span class="marker">scalable growth.</span></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <div class="cap">.handwritten — Caveat, playful kicker only (never body copy)</div>
+      <p class="handwritten" style="font-size:26px;">the missing piece</p>
+    </div>
+    <div class="dark">
+      <div class="cap" style="color:var(--on-navy-mute)">.handwritten.light — lime, on dark surfaces only</div>
+      <p class="handwritten light" style="font-size:26px;">let's talk</p>
+    </div>
+  </div>
+</body>
+</html>

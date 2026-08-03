@@ -1,0 +1,54 @@
+<!-- @dsCard group="Brand" name="Logo" subtitle="Lime badge mark + wordmark — navy and reverse variants" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 24px; max-width: 620px; }
+  .row { display: flex; align-items: center; gap: 32px; margin-bottom: 16px; }
+  .cap { font-size: 12px; color: var(--ink-mute); font-family: ui-monospace, monospace; margin-bottom: 10px; }
+  .dark { background: var(--ink-deep); padding: 22px; border-radius: 12px; }
+</style>
+</head>
+<body>
+  <h2>Logo</h2>
+  <p class="lede">The "sharpened funnel" mark: lime rounded-square badge, near-black funnel, coral dot. The badge stays lime on both light and dark; only the wordmark color swaps.</p>
+
+  <div class="cap">variant="navy" (default — on light nav)</div>
+  <div class="row">
+    <span style="display:inline-flex;align-items:center;gap:9px;">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="flex:none;display:block;">
+        <rect width="40" height="40" rx="9" fill="#DBFF00"></rect>
+        <g transform="translate(7,7) scale(0.65)">
+          <path d="M5 6h30l-4.5 6.6H9.5z" fill="#16180f"></path>
+          <path d="M11 15.4h18l-4 6.1H15z" fill="#16180f" opacity="0.7"></path>
+          <path d="M16.5 24.3h7l-1.6 5.3h-3.8z" fill="#16180f" opacity="0.44"></path>
+          <circle cx="20" cy="35" r="2.7" fill="#cc4117"></circle>
+        </g>
+      </svg>
+      <span style="font-weight:800;font-size:16px;letter-spacing:-0.3px;color:var(--ink);">The Growth PMM</span>
+    </span>
+  </div>
+
+  <div class="cap">variant="reverse" (on dark footer)</div>
+  <div class="dark">
+    <span style="display:inline-flex;align-items:center;gap:9px;">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="flex:none;display:block;">
+        <rect width="40" height="40" rx="9" fill="#DBFF00"></rect>
+        <g transform="translate(7,7) scale(0.65)">
+          <path d="M5 6h30l-4.5 6.6H9.5z" fill="#16180f"></path>
+          <path d="M11 15.4h18l-4 6.1H15z" fill="#16180f" opacity="0.7"></path>
+          <path d="M16.5 24.3h7l-1.6 5.3h-3.8z" fill="#16180f" opacity="0.44"></path>
+          <circle cx="20" cy="35" r="2.7" fill="#cc4117"></circle>
+        </g>
+      </svg>
+      <span style="font-weight:800;font-size:16px;letter-spacing:-0.3px;color:#ffffff;">The Growth PMM</span>
+    </span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!-- @dsCard group="Foundations" name="Typography" subtitle="Bricolage Grotesque (headings), Inter (body), Caveat (accents)" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typography</title>
+<link rel="stylesheet" href="../../../styles.css">
+<style>
+  body { padding: 28px; max-width: 680px; }
+  h2 { font-size: 22px; margin: 0 0 4px; }
+  .lede { color: var(--ink-mute); font-size: 14px; margin: 0 0 26px; }
+  .row { padding: 16px 0; border-bottom: 1px solid var(--hairline); }
+  .label { font-size: 12px; color: var(--ink-mute); font-family: ui-monospace, monospace; margin-bottom: 6px; }
+  .sample-display { font-family: var(--font-display); font-weight: 800; font-size: 32px; letter-spacing: -0.03em; margin: 0; }
+  .sample-body { font-family: var(--font-body); font-size: 16px; line-height: 1.55; margin: 0; }
+  .sample-hand { font-family: var(--font-hand); font-weight: 700; font-size: 26px; color: var(--ink-deep); margin: 0; }
+</style>
+</head>
+<body>
+  <h2>Typography</h2>
+  <p class="lede">Three faces, each with one job. Headings never use Inter; body never uses Bricolage.</p>
+
+  <div class="row">
+    <div class="label">--font-display · Bricolage Grotesque 700/800 · h1, h2, h3</div>
+    <p class="sample-display">Product Marketing that turns early traction into scalable growth.</p>
+  </div>
+
+  <div class="row">
+    <div class="label">--font-body · Inter 400–700 · body copy, UI</div>
+    <p class="sample-body">I partner with post-product-market-fit startups to clarify positioning, sharpen messaging, and execute GTM strategies that grow adoption and revenue.</p>
+  </div>
+
+  <div class="row">
+    <div class="label">--font-hand · Caveat 600/700 · .handwritten — playful kickers only, never body copy</div>
+    <p class="sample-hand">the missing piece</p>
+  </div>
+</body>
+</html>
