@@ -11,14 +11,15 @@
 
 <div class="audit-quiz-wrap">
   <div id="quiz-container" class="quiz-container">
-    <!-- Question Screen -->
+    <!-- Single Question Screen (Progressive Disclosure) -->
     <div id="quiz-form" class="quiz-form" style="display:block;">
       <div class="quiz-progress">
         <div id="progress-bar" class="progress-bar"></div>
       </div>
 
       <form id="auditForm">
-        <div class="quiz-question" id="q1" style="display:block;">
+        <!-- Q1: Acquisition -->
+        <div class="quiz-question active" id="q1" data-field="acquisition" data-max="3">
           <h3>How confident are you in your customer acquisition strategy?</h3>
           <div class="quiz-options">
             <label><input type="radio" name="acquisition" value="3" /> We have a clear, scalable channel mix</label>
@@ -28,7 +29,8 @@
           </div>
         </div>
 
-        <div class="quiz-question" id="q2">
+        <!-- Q2: Activation -->
+        <div class="quiz-question" id="q2" data-field="activation" data-max="3">
           <h3>How many of your users become active, engaged customers?</h3>
           <div class="quiz-options">
             <label><input type="radio" name="activation" value="3" /> Most onboard smoothly and engage early</label>
@@ -38,7 +40,8 @@
           </div>
         </div>
 
-        <div class="quiz-question" id="q3">
+        <!-- Q3: Conversion -->
+        <div class="quiz-question" id="q3" data-field="conversion" data-max="3">
           <h3>How are you converting users into paying customers?</h3>
           <div class="quiz-options">
             <label><input type="radio" name="conversion" value="3" /> Our sales process is repeatable and clear</label>
@@ -48,7 +51,8 @@
           </div>
         </div>
 
-        <div class="quiz-question" id="q4">
+        <!-- Q4: Retention -->
+        <div class="quiz-question" id="q4" data-field="retention" data-max="3">
           <h3>How likely are your customers to stay and expand?</h3>
           <div class="quiz-options">
             <label><input type="radio" name="retention" value="3" /> High churn is not our problem, expansion is our focus</label>
@@ -58,7 +62,8 @@
           </div>
         </div>
 
-        <div class="quiz-question" id="q5">
+        <!-- Q5: Email -->
+        <div class="quiz-question" id="q5" data-field="email" data-max="0">
           <h3>What's your email for your personalized audit?</h3>
           <div class="quiz-options" style="display:flex;flex-direction:column;gap:12px;">
             <input type="email" id="userEmail" name="email" placeholder="you@company.com" required style="padding:12px 16px;border:1px solid var(--warm-line);border-radius:8px;font-size:16px;font-family:inherit;" />
@@ -148,11 +153,12 @@
 
 .quiz-question {
   display:none;
-  animation:fadeIn 0.3s ease;
+  animation:fadeIn 0.25s ease;
 }
 
 .quiz-question.active {
   display:block;
+  animation:fadeIn 0.25s ease;
 }
 
 @keyframes fadeIn {
@@ -261,6 +267,11 @@
   margin-top:32px;
 }
 
+.btn-navy:disabled {
+  opacity:0.5;
+  cursor:not-allowed;
+}
+
 @media (max-width:900px) {
   .quiz-container {
     padding:32px 24px;
@@ -284,24 +295,56 @@ const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
 let currentQuestion = 0;
 
 function showQuestion(index) {
+  // Hide all questions
   questions.forEach((q) => {
     document.getElementById(q).classList.remove('active');
   });
+  // Show only current question
   document.getElementById(questions[index]).classList.add('active');
 
-  progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+  // Update progress bar
+  const progress = ((index + 1) / questions.length) * 100;
+  progressBar.style.width = `${progress}%`;
 
+  // Toggle back button
   prevBtn.style.display = index > 0 ? 'block' : 'none';
-  nextBtn.textContent = index === questions.length - 1 ? 'Get Your Audit' : 'Next';
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Update next button text and disable if no answer selected
+  const isLastQuestion = index === questions.length - 1;
+  nextBtn.textContent = isLastQuestion ? 'Get Your Audit' : 'Next';
+
+  // Disable next button until an answer is selected
+  updateNextButtonState();
+
+  // Scroll to top smoothly
+  const quizContainer = document.getElementById('quiz-container');
+  quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+function updateNextButtonState() {
+  const currentField = questions[currentQuestion];
+  const fieldName = document.getElementById(currentField).dataset.field;
+
+  if (fieldName === 'email') {
+    const email = document.getElementById('userEmail').value;
+    nextBtn.disabled = !email || !email.includes('@');
+  } else {
+    const selected = form.querySelector(`input[name="${fieldName}"]:checked`);
+    nextBtn.disabled = !selected;
+  }
+}
+
+// Listen for answer selections to enable Next button
+form.addEventListener('change', updateNextButtonState);
+document.getElementById('userEmail').addEventListener('input', updateNextButtonState);
 
 nextBtn.addEventListener('click', () => {
   if (currentQuestion < questions.length - 1) {
+    // Advance to next question
     currentQuestion++;
     showQuestion(currentQuestion);
   } else {
+    // Submit the quiz
     submitQuiz();
   }
 });
