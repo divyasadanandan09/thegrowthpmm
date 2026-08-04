@@ -465,14 +465,21 @@ const startNumber = stages.map((_, i) =>
       nextBtn.textContent = "Next";
     }
 
-    function show(index: number) {
+    /**
+     * `scroll` must stay false for the initial render. This runs on every page
+     * that embeds the quiz, so scrolling here yanks the visitor from the hero
+     * down to the quiz the moment the page loads. It also moves the viewport
+     * during load, which stops Lighthouse resolving an LCP element at all
+     * (NO_LCP). Only scroll when the visitor actually changed step.
+     */
+    function show(index: number, scroll = true) {
       current = index;
       screens.forEach((s, i) => (s.hidden = i !== index));
       bar.style.width = `${((index + 1) / screens.length) * 100}%`;
       stepLabel.textContent = `Step ${index + 1} of ${screens.length}`;
       backBtn.hidden = index === 0;
       refreshNext();
-      root.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scroll) root.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     // Answering collapses the card and opens the next unanswered one.
@@ -604,6 +611,6 @@ const startNumber = stages.map((_, i) =>
       }
     }
 
-    show(0);
+    show(0, false);
   }
 </script>

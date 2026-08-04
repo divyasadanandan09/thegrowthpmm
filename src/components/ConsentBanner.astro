@@ -1,0 +1,126 @@
+---
+/**
+ * Cookie consent, shown only where it is actually owed.
+ *
+ * GA4 sets cookies, which under GDPR/ePrivacy need consent BEFORE they are set
+ * for EEA and UK visitors. Everyone else (India, US, the bulk of the traffic)
+ * sees nothing, so the design is not degraded for people the rule does not
+ * cover.
+ *
+ * How it works:
+ *  1. Layout.astro sets Consent Mode defaults BEFORE gtag loads, denying
+ *     analytics_storage for the EEA/UK region only. Google enforces that
+ *     server side from the visitor's IP, so analytics cookies are already
+ *     blocked there even if this script never runs.
+ *  2. This component only decides whether to SHOW the banner. It reads the
+ *     country from Cloudflare's /cdn-cgi/trace, which is free, needs no
+ *     Function and no third-party geo service.
+ *  3. On accept, gtag('consent','update') upgrades storage and GA starts
+ *     setting cookies. On decline, GA keeps sending cookieless pings, so
+ *     traffic is still modelled rather than lost entirely.
+ *
+ * The choice is stored in localStorage, not a cookie, so declining does not
+ * itself write the thing the visitor just declined.
+ */
+---
+
+<div id="consent" class="consent" hidden role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <p class="consent-copy">
+    I use Google Analytics to see which pages help founders and which do not.
+    It sets cookies. Decline and the site works exactly the same.
+  </p>
+  <div class="consent-actions">
+    <button type="button" id="consent-decline" class="consent-btn consent-btn--ghost">Decline</button>
+    <button type="button" id="consent-accept" class="consent-btn consent-btn--solid">Accept</button>
+  </div>
+</div>
+
+<style>
+.consent {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 60;
+  max-width: 380px;
+  background: var(--ink-deep);
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 18px 44px rgba(22, 24, 15, 0.32);
+}
+.consent[hidden] { display: none; }
+
+.consent-copy {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--on-navy-mute);
+}
+
+.consent-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+.consent-btn {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+/* Lime as a fill with ink text on top, never lime text on light. */
+.consent-btn--solid { background: var(--navy); color: var(--ink-deep); }
+.consent-btn--ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,0.32); }
+.consent-btn--ghost:hover { border-color: rgba(255,255,255,0.6); }
+
+@media (max-width: 900px) {
+  /* Sit above the floating CTA rather than covering it. */
+  .consent { left: 12px; right: 12px; bottom: 84px; max-width: none; }
+}
+</style>
+
+<script>
+  const KEY = "tgp-consent";
+  // EEA plus the UK. Consent Mode enforces the same set server side.
+  const EEA = ["AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU","IS","IE","IT","LV","LI","LT","LU","MT","NL","NO","PL","PT","RO","SK","SI","ES","SE","GB"];
+
+  const el = document.getElementById("consent");
+
+  function apply(granted: boolean) {
+    // gtag is defined in Layout.astro before this runs.
+    (window as any).gtag?.("consent", "update", {
+      analytics_storage: granted ? "granted" : "denied",
+    });
+  }
+
+  function decide(granted: boolean) {
+    try { localStorage.setItem(KEY, granted ? "granted" : "denied"); } catch {}
+    apply(granted);
+    if (el) el.hidden = true;
+  }
+
+  document.getElementById("consent-accept")?.addEventListener("click", () => decide(true));
+  document.getElementById("consent-decline")?.addEventListener("click", () => decide(false));
+
+  (async () => {
+    let stored: string | null = null;
+    try { stored = localStorage.getItem(KEY); } catch {}
+
+    // Already answered: honour it everywhere and never show the banner again.
+    if (stored) { apply(stored === "granted"); return; }
+
+    // Cloudflare returns the visitor's country. If this fails, show nothing:
+    // Consent Mode has already denied storage in the EEA regardless, so the
+    // safe default holds without the banner.
+    try {
+      const res = await fetch("/cdn-cgi/trace", { cache: "no-store" });
+      const country = (await res.text()).match(/^loc=(\w+)/m)?.[1];
+      if (country && EEA.includes(country) && el) el.hidden = false;
+    } catch {}
+  })();
+</script>
