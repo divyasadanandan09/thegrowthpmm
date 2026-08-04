@@ -146,13 +146,19 @@ const stages = [
     ],
   },
 ];
+
+// Questions are numbered continuously across stages (1 to 12), not restarted
+// per stage, so the founder can see how far through the whole audit they are.
+const startNumber = stages.map((_, i) =>
+  stages.slice(0, i).reduce((n, s) => n + s.questions.length, 1)
+);
 ---
 
 <div class="audit-quiz">
   <!-- STAGE SCREENS -->
   <div id="quizForm">
     <div class="quiz-progress" aria-hidden="true"><div id="progressBar"></div></div>
-    <p class="quiz-step" id="stepLabel">Stage 1 of 5</p>
+    <p class="quiz-step" id="stepLabel">Step 1 of 5</p>
 
     {stages.map((stage, si) => (
       <section class="stage" data-stage={si} hidden={si !== 0} aria-label={stage.name}>
@@ -163,7 +169,7 @@ const stages = [
           {stage.questions.map((item, qi) => (
             <div class="card" data-card={qi} data-open={qi === 0 ? "true" : "false"}>
               <button type="button" class="card-head" aria-expanded={qi === 0 ? "true" : "false"}>
-                <span class="card-num">{qi + 1}</span>
+                <span class="card-num">{startNumber[si] + qi}</span>
                 <span class="card-q">{item.q}</span>
                 <span class="card-answer" hidden></span>
               </button>
@@ -295,10 +301,12 @@ const stages = [
   cursor: pointer;
   color: var(--ink-deep);
 }
+/* Pill, not a fixed circle, so two-digit numbers (10 to 12) still fit. */
 .card-num {
   flex: none;
-  width: 22px; height: 22px;
-  border-radius: 50%;
+  min-width: 24px; height: 24px;
+  padding: 0 6px; box-sizing: border-box;
+  border-radius: 99px;
   display: grid; place-items: center;
   font-size: 12px; font-weight: 700;
   background: var(--cream); color: var(--ink-mute);
@@ -479,7 +487,7 @@ const stages = [
       current = index;
       screens.forEach((s, i) => (s.hidden = i !== index));
       bar.style.width = `${((index + 1) / screens.length) * 100}%`;
-      stepLabel.textContent = `Stage ${index + 1} of ${screens.length}`;
+      stepLabel.textContent = `Step ${index + 1} of ${screens.length}`;
       backBtn.hidden = index === 0;
       refreshNext();
       root.scrollIntoView({ behavior: "smooth", block: "start" });
