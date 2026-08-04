@@ -1,4 +1,14 @@
-<svg viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
-  <!-- Decathlon full wordmark with better scaling -->
-  <text x="0" y="40" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#3642b8" letter-spacing="1">DECATHLON</text>
+<svg viewBox="0 0 180 40" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .decathlon-text { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #3642b8; }
+    </style>
+  </defs>
+
+  <!-- Decathlon stylized D icon -->
+  <circle cx="12" cy="20" r="9" fill="none" stroke="#3642b8" stroke-width="1.2"/>
+  <path d="M 7 12 L 7 28 L 12 28 Q 17 28 17 20 Q 17 12 12 12 Z" fill="none" stroke="#3642b8" stroke-width="1.2" stroke-linejoin="round"/>
+
+  <!-- DECATHLON text -->
+  <text x="30" y="25" class="decathlon-text">DECATHLON</text>
 </svg>
