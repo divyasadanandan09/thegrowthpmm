@@ -21,36 +21,62 @@ var STAGES = [
 
 var BOOKING = 'https://calendar.app.google/LXLo1623kmwa7NWr6';
 
-// Kept in step with the copy in src/components/GrowthAuditQuiz.astro.
+// <<< GENERATED FROM src/content/audit-copy.json — do not edit by hand
+var VERDICTS = {
+  "strong": "Your funnel is in good shape. The gains left are specific, not structural.",
+  "mixed": "The foundations are there. One stage is holding the rest of the funnel back.",
+  "weak": "Growth is leaking in more than one place, and the stages are compounding on each other."
+};
+
 var DIAGNOSIS = {
-  Acquisition: {
-    read: "You are spending into channels without a clean read on which ones pay back. That is why adding budget has stopped adding growth.",
-    cause: "No one owns the channel portfolio, so channels get added and never retired. Blended CAC hides the losers inside the average.",
-    move: "Split CAC by channel for the last 90 days, then cut or cap the worst performer for one full cycle and watch what happens to pipeline."
+  "Acquisition": {
+    "read": "You are spending into channels without a clean read on which ones pay back. That is why adding budget has stopped adding growth.",
+    "cause": "No one owns the channel portfolio, so channels get added and never retired. Blended CAC hides the losers inside the average.",
+    "move": "Split CAC by channel for the last 90 days, then cut or cap the worst performer for one full cycle and watch what happens to pipeline."
   },
-  Activation: {
-    read: "New users are not reliably reaching value, so everything you spend on acquisition leaks straight back out.",
-    cause: "The activation moment is not defined in writing, so Product, Marketing, and Support are each optimising for a different finish line.",
-    move: "Write down the single action that marks a user as activated, then measure what share of signups hit it within their first week."
+  "Activation": {
+    "read": "New users are not reliably reaching value, so everything you spend on acquisition leaks straight back out.",
+    "cause": "The activation moment is not defined in writing, so Product, Marketing, and Support are each optimising for a different finish line.",
+    "move": "Write down the single action that marks a user as activated, then measure what share of signups hit it within their first week."
   },
-  Conversion: {
-    read: "Deals are turning on the individual rep and the individual conversation rather than on a story that holds up every time.",
-    cause: "Positioning and messaging have no owner, so each rep rebuilds the pitch themselves and loss reasons never get written down.",
-    move: "Write up the last five lost deals in one page. The repeated objection is your messaging gap, and it is usually fixable in a week."
+  "Conversion": {
+    "read": "Deals are turning on the individual rep and the individual conversation rather than on a story that holds up every time.",
+    "cause": "Positioning and messaging have no owner, so each rep rebuilds the pitch themselves and loss reasons never get written down.",
+    "move": "Write up the last five lost deals in one page. The repeated objection is your messaging gap, and it is usually fixable in a week."
   },
-  Retention: {
-    read: "Retention is being handled reactively. You find out about churn once it has already happened, and expansion is left on the table.",
-    cause: "Retention sits between Sales and CS, so no one is accountable for it and expansion revenue never gets a real number.",
-    move: "Give retention one named owner, then track expansion revenue as a hard number rather than an estimate for one quarter."
+  "Retention": {
+    "read": "Retention is being handled reactively. You find out about churn once it has already happened, and expansion is left on the table.",
+    "cause": "Retention sits between Sales and CS, so no one is accountable for it and expansion revenue never gets a real number.",
+    "move": "Give retention one named owner, then track expansion revenue as a hard number rather than an estimate for one quarter."
   }
 };
+
+var FREE_MAIL = ["gmail.com","googlemail.com","yahoo.com","yahoo.co.in","yahoo.co.uk","outlook.com","hotmail.com","hotmail.co.uk","live.com","msn.com","icloud.com","me.com","mac.com","aol.com","proton.me","protonmail.com","pm.me","gmx.com","gmx.net","mail.com","yandex.com","zoho.com","rediffmail.com","hey.com","fastmail.com","tutanota.com"];
+// >>> END GENERATED
+
+/**
+ * The browser already blocks personal addresses, but that gate is client side
+ * and this endpoint is public, so anything can POST here. Re-check server side
+ * or the "work email only" promise on the page means nothing at the door.
+ */
+function validateEmail(value) {
+  if (!value || typeof value !== 'string') return 'missing email';
+  var email = value.trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(email)) return 'malformed email';
+  if (email.length > 254) return 'email too long';
+  if (FREE_MAIL.indexOf(email.split('@')[1]) !== -1) return 'personal email';
+  return null;
+}
 
 function doPost(e) {
   try {
     var data = JSON.parse(e.postData.contents);
-    if (!data.email) {
-      return json({ ok: false, error: 'missing email' });
+
+    var emailError = validateEmail(data.email);
+    if (emailError) {
+      return json({ ok: false, error: emailError });
     }
+    var email = data.email.trim();
 
     var scored = STAGES.map(function (s) {
       var score = Number(data[s.key]) || 0;
@@ -60,12 +86,12 @@ function doPost(e) {
     var total = scored.reduce(function (sum, s) { return sum + s.score; }, 0);
 
     SpreadsheetApp.getActiveSheet().appendRow([
-      new Date(), data.email,
+      new Date(), email,
       scored[0].score, scored[1].score, scored[2].score, scored[3].score,
       total, data.biggestGap || ''
     ]);
 
-    sendAuditEmail(data.email, scored, total);
+    sendAuditEmail(email, scored, total);
     return json({ ok: true });
   } catch (err) {
     console.error(err);
@@ -91,11 +117,7 @@ function sendAuditEmail(email, scored, total) {
   var second = ranked[1];
   var d = DIAGNOSIS[worst.name];
 
-  var verdict = total >= 40
-    ? 'Your funnel is in good shape. The gains left are specific, not structural.'
-    : total >= 28
-      ? 'The foundations are there. One stage is holding the rest of the funnel back.'
-      : 'Growth is leaking in more than one place, and the stages are compounding on each other.';
+  var verdict = total >= 40 ? VERDICTS.strong : total >= 28 ? VERDICTS.mixed : VERDICTS.weak;
 
   // Tables, not flex or grid. Outlook ignores modern layout.
   //

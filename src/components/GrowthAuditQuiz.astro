@@ -403,36 +403,18 @@ const startNumber = stages.map((_, i) =>
 </style>
 
 <script>
-  type Diag = { read: string; cause: string; move: string };
+  // Single source of truth, shared with the emailed audit. The Apps Script
+  // gets the same JSON injected by scripts/sync-audit-copy.mjs, and the build
+  // fails if the two drift, so the page and the email cannot disagree.
+  import copy from "../content/audit-copy.json";
 
   const MAXES: Record<string, number> = {
     Acquisition: 14, Activation: 12, Conversion: 12, Retention: 12,
   };
 
-  const DIAG: Record<string, Diag> = {
-    Acquisition: {
-      read: "You are spending into channels without a clean read on which ones pay back. That is why adding budget has stopped adding growth.",
-      cause: "No one owns the channel portfolio, so channels get added and never retired. Blended CAC hides the losers inside the average.",
-      move: "Split CAC by channel for the last 90 days, then cut or cap the worst performer for one full cycle and watch what happens to pipeline.",
-    },
-    Activation: {
-      read: "New users are not reliably reaching value, so everything you spend on acquisition leaks straight back out.",
-      cause: "The activation moment is not defined in writing, so Product, Marketing, and Support are each optimising for a different finish line.",
-      move: "Write down the single action that marks a user as activated, then measure what share of signups hit it within their first week.",
-    },
-    Conversion: {
-      read: "Deals are turning on the individual rep and the individual conversation rather than on a story that holds up every time.",
-      cause: "Positioning and messaging have no owner, so each rep rebuilds the pitch themselves and loss reasons never get written down.",
-      move: "Write up the last five lost deals in one page. The repeated objection is your messaging gap, and it is usually fixable in a week.",
-    },
-    Retention: {
-      read: "Retention is being handled reactively. You find out about churn once it has already happened, and expansion is left on the table.",
-      cause: "Retention sits between Sales and CS, so no one is accountable for it and expansion revenue never gets a real number.",
-      move: "Give retention one named owner, then track expansion revenue as a hard number rather than an estimate for one quarter.",
-    },
-  };
-
-  const FREE_MAIL = ["gmail.com","yahoo.com","yahoo.co.in","outlook.com","hotmail.com","live.com","icloud.com","me.com","aol.com","proton.me","protonmail.com","gmx.com","mail.com","yandex.com","rediffmail.com","zoho.com"];
+  const DIAG = copy.stages;
+  const VERDICTS = copy.verdicts;
+  const FREE_MAIL = copy.freeMailDomains;
 
   const root = document.querySelector(".audit-quiz") as HTMLElement;
   if (root) {
@@ -569,11 +551,7 @@ const startNumber = stages.map((_, i) =>
       const second = ranked[1];
 
       (root.querySelector("#verdict") as HTMLElement).textContent =
-        total >= 40
-          ? "Your funnel is in good shape. The gains left are specific, not structural."
-          : total >= 28
-          ? "The foundations are there. One stage is holding the rest of the funnel back."
-          : "Growth is leaking in more than one place, and the stages are compounding on each other.";
+        total >= 40 ? VERDICTS.strong : total >= 28 ? VERDICTS.mixed : VERDICTS.weak;
 
       scores.forEach(({ name, score, max }) => {
         const row = root.querySelector<HTMLElement>(`.bar-row[data-row="${name}"]`);

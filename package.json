@@ -7,9 +7,11 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run check:audit-copy && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "sync:audit-copy": "node scripts/sync-audit-copy.mjs",
+    "check:audit-copy": "node scripts/sync-audit-copy.mjs --check"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",

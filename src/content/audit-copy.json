@@ -1,0 +1,41 @@
+{
+  "_comment": "The ONE place Growth Audit copy lives. The page imports this directly. The Apps Script gets it injected by scripts/sync-audit-copy.mjs, so the page and the email cannot disagree. After editing, run: npm run sync:audit-copy",
+
+  "verdicts": {
+    "strong": "Your funnel is in good shape. The gains left are specific, not structural.",
+    "mixed": "The foundations are there. One stage is holding the rest of the funnel back.",
+    "weak": "Growth is leaking in more than one place, and the stages are compounding on each other."
+  },
+
+  "stages": {
+    "Acquisition": {
+      "read": "You are spending into channels without a clean read on which ones pay back. That is why adding budget has stopped adding growth.",
+      "cause": "No one owns the channel portfolio, so channels get added and never retired. Blended CAC hides the losers inside the average.",
+      "move": "Split CAC by channel for the last 90 days, then cut or cap the worst performer for one full cycle and watch what happens to pipeline."
+    },
+    "Activation": {
+      "read": "New users are not reliably reaching value, so everything you spend on acquisition leaks straight back out.",
+      "cause": "The activation moment is not defined in writing, so Product, Marketing, and Support are each optimising for a different finish line.",
+      "move": "Write down the single action that marks a user as activated, then measure what share of signups hit it within their first week."
+    },
+    "Conversion": {
+      "read": "Deals are turning on the individual rep and the individual conversation rather than on a story that holds up every time.",
+      "cause": "Positioning and messaging have no owner, so each rep rebuilds the pitch themselves and loss reasons never get written down.",
+      "move": "Write up the last five lost deals in one page. The repeated objection is your messaging gap, and it is usually fixable in a week."
+    },
+    "Retention": {
+      "read": "Retention is being handled reactively. You find out about churn once it has already happened, and expansion is left on the table.",
+      "cause": "Retention sits between Sales and CS, so no one is accountable for it and expansion revenue never gets a real number.",
+      "move": "Give retention one named owner, then track expansion revenue as a hard number rather than an estimate for one quarter."
+    }
+  },
+
+  "freeMailDomains": [
+    "gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.in", "yahoo.co.uk",
+    "outlook.com", "hotmail.com", "hotmail.co.uk", "live.com", "msn.com",
+    "icloud.com", "me.com", "mac.com", "aol.com",
+    "proton.me", "protonmail.com", "pm.me",
+    "gmx.com", "gmx.net", "mail.com", "yandex.com", "zoho.com",
+    "rediffmail.com", "hey.com", "fastmail.com", "tutanota.com"
+  ]
+}
