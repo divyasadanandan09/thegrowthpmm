@@ -98,19 +98,27 @@ function sendAuditEmail(email, scored, total) {
       : 'Growth is leaking in more than one place, and the stages are compounding on each other.';
 
   // Tables, not flex or grid. Outlook ignores modern layout.
+  //
+  // The bar cells carry width= and bgcolor= as HTML attributes, not just CSS.
+  // Gmail collapsed an earlier CSS-only version to zero width, so the bars
+  // vanished while the numbers still showed. Keep the attributes.
   var rows = scored.map(function (s) {
     var st = statusOf(s.pct);
-    var filled = Math.round(s.pct * 100);
+    var filled = Math.max(2, Math.round(s.pct * 100)); // 2% floor so a near-zero score still reads as a bar
+    var rest = 100 - filled;
+    var cell = 'style="line-height:12px;font-size:12px;height:12px;"';
     return '' +
       '<tr>' +
-        '<td style="padding:10px 0;font:600 14px Arial,sans-serif;color:#16180f;width:110px;">' + s.name + '</td>' +
-        '<td style="padding:10px 0;">' +
-          '<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;background:#e7ebf5;border-radius:99px;">' +
-            '<tr><td style="width:' + filled + '%;background:' + st.color + ';border-radius:99px;font-size:0;line-height:12px;height:12px;">&nbsp;</td>' +
-            '<td style="font-size:0;line-height:12px;">&nbsp;</td></tr>' +
+        '<td width="105" style="padding:9px 0;font:600 14px Arial,sans-serif;color:#16180f;">' + s.name + '</td>' +
+        '<td style="padding:9px 12px;">' +
+          '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;table-layout:fixed;">' +
+            '<tr>' +
+              '<td width="' + filled + '%" bgcolor="' + st.color + '" ' + cell + '>&nbsp;</td>' +
+              (rest > 0 ? '<td width="' + rest + '%" bgcolor="#e7ebf5" ' + cell + '>&nbsp;</td>' : '') +
+            '</tr>' +
           '</table>' +
         '</td>' +
-        '<td style="padding:10px 0 10px 14px;font:700 13px Arial,sans-serif;color:#16180f;white-space:nowrap;text-align:right;">' +
+        '<td width="70" style="padding:9px 0;font:700 13px Arial,sans-serif;color:#16180f;text-align:right;">' +
           s.score + '/' + s.max +
           '<div style="font:700 11px Arial,sans-serif;color:' + st.color + ';">' + st.label + '</div>' +
         '</td>' +
