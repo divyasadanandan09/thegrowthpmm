@@ -482,10 +482,22 @@ const startNumber = stages.map((_, i) =>
       if (scroll) root.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
+    // GA4. Safe if the tag is blocked or consent was declined: gtag is simply
+    // undefined and these become no-ops.
+    const track = (name: string, params: Record<string, unknown> = {}) =>
+      (window as any).gtag?.("event", name, params);
+
+    let started = false;
+
     // Answering collapses the card and opens the next unanswered one.
     root.addEventListener("change", (e) => {
       const input = e.target as HTMLInputElement;
       if (input.type === "radio") {
+        // Fires once, on the first answer. Paired with the per-stage events
+        // below this is what makes quiz drop-off legible: how many begin
+        // versus how many reach the email step.
+        if (!started) { started = true; track("audit_start"); }
+
         const card = input.closest(".card") as HTMLElement;
         const stage = input.closest(".stage") as HTMLElement;
         card.dataset.answered = "true";
@@ -531,7 +543,13 @@ const startNumber = stages.map((_, i) =>
     backBtn.addEventListener("click", () => show(Math.max(0, current - 1)));
 
     nextBtn.addEventListener("click", () => {
-      if (!isEmailScreen()) { show(current + 1); return; }
+      if (!isEmailScreen()) {
+        // One event per completed stage, so drop-off is visible per funnel
+        // stage rather than only start versus finish.
+        track("audit_stage_complete", { stage: current + 1 });
+        show(current + 1);
+        return;
+      }
       const err = validateEmail();
       if (err) {
         emailError.textContent = err;
@@ -590,6 +608,15 @@ const startNumber = stages.map((_, i) =>
         total,
         ...Object.fromEntries(scores.map((s) => [s.name.toLowerCase(), s.score])),
         biggestGap: worst.name,
+      });
+
+      // generate_lead is GA4's recommended name for exactly this, so it slots
+      // into Google's lead-gen reporting rather than sitting off to one side.
+      // No email is sent to GA: that would be personal data leaving to a
+      // third party, and the score is what is useful for analysis anyway.
+      track("generate_lead", {
+        audit_score: total,
+        biggest_gap: worst.name,
       });
 
       form.hidden = true;

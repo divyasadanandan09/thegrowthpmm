@@ -151,6 +151,31 @@ const entitySchema = {
     <script is:inline>
       gtag('js', new Date());
       gtag('config', 'G-V9TFZXSKBJ');
+
+      // Booking clicks, the primary conversion.
+      //
+      // Enhanced measurement already logs these as generic outbound `click`
+      // events, but those are awkward to use as a key event and lump every
+      // external link together. This fires a named event instead, and records
+      // WHICH call-to-action was clicked, so the hero, the floating corner
+      // button and the closing band can be compared rather than pooled.
+      //
+      // Delegated on document, so new booking links anywhere on the site are
+      // covered without touching them.
+      document.addEventListener('click', function (e) {
+        var a = e.target instanceof Element ? e.target.closest('a[href*="calendar.app.google"]') : null;
+        if (!a) return;
+        var where = a.closest('#nav-cta-corner') ? 'floating_corner'
+                  : a.closest('#navbar') ? 'nav'
+                  : a.closest('#mobile-menu') ? 'mobile_menu'
+                  : a.closest('.audit-quiz') ? 'audit_results'
+                  : a.closest('header') ? 'hero'
+                  : 'in_page';
+        gtag('event', 'book_call_click', {
+          cta_location: where,
+          page_path: location.pathname
+        });
+      }, true);
     </script>
   </head>
   <body class="bg-white text-stone-900 font-sans antialiased">
