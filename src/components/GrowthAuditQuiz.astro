@@ -1,446 +1,623 @@
 ---
-// Growth Audit Quiz — interactive embedded form
-// Scores user across 4 funnel stages, delivers a personalized audit result
+// Growth Audit — the 12-question funnel diagnostic, embedded.
 //
-// CONFIGURATION:
-// Set VITE_AUDIT_ENDPOINT in .env or wrangler.jsonc to enable email delivery:
-// VITE_AUDIT_ENDPOINT = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/usercontent"
+// Questions are the exact set from the Google Form this replaces
+// (forms.gle/HTwdNSTiyyXQYsxb7): 3 per stage, 3 options each.
 //
-// Setup guide: See GOOGLE_APPS_SCRIPT_SETUP.md
+// SCORING IS A RECONSTRUCTION, NOT A COPY. The form's own weights were not
+// recoverable. What is known, from a sent audit email, is the stage maxima:
+// Acquisition 14, Activation 12, Conversion 12, Retention 12, total 50. The
+// weights below are the simplest set that hits those maxima AND reproduces
+// that email's 9/7/7/6 = 29 exactly. Confirm against the form's key before
+// treating any individual score as authoritative.
+//
+// Layout: one stage per screen. Within a screen the three questions are a
+// stack, one open at a time, answered ones collapsing to a summary line.
+
+const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
+
+const stages = [
+  {
+    id: "acquisition",
+    name: "Acquisition",
+    max: 14,
+    blurb: "How you bring people in.",
+    questions: [
+      {
+        q: "How many channels are you actively running right now?",
+        options: [
+          { label: "1 to 2", value: 5 },
+          { label: "3 to 4", value: 3 },
+          { label: "5 or more", value: 1 },
+        ],
+      },
+      {
+        q: "When did you last kill or pause an underperforming channel?",
+        options: [
+          { label: "Within the last quarter", value: 5 },
+          { label: "Over 6 months ago", value: 3 },
+          { label: "Never, we just keep adding", value: 1 },
+        ],
+      },
+      {
+        q: "Do you know your CAC by channel, or only blended CAC?",
+        options: [
+          { label: "By channel", value: 4 },
+          { label: "Only blended", value: 2 },
+          { label: "Not tracked well", value: 1 },
+        ],
+      },
+    ],
+  },
+  {
+    id: "activation",
+    name: "Activation",
+    max: 12,
+    blurb: "How fast they reach value.",
+    questions: [
+      {
+        q: "Do you know your time-to-first-value for new users or customers?",
+        options: [
+          { label: "Yes, actively tracked", value: 4 },
+          { label: "Rough idea", value: 2 },
+          { label: "No idea", value: 1 },
+        ],
+      },
+      {
+        q: "Is your activation ‘aha moment’ clearly defined and documented, or understood informally?",
+        options: [
+          { label: "Defined and documented", value: 4 },
+          { label: "Understood informally, not written down", value: 2 },
+          { label: "Not really defined", value: 1 },
+        ],
+      },
+      {
+        q: "What share of signups or trials reach activation?",
+        options: [
+          { label: "We track this number", value: 4 },
+          { label: "We estimate it", value: 2 },
+          { label: "We do not measure this", value: 1 },
+        ],
+      },
+    ],
+  },
+  {
+    id: "conversion",
+    name: "Conversion",
+    max: 12,
+    blurb: "How they become paying customers.",
+    questions: [
+      {
+        q: "Can you name your number one drop-off point in the funnel right now?",
+        options: [
+          { label: "Yes, specifically", value: 4 },
+          { label: "I have a guess", value: 2 },
+          { label: "No", value: 1 },
+        ],
+      },
+      {
+        q: "Do you have documented reasons for your last 5 lost deals?",
+        options: [
+          { label: "Yes", value: 4 },
+          { label: "Some anecdotal sense", value: 2 },
+          { label: "No", value: 1 },
+        ],
+      },
+      {
+        q: "Who owns fixing conversion drop-off?",
+        options: [
+          { label: "Clear owner", value: 4 },
+          { label: "Shared or unclear", value: 2 },
+          { label: "No owner", value: 1 },
+        ],
+      },
+    ],
+  },
+  {
+    id: "retention",
+    name: "Retention",
+    max: 12,
+    blurb: "How they stay, and grow.",
+    questions: [
+      {
+        q: "Is retention owned by a specific person or team, or does it fall between Sales and CS?",
+        options: [
+          { label: "Clear owner", value: 4 },
+          { label: "Falls between teams", value: 2 },
+          { label: "No real ownership", value: 1 },
+        ],
+      },
+      {
+        q: "Do you know your expansion revenue as a share of total revenue?",
+        options: [
+          { label: "Yes, tracked", value: 4 },
+          { label: "Rough estimate", value: 2 },
+          { label: "Not tracked", value: 1 },
+        ],
+      },
+      {
+        q: "When a customer churns, do you know why more than half the time?",
+        options: [
+          { label: "Yes, documented", value: 4 },
+          { label: "Sometimes", value: 2 },
+          { label: "Rarely", value: 1 },
+        ],
+      },
+    ],
+  },
+];
 ---
 
-<div class="audit-quiz-wrap">
-  <div id="quiz-container" class="quiz-container">
-    <!-- Single Question Screen (Progressive Disclosure) -->
-    <div id="quiz-form" class="quiz-form" style="display:block;">
-      <div class="quiz-progress">
-        <div id="progress-bar" class="progress-bar"></div>
+<div class="audit-quiz">
+  <!-- STAGE SCREENS -->
+  <div id="quizForm">
+    <div class="quiz-progress" aria-hidden="true"><div id="progressBar"></div></div>
+    <p class="quiz-step" id="stepLabel">Stage 1 of 5</p>
+
+    {stages.map((stage, si) => (
+      <section class="stage" data-stage={si} hidden={si !== 0} aria-label={stage.name}>
+        <h3 class="stage-name">{stage.name}</h3>
+        <p class="stage-blurb">{stage.blurb}</p>
+
+        <div class="stack">
+          {stage.questions.map((item, qi) => (
+            <div class="card" data-card={qi} data-open={qi === 0 ? "true" : "false"}>
+              <button type="button" class="card-head" aria-expanded={qi === 0 ? "true" : "false"}>
+                <span class="card-num">{qi + 1}</span>
+                <span class="card-q">{item.q}</span>
+                <span class="card-answer" hidden></span>
+              </button>
+              <div class="card-body">
+                {item.options.map((opt) => (
+                  <label class="opt">
+                    <input type="radio" name={`${stage.id}-${qi}`} value={opt.value} data-label={opt.label} />
+                    <span>{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- EMAIL SCREEN -->
+    <section class="stage" data-stage="4" hidden aria-label="Your work email">
+      <h3 class="stage-name">Where should the audit go?</h3>
+      <p class="stage-blurb">Work email only. The audit reads on your company, so a personal inbox will not do.</p>
+      <div class="stack">
+        <div class="card" data-open="true">
+          <div class="card-body" style="padding-top:18px;">
+            <label class="field-label" for="workEmail">Work email</label>
+            <input type="email" id="workEmail" placeholder="you@yourcompany.com" autocomplete="email" spellcheck="false" />
+            <p class="field-error" id="emailError" hidden></p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <form id="auditForm">
-        <!-- Q1: Acquisition -->
-        <div class="quiz-question active" id="q1" data-field="acquisition" data-max="3">
-          <h3>How confident are you in your customer acquisition strategy?</h3>
-          <div class="quiz-options">
-            <label><input type="radio" name="acquisition" value="3" /> We have a clear, scalable channel mix</label>
-            <label><input type="radio" name="acquisition" value="2" /> We're experimenting but seeing some signs</label>
-            <label><input type="radio" name="acquisition" value="1" /> We're not sure what's working</label>
-            <label><input type="radio" name="acquisition" value="0" /> We haven't started yet</label>
-          </div>
-        </div>
+    <div class="quiz-nav">
+      <button type="button" id="backBtn" class="btn-ghost" hidden>Back</button>
+      <button type="button" id="nextBtn" class="btn-navy" disabled>Next</button>
+    </div>
+  </div>
 
-        <!-- Q2: Activation -->
-        <div class="quiz-question" id="q2" data-field="activation" data-max="3">
-          <h3>How many of your users become active, engaged customers?</h3>
-          <div class="quiz-options">
-            <label><input type="radio" name="activation" value="3" /> Most onboard smoothly and engage early</label>
-            <label><input type="radio" name="activation" value="2" /> Some do, but there's room to improve</label>
-            <label><input type="radio" name="activation" value="1" /> Many drop off before experiencing value</label>
-            <label><input type="radio" name="activation" value="0" /> We don't track this</label>
-          </div>
-        </div>
+  <!-- RESULTS -->
+  <div id="results" hidden>
+    <p class="res-eyebrow">Your Growth Audit</p>
+    <h3 class="res-score"><span id="totalScore">0</span><span class="res-out">/50</span></h3>
+    <p class="res-verdict" id="verdict"></p>
 
-        <!-- Q3: Conversion -->
-        <div class="quiz-question" id="q3" data-field="conversion" data-max="3">
-          <h3>How are you converting users into paying customers?</h3>
-          <div class="quiz-options">
-            <label><input type="radio" name="conversion" value="3" /> Our sales process is repeatable and clear</label>
-            <label><input type="radio" name="conversion" value="2" /> We're converting, but our message varies</label>
-            <label><input type="radio" name="conversion" value="1" /> Conversion is unpredictable</label>
-            <label><input type="radio" name="conversion" value="0" /> We're not sure what converts</label>
-          </div>
+    <!-- Rendered statically, filled by JS. Astro scopes <style> to markup that
+         exists at build time, so innerHTML-injected rows would come out unstyled. -->
+    <div class="bars" id="bars">
+      {["Acquisition", "Activation", "Conversion", "Retention"].map((name) => (
+        <div class="bar-row" data-row={name}>
+          <span class="bar-name">{name}</span>
+          <span class="bar-track"><span class="bar-fill"></span></span>
+          <span class="bar-meta"><span class="bar-val"></span><span class="bar-tag"></span></span>
         </div>
-
-        <!-- Q4: Retention -->
-        <div class="quiz-question" id="q4" data-field="retention" data-max="3">
-          <h3>How likely are your customers to stay and expand?</h3>
-          <div class="quiz-options">
-            <label><input type="radio" name="retention" value="3" /> High churn is not our problem, expansion is our focus</label>
-            <label><input type="radio" name="retention" value="2" /> We retain most but haven't optimized for expansion</label>
-            <label><input type="radio" name="retention" value="1" /> We see steady churn and limited expansion</label>
-            <label><input type="radio" name="retention" value="0" /> We're losing customers faster than we'd like</label>
-          </div>
-        </div>
-
-        <!-- Q5: Email -->
-        <div class="quiz-question" id="q5" data-field="email" data-max="0">
-          <h3>What's your email for your personalized audit?</h3>
-          <div class="quiz-options" style="display:flex;flex-direction:column;gap:12px;">
-            <input type="email" id="userEmail" name="email" placeholder="you@company.com" required style="padding:12px 16px;border:1px solid var(--warm-line);border-radius:8px;font-size:16px;font-family:inherit;" />
-          </div>
-        </div>
-      </form>
+      ))}
     </div>
 
-    <!-- Results Screen -->
-    <div id="results-screen" class="results-screen" style="display:none;">
-      <div class="results-header">
-        <h2 style="font-size:36px;font-weight:800;margin:0 0 4px;color:var(--ink-deep);letter-spacing:-0.7px;">Your Growth Audit: <span id="totalScore" style="color:var(--navy);">0</span>/50</h2>
-        <p style="font-size:16px;color:var(--ink-mute);margin:0;font-weight:500;">Here's where you stand:</p>
-      </div>
+    <div class="finding">
+      <p class="finding-label">Your biggest gap</p>
+      <h4 class="finding-title" id="gapTitle"></h4>
+      <p class="finding-body" id="gapRead"></p>
 
-      <div class="results-grid">
-        <div class="result-stat">
-          <div class="result-score">
-            <span id="acqScore">0</span><span style="font-size:14px;color:var(--ink-mute);font-weight:600;">/14</span>
-          </div>
-          <p class="result-label">Acquisition</p>
+      <div class="finding-split">
+        <div>
+          <p class="finding-label">Likely root cause</p>
+          <p class="finding-body" id="gapCause"></p>
         </div>
-        <div class="result-stat">
-          <div class="result-score">
-            <span id="actScore">0</span><span style="font-size:14px;color:var(--ink-mute);font-weight:600;">/12</span>
-          </div>
-          <p class="result-label">Activation</p>
-        </div>
-        <div class="result-stat">
-          <div class="result-score">
-            <span id="convScore">0</span><span style="font-size:14px;color:var(--ink-mute);font-weight:600;">/12</span>
-          </div>
-          <p class="result-label">Conversion</p>
-        </div>
-        <div class="result-stat">
-          <div class="result-score">
-            <span id="retScore">0</span><span style="font-size:14px;color:var(--ink-mute);font-weight:600;">/12</span>
-          </div>
-          <p class="result-label">Retention</p>
+        <div>
+          <p class="finding-label">Your first move</p>
+          <p class="finding-body" id="gapMove"></p>
         </div>
       </div>
 
-      <div id="insightBox" class="insight-box" style="background:var(--cream);border-radius:12px;padding:28px;margin-top:40px;text-align:left;border-left:4px solid var(--navy);">
-        <p style="font-size:12px;font-weight:700;color:var(--ink-mute);margin:0 0 14px;text-transform:uppercase;letter-spacing:0.8px;">Where to start:</p>
-        <p id="insightText" style="font-size:16px;color:var(--ink-deep);margin:0;line-height:1.6;font-weight:500;"></p>
-      </div>
-
-      <p style="font-size:14px;color:var(--ink-mute);margin:32px 0 0;text-align:center;font-weight:500;">✓ A personalized Growth Audit is on its way to your inbox.</p>
-
-      <div style="display:flex;gap:12px;justify-content:center;margin-top:32px;">
-        <a href="https://calendar.app.google/LXLo1623kmwa7NWr6" target="_blank" rel="noopener" class="btn-navy" style="font-size:16px;padding:14px 32px;">Book a call to dive deeper</a>
-      </div>
+      <p class="finding-next" id="gapNext"></p>
     </div>
 
-    <!-- Navigation -->
-    <div class="quiz-nav" id="quizNav" style="display:flex;gap:12px;margin-top:32px;justify-content:center;">
-      <button id="prevBtn" type="button" style="padding:12px 24px;border:1px solid var(--warm-line);border-radius:8px;background:#fff;cursor:pointer;font-weight:600;display:none;">Back</button>
-      <button id="nextBtn" type="button" class="btn-navy" style="padding:12px 32px;cursor:pointer;font-weight:600;">Next</button>
+    <div class="res-cta">
+      <p class="res-cta-line">Every one of these is fixable. The fastest way through is 20 minutes on a call.</p>
+      <a href={BOOKING} target="_blank" rel="noopener" class="btn-navy btn-lg">Book your free consultation</a>
+      <p class="res-note" id="resNote"></p>
     </div>
   </div>
 </div>
 
 <style>
-.audit-quiz-wrap {
-  max-width:640px;
-  margin:44px auto 0;
+.audit-quiz {
+  max-width: 660px;
+  margin: 44px auto 0;
+  background: #fff;
+  border: 1px solid var(--warm-line);
+  border-radius: 18px;
+  padding: 40px;
+  text-align: left;
 }
 
-.quiz-container {
-  background:#fff;
-  border-radius:12px;
-  border:1px solid var(--warm-line);
-  padding:48px 40px;
+/* progress */
+.quiz-progress { height: 4px; background: var(--cream); border-radius: 99px; overflow: hidden; }
+.quiz-progress > div { height: 100%; width: 20%; background: var(--navy); transition: width .3s ease; }
+.quiz-step { font-size: 12px; font-weight: 700; color: var(--ink-mute); margin: 14px 0 0; }
+
+.stage-name { font-size: 26px; font-weight: 800; letter-spacing: -.5px; margin: 6px 0 0; color: var(--ink-deep); }
+.stage-blurb { font-size: 15px; color: var(--ink-mute); margin: 6px 0 0; }
+
+/* Stacked-paper cards: collapsed sheets tuck under the open one. */
+.stack { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+
+.card {
+  border: 1px solid var(--warm-line);
+  border-radius: 12px;
+  background: #fff;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
 }
-
-.quiz-progress {
-  width:100%;
-  height:4px;
-  background:var(--cream);
-  border-radius:2px;
-  margin-bottom:32px;
-  overflow:hidden;
+.card[data-open="true"] {
+  border-color: var(--ink-deep);
+  box-shadow: 0 10px 26px rgba(22,24,15,.10);
 }
+.card[data-open="false"] { background: #fcfcfa; }
+.card[data-open="false"]:hover { transform: translateY(-1px); }
 
-.progress-bar {
-  height:100%;
-  background:var(--navy);
-  width:20%;
-  transition:width 0.3s ease;
+.card-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: none;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  color: var(--ink-deep);
 }
-
-.quiz-question {
-  display:none;
-  animation:fadeIn 0.25s ease;
+.card-num {
+  flex: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 12px; font-weight: 700;
+  background: var(--cream); color: var(--ink-mute);
 }
+.card[data-open="true"] .card-num { background: var(--navy); color: var(--ink-deep); }
+.card[data-answered="true"] .card-num { background: var(--navy); color: var(--ink-deep); }
 
-.quiz-question.active {
-  display:block;
-  animation:fadeIn 0.25s ease;
+.card-q { flex: 1; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.card[data-open="false"] .card-q {
+  font-weight: 500;
+  color: var(--ink-mute);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.card-answer { flex: none; font-size: 13px; font-weight: 700; color: var(--ink-deep); }
 
-@keyframes fadeIn {
-  from { opacity:0;transform:translateY(8px); }
-  to { opacity:1;transform:translateY(0); }
+.card-body { display: none; padding: 0 16px 16px 50px; }
+.card[data-open="true"] .card-body { display: block; }
+
+.opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; margin-top: 8px;
+  border: 1px solid var(--warm-line); border-radius: 9px;
+  cursor: pointer; font-size: 15px;
+  transition: border-color .15s ease, background .15s ease;
 }
+.opt:hover { border-color: var(--ink-deep); background: var(--cream); }
+.opt input { accent-color: var(--ink-deep); cursor: pointer; }
+.opt:has(input:checked) { border-color: var(--ink-deep); background: var(--cream); font-weight: 600; }
 
-.quiz-question h3 {
-  font-size:20px;
-  font-weight:700;
-  color:var(--ink-deep);
-  margin:0 0 24px;
-  line-height:1.4;
+.field-label { display: block; font-size: 12px; font-weight: 700; color: var(--ink-mute); margin-bottom: 8px; }
+#workEmail {
+  width: 100%; box-sizing: border-box;
+  padding: 13px 15px; font: inherit; font-size: 16px;
+  border: 1px solid var(--warm-line); border-radius: 9px;
 }
+#workEmail:focus { outline: none; border-color: var(--ink-deep); }
+#workEmail[aria-invalid="true"] { border-color: #cc4117; }
+.field-error { font-size: 13px; color: #cc4117; margin: 8px 0 0; font-weight: 600; }
 
-.quiz-options {
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.quiz-nav { display: flex; gap: 10px; justify-content: flex-end; margin-top: 26px; }
+.btn-ghost {
+  padding: 12px 22px; border: 1px solid var(--warm-line);
+  border-radius: 99px; background: #fff; cursor: pointer;
+  font: inherit; font-weight: 600; color: var(--ink-deep);
 }
+.quiz-nav .btn-navy { padding: 12px 30px; cursor: pointer; border: 0; font: inherit; font-weight: 700; }
+.quiz-nav .btn-navy:disabled { opacity: .45; cursor: not-allowed; }
 
-.quiz-options label {
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  padding:12px 16px;
-  border:1px solid var(--warm-line);
-  border-radius:8px;
-  cursor:pointer;
-  transition:all 0.2s ease;
-  background:#fff;
+/* ---------- results ---------- */
+.res-eyebrow { font-size: 12px; font-weight: 700; color: var(--ink-mute); margin: 0; }
+.res-score {
+  font-size: 60px; font-weight: 800; letter-spacing: -2px;
+  margin: 2px 0 0; color: var(--ink-deep); line-height: 1;
 }
+.res-out { font-size: 26px; color: var(--ink-mute); letter-spacing: -.5px; }
+.res-verdict { font-size: 17px; line-height: 1.55; color: var(--ink-deep); margin: 12px 0 0; font-weight: 600; }
 
-.quiz-options label:hover {
-  border-color:var(--navy);
-  background:var(--cream);
+.bars { margin: 30px 0 0; display: flex; flex-direction: column; gap: 16px; }
+.bar-row { display: grid; grid-template-columns: 108px 1fr auto; align-items: center; gap: 14px; }
+.bar-name { font-size: 14px; font-weight: 700; color: var(--ink-deep); }
+/* Both are spans, so they must be blockified or width/height are ignored. */
+.bar-track { display: block; height: 12px; border-radius: 99px; background: var(--cream); overflow: hidden; }
+.bar-fill { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .5s ease; }
+/* Lime only ever as a fill, never as text on light. Coral marks drop-off. */
+.bar-fill.healthy { background: var(--navy); }
+.bar-fill.risk    { background: #f0b429; }
+.bar-fill.leaking { background: #ec6a43; }
+.bar-meta { font-size: 13px; font-weight: 700; color: var(--ink-deep); white-space: nowrap; }
+.bar-tag { display: block; font-size: 11px; font-weight: 700; color: var(--ink-mute); }
+
+.finding {
+  margin: 32px 0 0; padding: 26px;
+  background: var(--cream); border-radius: 14px;
+  border-left: 4px solid var(--navy);
 }
+.finding-label { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--ink-mute); margin: 0; }
+.finding-title { font-size: 21px; font-weight: 800; color: var(--ink-deep); margin: 8px 0 0; letter-spacing: -.3px; }
+.finding-body { font-size: 15px; line-height: 1.6; color: var(--ink-deep); margin: 8px 0 0; }
+.finding-split { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
+.finding-next { font-size: 14px; line-height: 1.55; color: var(--ink-mute); margin: 22px 0 0; padding-top: 16px; border-top: 1px solid var(--warm-line); }
 
-.quiz-options input[type="radio"] {
-  margin-top:3px;
-  cursor:pointer;
-  accent-color:var(--navy);
-}
+.res-cta { margin: 34px 0 0; text-align: center; }
+.res-cta-line { font-size: 16px; line-height: 1.55; color: var(--ink-deep); margin: 0 0 18px; font-weight: 600; }
+.btn-lg { display: inline-block; font-size: 17px; padding: 16px 34px; box-shadow: 0 6px 22px rgba(22,24,15,.22); }
+.res-note { font-size: 13px; color: var(--ink-mute); margin: 14px 0 0; }
 
-.quiz-options input[type="radio"]:checked + label,
-.quiz-options label:has(input[type="radio"]:checked) {
-  border-color:var(--navy);
-  background:var(--cream);
-  font-weight:600;
-}
-
-#userEmail {
-  width:100%;
-  box-sizing:border-box;
-}
-
-.results-screen {
-  animation:fadeIn 0.3s ease;
-}
-
-.results-header {
-  margin-bottom:36px;
-}
-
-.results-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
-  gap:16px;
-  margin-bottom:32px;
-}
-
-.result-stat {
-  padding:20px 16px;
-  border:1px solid var(--warm-line);
-  border-radius:8px;
-  background:var(--cream);
-}
-
-.result-score {
-  font-size:28px;
-  font-weight:800;
-  color:var(--navy);
-  margin-bottom:8px;
-}
-
-.result-score span:last-child {
-  font-size:16px;
-  color:var(--ink-mute);
-  font-weight:600;
-}
-
-.result-label {
-  font-size:12px;
-  font-weight:700;
-  color:var(--ink-mute);
-  text-transform:uppercase;
-  letter-spacing:0.5px;
-  margin:0;
-}
-
-.insight-box {
-  text-align:left;
-}
-
-.quiz-nav {
-  margin-top:32px;
-}
-
-.btn-navy:disabled {
-  opacity:0.5;
-  cursor:not-allowed;
-}
-
-@media (max-width:900px) {
-  .quiz-container {
-    padding:32px 24px;
-  }
-
-  .results-grid {
-    grid-template-columns:repeat(2, 1fr);
-  }
+@media (max-width: 900px) {
+  .audit-quiz { padding: 26px 20px; border-radius: 14px; }
+  .res-score { font-size: 48px; }
+  .card-body { padding-left: 16px; }
+  .bar-row { grid-template-columns: 92px 1fr auto; gap: 10px; }
+  .finding-split { grid-template-columns: 1fr; gap: 18px; }
 }
 </style>
 
 <script>
-const form = document.getElementById('auditForm');
-const nextBtn = document.getElementById('nextBtn');
-const prevBtn = document.getElementById('prevBtn');
-const progressBar = document.getElementById('progress-bar');
-const quizForm = document.getElementById('quiz-form');
-const resultsScreen = document.getElementById('results-screen');
+  type Diag = { read: string; cause: string; move: string };
 
-const questions = ['q1', 'q2', 'q3', 'q4', 'q5'];
-let currentQuestion = 0;
-
-function showQuestion(index) {
-  // Hide all questions
-  questions.forEach((q) => {
-    document.getElementById(q).classList.remove('active');
-  });
-  // Show only current question
-  document.getElementById(questions[index]).classList.add('active');
-
-  // Update progress bar
-  const progress = ((index + 1) / questions.length) * 100;
-  progressBar.style.width = `${progress}%`;
-
-  // Toggle back button
-  prevBtn.style.display = index > 0 ? 'block' : 'none';
-
-  // Update next button text and disable if no answer selected
-  const isLastQuestion = index === questions.length - 1;
-  nextBtn.textContent = isLastQuestion ? 'Get Your Audit' : 'Next';
-
-  // Disable next button until an answer is selected
-  updateNextButtonState();
-
-  // Scroll to top smoothly
-  const quizContainer = document.getElementById('quiz-container');
-  quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function updateNextButtonState() {
-  const currentField = questions[currentQuestion];
-  const fieldName = document.getElementById(currentField).dataset.field;
-
-  if (fieldName === 'email') {
-    const email = document.getElementById('userEmail').value;
-    nextBtn.disabled = !email || !email.includes('@');
-  } else {
-    const selected = form.querySelector(`input[name="${fieldName}"]:checked`);
-    nextBtn.disabled = !selected;
-  }
-}
-
-// Listen for answer selections to enable Next button
-form.addEventListener('change', updateNextButtonState);
-document.getElementById('userEmail').addEventListener('input', updateNextButtonState);
-
-nextBtn.addEventListener('click', () => {
-  if (currentQuestion < questions.length - 1) {
-    // Advance to next question
-    currentQuestion++;
-    showQuestion(currentQuestion);
-  } else {
-    // Submit the quiz
-    submitQuiz();
-  }
-});
-
-prevBtn.addEventListener('click', () => {
-  if (currentQuestion > 0) {
-    currentQuestion--;
-    showQuestion(currentQuestion);
-  }
-});
-
-function submitQuiz() {
-  const acq = parseInt(form.querySelector('input[name="acquisition"]:checked')?.value || 0);
-  const act = parseInt(form.querySelector('input[name="activation"]:checked')?.value || 0);
-  const conv = parseInt(form.querySelector('input[name="conversion"]:checked')?.value || 0);
-  const ret = parseInt(form.querySelector('input[name="retention"]:checked')?.value || 0);
-  const email = document.getElementById('userEmail').value;
-
-  if (!email) {
-    alert('Please enter your email');
-    return;
-  }
-
-  // Multiply by max scores: acq=14, act/conv/ret=12 each (max out of 50)
-  const acqScore = acq * (14/3);
-  const actScore = act * (12/3);
-  const convScore = conv * (12/3);
-  const retScore = ret * (12/3);
-  const totalScore = Math.round(acqScore + actScore + convScore + retScore);
-
-  // Update results
-  document.getElementById('acqScore').textContent = Math.round(acqScore);
-  document.getElementById('actScore').textContent = Math.round(actScore);
-  document.getElementById('convScore').textContent = Math.round(convScore);
-  document.getElementById('retScore').textContent = Math.round(retScore);
-  document.getElementById('totalScore').textContent = totalScore;
-
-  // Generate insight based on lowest score
-  const scores = [
-    { name: 'Retention', score: retScore },
-    { name: 'Activation', score: actScore },
-    { name: 'Conversion', score: convScore },
-    { name: 'Acquisition', score: acqScore }
-  ];
-  scores.sort((a, b) => a.score - b.score);
-
-  const insights = {
-    'Retention': 'Your biggest opportunity is in retention. Without an owner focused on churn and expansion, growth stays reactive. Let\'s build a retention strategy that turns existing customers into revenue drivers.',
-    'Activation': 'Activation is your constraint. Users aren\'t experiencing value early, so messaging and positioning won\'t move the needle yet. We\'d focus on understanding where new customers get stuck, then fix that before scaling acquisition.',
-    'Conversion': 'Your conversion process needs clarity. When your positioning and messaging aren\'t owned, sales becomes inconsistent and deals slip. Let\'s build repeatable conversion motion.',
-    'Acquisition': 'Acquisition is where you\'re stuck. Without a clear positioning and GTM strategy, no channel will scale. We\'d start by defining exactly who you\'re for and how to reach them.'
+  const MAXES: Record<string, number> = {
+    Acquisition: 14, Activation: 12, Conversion: 12, Retention: 12,
   };
 
-  document.getElementById('insightText').textContent = insights[scores[0].name];
+  const DIAG: Record<string, Diag> = {
+    Acquisition: {
+      read: "You are spending into channels without a clean read on which ones pay back. That is why adding budget has stopped adding growth.",
+      cause: "No one owns the channel portfolio, so channels get added and never retired. Blended CAC hides the losers inside the average.",
+      move: "Split CAC by channel for the last 90 days, then cut or cap the worst performer for one full cycle and watch what happens to pipeline.",
+    },
+    Activation: {
+      read: "New users are not reliably reaching value, so everything you spend on acquisition leaks straight back out.",
+      cause: "The activation moment is not defined in writing, so Product, Marketing, and Support are each optimising for a different finish line.",
+      move: "Write down the single action that marks a user as activated, then measure what share of signups hit it within their first week.",
+    },
+    Conversion: {
+      read: "Deals are turning on the individual rep and the individual conversation rather than on a story that holds up every time.",
+      cause: "Positioning and messaging have no owner, so each rep rebuilds the pitch themselves and loss reasons never get written down.",
+      move: "Write up the last five lost deals in one page. The repeated objection is your messaging gap, and it is usually fixable in a week.",
+    },
+    Retention: {
+      read: "Retention is being handled reactively. You find out about churn once it has already happened, and expansion is left on the table.",
+      cause: "Retention sits between Sales and CS, so no one is accountable for it and expansion revenue never gets a real number.",
+      move: "Give retention one named owner, then track expansion revenue as a hard number rather than an estimate for one quarter.",
+    },
+  };
 
-  // Send to Sheets or email service (for now, just show results)
-  sendToSheet(email, acq, act, conv, ret, totalScore);
+  const FREE_MAIL = ["gmail.com","yahoo.com","yahoo.co.in","outlook.com","hotmail.com","live.com","icloud.com","me.com","aol.com","proton.me","protonmail.com","gmx.com","mail.com","yandex.com","rediffmail.com","zoho.com"];
 
-  // Show results
-  quizForm.style.display = 'none';
-  resultsScreen.style.display = 'block';
-  document.getElementById('quizNav').style.display = 'none';
-}
+  const root = document.querySelector(".audit-quiz") as HTMLElement;
+  if (root) {
+    const screens = Array.from(root.querySelectorAll<HTMLElement>(".stage"));
+    const nextBtn = root.querySelector("#nextBtn") as HTMLButtonElement;
+    const backBtn = root.querySelector("#backBtn") as HTMLButtonElement;
+    const bar = root.querySelector("#progressBar") as HTMLElement;
+    const stepLabel = root.querySelector("#stepLabel") as HTMLElement;
+    const form = root.querySelector("#quizForm") as HTMLElement;
+    const results = root.querySelector("#results") as HTMLElement;
+    const emailInput = root.querySelector("#workEmail") as HTMLInputElement;
+    const emailError = root.querySelector("#emailError") as HTMLElement;
 
-async function sendToSheet(email, acq, act, conv, ret, total) {
-  // Send quiz results to configured endpoint
-  // Configure the endpoint in environment: VITE_AUDIT_ENDPOINT
-  const endpoint = import.meta.env.VITE_AUDIT_ENDPOINT || '';
+    let current = 0;
 
-  if (!endpoint) {
-    console.log('Audit scores saved locally. Email:', email);
-    return;
-  }
+    const isEmailScreen = () => current === screens.length - 1;
 
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email,
-        acquisition: Math.round(acq * (14/3)),
-        activation: Math.round(act * (12/3)),
-        conversion: Math.round(conv * (12/3)),
-        retention: Math.round(ret * (12/3)),
-        total
-      })
+    function openCard(stage: HTMLElement, index: number) {
+      stage.querySelectorAll<HTMLElement>(".card").forEach((card, i) => {
+        const open = i === index;
+        card.dataset.open = String(open);
+        card.querySelector(".card-head")?.setAttribute("aria-expanded", String(open));
+      });
+    }
+
+    function validateEmail(): string | null {
+      const value = (emailInput?.value || "").trim();
+      if (!value) return "Enter your work email.";
+      // Deliberately permissive on shape, strict on domain type.
+      if (!/^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/.test(value)) return "That does not look like a valid email.";
+      const domain = value.split("@")[1].toLowerCase();
+      if (FREE_MAIL.includes(domain)) return "Please use your work email, not a personal one.";
+      return null;
+    }
+
+    function refreshNext() {
+      if (isEmailScreen()) {
+        nextBtn.disabled = validateEmail() !== null;
+        nextBtn.textContent = "Get my audit";
+        return;
+      }
+      const stage = screens[current];
+      const groups = new Set(
+        Array.from(stage.querySelectorAll<HTMLInputElement>("input[type=radio]")).map((i) => i.name)
+      );
+      const answered = Array.from(groups).every((n) => stage.querySelector(`input[name="${n}"]:checked`));
+      nextBtn.disabled = !answered;
+      nextBtn.textContent = "Next";
+    }
+
+    function show(index: number) {
+      current = index;
+      screens.forEach((s, i) => (s.hidden = i !== index));
+      bar.style.width = `${((index + 1) / screens.length) * 100}%`;
+      stepLabel.textContent = `Stage ${index + 1} of ${screens.length}`;
+      backBtn.hidden = index === 0;
+      refreshNext();
+      root.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // Answering collapses the card and opens the next unanswered one.
+    root.addEventListener("change", (e) => {
+      const input = e.target as HTMLInputElement;
+      if (input.type === "radio") {
+        const card = input.closest(".card") as HTMLElement;
+        const stage = input.closest(".stage") as HTMLElement;
+        card.dataset.answered = "true";
+        const tag = card.querySelector(".card-answer") as HTMLElement;
+        tag.textContent = input.dataset.label || "";
+        tag.hidden = false;
+
+        const cards = Array.from(stage.querySelectorAll<HTMLElement>(".card"));
+        const nextUnanswered = cards.findIndex((c) => c.dataset.answered !== "true");
+        if (nextUnanswered > -1) openCard(stage, nextUnanswered);
+        else openCard(stage, -1);
+      }
+      refreshNext();
     });
-    if (!response.ok) console.warn('Submission failed, but results are displayed');
-  } catch (err) {
-    console.warn('Could not reach submission endpoint:', err);
-  }
-}
 
-showQuestion(0);
+    // Let people reopen any card in the stack.
+    root.addEventListener("click", (e) => {
+      const head = (e.target as HTMLElement).closest(".card-head");
+      if (!head) return;
+      const stage = head.closest(".stage") as HTMLElement;
+      const cards = Array.from(stage.querySelectorAll<HTMLElement>(".card"));
+      const card = head.closest(".card") as HTMLElement;
+      openCard(stage, card.dataset.open === "true" ? -1 : cards.indexOf(card));
+    });
+
+    // Surface the reason as they type. A disabled button with no explanation
+    // reads as a broken form, especially to anyone entering a personal address.
+    emailInput?.addEventListener("input", () => {
+      const value = emailInput.value.trim();
+      const err = validateEmail();
+      const worthWarning = value.includes("@") && value.split("@")[1]?.includes(".");
+      if (err && worthWarning) {
+        emailError.textContent = err;
+        emailError.hidden = false;
+        emailInput.setAttribute("aria-invalid", "true");
+      } else {
+        emailError.hidden = true;
+        emailInput.setAttribute("aria-invalid", "false");
+      }
+      refreshNext();
+    });
+
+    backBtn.addEventListener("click", () => show(Math.max(0, current - 1)));
+
+    nextBtn.addEventListener("click", () => {
+      if (!isEmailScreen()) { show(current + 1); return; }
+      const err = validateEmail();
+      if (err) {
+        emailError.textContent = err;
+        emailError.hidden = false;
+        emailInput.setAttribute("aria-invalid", "true");
+        return;
+      }
+      finish();
+    });
+
+    function finish() {
+      const scores = screens.slice(0, 4).map((stage) => {
+        const name = (stage.querySelector(".stage-name") as HTMLElement).textContent!.trim();
+        const picked = Array.from(stage.querySelectorAll<HTMLInputElement>("input[type=radio]:checked"));
+        const score = picked.reduce((sum, i) => sum + Number(i.value), 0);
+        return { name, score, max: MAXES[name] };
+      });
+
+      const total = scores.reduce((s, x) => s + x.score, 0);
+      (root.querySelector("#totalScore") as HTMLElement).textContent = String(total);
+
+      const ranked = [...scores].sort((a, b) => a.score / a.max - b.score / b.max);
+      const worst = ranked[0];
+      const second = ranked[1];
+
+      (root.querySelector("#verdict") as HTMLElement).textContent =
+        total >= 40
+          ? "Your funnel is in good shape. The gains left are specific, not structural."
+          : total >= 28
+          ? "The foundations are there. One stage is holding the rest of the funnel back."
+          : "Growth is leaking in more than one place, and the stages are compounding on each other.";
+
+      scores.forEach(({ name, score, max }) => {
+        const row = root.querySelector<HTMLElement>(`.bar-row[data-row="${name}"]`);
+        if (!row) return;
+        const pct = Math.round((score / max) * 100);
+        const state = pct >= 75 ? "healthy" : pct >= 50 ? "risk" : "leaking";
+        const fill = row.querySelector<HTMLElement>(".bar-fill")!;
+        fill.classList.remove("healthy", "risk", "leaking");
+        fill.classList.add(state);
+        fill.style.width = `${pct}%`;
+        row.querySelector<HTMLElement>(".bar-val")!.textContent = `${score}/${max}`;
+        row.querySelector<HTMLElement>(".bar-tag")!.textContent =
+          state === "healthy" ? "Healthy" : state === "risk" ? "At risk" : "Leaking";
+      });
+
+      const d = DIAG[worst.name];
+      (root.querySelector("#gapTitle") as HTMLElement).textContent = `${worst.name}, at ${worst.score} out of ${worst.max}`;
+      (root.querySelector("#gapRead") as HTMLElement).textContent = d.read;
+      (root.querySelector("#gapCause") as HTMLElement).textContent = d.cause;
+      (root.querySelector("#gapMove") as HTMLElement).textContent = d.move;
+      (root.querySelector("#gapNext") as HTMLElement).textContent =
+        `Second priority: ${second.name}, at ${second.score} out of ${second.max}. Fix ${worst.name} first. Moving it usually lifts ${second.name} on its own.`;
+
+      (root.querySelector("#resNote") as HTMLElement).textContent =
+        `A full written version is on its way to ${emailInput.value.trim()}.`;
+
+      send({
+        email: emailInput.value.trim(),
+        total,
+        ...Object.fromEntries(scores.map((s) => [s.name.toLowerCase(), s.score])),
+        biggestGap: worst.name,
+      });
+
+      form.hidden = true;
+      results.hidden = false;
+      root.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    async function send(payload: Record<string, unknown>) {
+      const endpoint = import.meta.env.PUBLIC_AUDIT_ENDPOINT;
+      if (!endpoint) return;
+      try {
+        await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload),
+        });
+      } catch {
+        // Results are already on screen; a failed post must not block them.
+      }
+    }
+
+    show(0);
+  }
 </script>

@@ -1,115 +1,82 @@
-# Google Apps Script Setup for Growth Audit Emails
+# Growth Audit: email delivery setup
 
-## Overview
-This Google Apps Script receives quiz responses from your website and:
-1. Stores responses in a Google Sheet
-2. Sends personalized audit emails to users
-3. Provides a webhook endpoint for the quiz form
+The quiz on the site scores the founder and shows results immediately. To also
+email them the written audit and log submissions, wire up this Apps Script.
+Until you do, the quiz still works end to end; it just does not send anything.
 
-## Step 1: Create a Google Sheet
+## 1. Sheet
 
-1. Go to [Google Sheets](https://sheets.google.com)
-2. Create a new sheet named "Growth Audit Responses"
-3. You'll use this to store audit results (the script will auto-create headers)
+1. Create a Google Sheet called **Growth Audit Responses**.
+2. **Extensions > Apps Script**.
+3. Delete the placeholder code, paste all of `GOOGLE_APPS_SCRIPT.gs`, save.
+4. Select `setupSheet` in the function dropdown and press Run. Approve the
+   permission prompt. This writes the header row.
 
-## Step 2: Create the Apps Script
+## 2. Deploy
 
-1. In the same Google Sheet, click **Extensions → Apps Script**
-2. Delete any default code in the editor
-3. Paste the contents of `GOOGLE_APPS_SCRIPT.gs` (see file in repo)
-4. Click **Save** (name it "Growth Audit Webhook")
+1. **Deploy > New deployment > Web app**.
+2. Execute as: **Me**. Who has access: **Anyone**.
+3. Deploy, then copy the `/exec` URL.
 
-## Step 3: Set Up the Sheet Headers
+## 3. Point the site at it
 
-1. In the Apps Script editor, click the **▶️ Run** button next to `setupSheet()`
-2. When prompted, click **Review permissions** → **Allow**
-3. This creates the column headers in your sheet
+Astro only exposes env vars to browser code when they are prefixed `PUBLIC_`.
+Create `.env` in the project root:
 
-## Step 4: Deploy as Web App
+```
+PUBLIC_AUDIT_ENDPOINT=https://script.google.com/macros/s/YOUR_ID/exec
+```
 
-1. Click **Deploy** → **New deployment**
-2. **Deployment type**: Select "Web app"
-3. **Execute as**: Your Google account
-4. **Who has access**: Select "Anyone"
-5. Click **Deploy**
-6. Copy the **Deployment URL** (looks like: `https://script.google.com/macros/s/ABC123.../usercontent`)
-7. **This is your webhook endpoint**
+For the live site, add the same variable in the Cloudflare Pages project under
+**Settings > Environment variables**, then redeploy. The value is visible in the
+built JS, which is fine here: the endpoint only accepts writes and returns no data.
 
-## Step 5: Configure Your Website
+## 4. Test
 
-1. Add the deployment URL to your site's environment:
-   - **For Cloudflare Pages**: Add to `wrangler.jsonc` or `.env`:
-     ```
-     VITE_AUDIT_ENDPOINT = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/usercontent"
-     ```
+Complete the quiz with a work email. You should get a mail titled
+"Your Growth Audit: NN/50" and a new row in the sheet.
 
-2. Or update the quiz component directly in `src/components/GrowthAuditQuiz.astro`:
-   ```javascript
-   const endpoint = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/usercontent';
-   ```
+To test the script alone, without the site:
 
-## Step 6: Test the Flow
+```bash
+curl -L -X POST 'https://script.google.com/macros/s/YOUR_ID/exec' \
+  -H 'Content-Type: text/plain;charset=utf-8' \
+  -d '{"email":"you@yourcompany.com","acquisition":14,"activation":6,"conversion":3,"retention":7,"biggestGap":"Conversion"}'
+```
 
-1. Go to your website's Growth Audit quiz
-2. Answer all 5 questions
-3. Enter your test email
-4. Click "Get Your Audit"
-5. **Check your inbox** — you should receive an email with:
-   - Your audit score breakdown (0-50)
-   - Scores by funnel stage (Acquisition, Activation, Conversion, Retention)
-   - Personalized recommendation on where to start
-   - CTA to book a call
+`-L` matters. Apps Script redirects, and without it you will see a 302 and
+assume it failed.
 
-## What Gets Stored
+## Payload
 
-**Google Sheet columns:**
-- Timestamp
-- Email
-- Acquisition score (0-14)
-- Activation score (0-12)
-- Conversion score (0-12)
-- Retention score (0-12)
-- Total score (0-50)
+| Field | Range |
+|---|---|
+| `email` | work email, validated on the client |
+| `acquisition` | 0 to 14 |
+| `activation` | 0 to 12 |
+| `conversion` | 0 to 12 |
+| `retention` | 0 to 12 |
+| `biggestGap` | stage name, lowest percentage |
 
-## Optional: Customize Email Template
+Total is derived server side, so the sheet cannot disagree with the email.
 
-Edit the `emailTemplate` in the `sendAuditEmail()` function to:
-- Change the subject line format
-- Adjust the tone or copy
-- Add your own branding footer
-- Include links to specific resources
+## Scoring caveat
 
-## Troubleshooting
+The 12 questions match the Google Form this replaced. **The per-option weights
+do not**: the form's key was not recoverable. The weights in
+`src/components/GrowthAuditQuiz.astro` are the simplest set that produces the
+documented maxima (14/12/12/12) and reproduces a real sent audit exactly
+(9/7/7/6 = 29). If you still have the form's key, check it against those
+weights before treating a single founder's score as authoritative. The stage
+ranking, which drives the diagnosis, is far less sensitive to this than the
+raw numbers are.
 
-**"Permission denied" errors:**
-- Make sure you ran `setupSheet()` and granted permissions
-- Check that you deployed as "Web app" with "Anyone" access
+## Notes
 
-**Emails not sending:**
-- Verify the email is valid
-- Check Apps Script logs (View → Logs)
-- Ensure your Google account allows mail sending
-
-**Quiz doesn't submit:**
-- Check browser console (F12) for errors
-- Verify the deployment URL is correct
-- Test with `curl`:
-  ```bash
-  curl -X POST 'https://script.google.com/macros/s/YOUR_ID/usercontent' \
-    -H 'Content-Type: application/json' \
-    -d '{"email":"test@example.com","acquisition":10,"activation":8,"conversion":7,"retention":6,"total":31}'
-  ```
-
-## Updates
-
-If you modify the Google Apps Script:
-1. Click **Deploy** → **Manage deployments**
-2. Click the pencil icon on your deployment
-3. Click **Create new version**
-4. The URL stays the same; the new version auto-activates
-
-## Rollback
-
-To revert to a previous version:
-1. **Deploy** → **Manage deployments**
-2. Click the version number dropdown and select an older version
+- The site posts `Content-Type: text/plain` deliberately. Apps Script does not
+  answer CORS preflight; text/plain is a simple request so the browser skips it.
+  Switching to `application/json` will break submissions silently.
+- Editing the script: **Deploy > Manage deployments >** pencil **> New version**.
+  The URL stays the same.
+- Diagnosis copy lives in two places, `DIAGNOSIS` in the `.gs` and `DIAG` in the
+  Astro component. Change both together.
