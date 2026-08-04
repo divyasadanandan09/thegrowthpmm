@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hand-maintained. Add a <url> here whenever you add a page under src/pages/.
+
+  URLs must end in a trailing slash. Astro builds each page as a directory, and
+  Cloudflare 308-redirects the slashless form, so /faq would send Search Console
+  to a redirect instead of the page. The trailing-slash form is also what the
+  <link rel="canonical"> on each page declares, so the two now agree.
+-->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.thegrowthpmm.com/</loc>
-    <lastmod>2026-08-03</lastmod>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.thegrowthpmm.com/faq</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://www.thegrowthpmm.com/faq/</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.thegrowthpmm.com/ai-product-marketing</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://www.thegrowthpmm.com/ai-product-marketing/</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.thegrowthpmm.com/fractional-head-of-pmm</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://www.thegrowthpmm.com/fractional-head-of-pmm/</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.thegrowthpmm.com/blog</loc>
-    <lastmod>2026-08-03</lastmod>
+    <loc>https://www.thegrowthpmm.com/blog/</loc>
+    <lastmod>2026-08-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
