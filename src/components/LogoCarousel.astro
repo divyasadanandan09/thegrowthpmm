@@ -1,122 +1,87 @@
 ---
-// Logo Carousel — animated, auto-rotating strip with logos enlarged by 25%
-// Sizes: Fi Money 27.5x27.5, Practo 100x27.5, MakeMyTrip 120x32.5, Raymond 81.25x27.5, TCS 96.25x27.5
+// Past-experience logo strip: a seamless marquee.
+// The track renders the list twice; the -50% keyframe lands exactly on the
+// second copy, so the loop has no visible seam or reset.
+const logos = [
+  { src: "/logos/fi-money.svg", alt: "Fi Money" },
+  { src: "/logos/practo.png", alt: "Practo" },
+  { src: "/logos/makemytrip.svg", alt: "MakeMyTrip" },
+  { src: "/logos/raymond.png", alt: "Raymond" },
+  { src: "/logos/tcs.png", alt: "TCS" },
+  { src: "/logos/decathlon.svg", alt: "Decathlon" },
+  { src: "/logos/ninjacart.png", alt: "Ninjacart" },
+];
 ---
 
-<section class="logo-carousel-wrap" style="background:var(--cream);border-top:1px solid var(--warm-line);border-bottom:1px solid var(--warm-line);">
-  <div style="max-width:1240px;margin:0 auto;padding:32px 24px;display:flex;align-items:center;gap:32px;justify-content:center;">
-
-    <div class="carousel-container">
-      <div class="carousel-track">
-        <!-- Logos duplicated for seamless loop -->
+<section class="logo-carousel-wrap">
+  <div class="carousel-container">
+    <div class="carousel-track">
+      {[...logos, ...logos].map((logo) => (
         <div class="carousel-item">
-          <img src="/logos/fi-money.svg" alt="Fi Money" loading="lazy" decoding="async" style="height:27.5px;width:27.5px;filter:grayscale(1);opacity:0.75;" />
+          <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
         </div>
-        <div class="carousel-item">
-          <img src="/logos/practo.png" alt="Practo" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/makemytrip.svg" alt="MakeMyTrip" loading="lazy" decoding="async" style="height:32.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/raymond.png" alt="Raymond" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/tcs.png" alt="TCS" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/decathlon.svg" alt="Decathlon" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/ninjacart.svg" alt="Ninjacart" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-
-        <!-- Duplicated for seamless loop -->
-        <div class="carousel-item">
-          <img src="/logos/fi-money.svg" alt="Fi Money" loading="lazy" decoding="async" style="height:27.5px;width:27.5px;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/practo.png" alt="Practo" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/makemytrip.svg" alt="MakeMyTrip" loading="lazy" decoding="async" style="height:32.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/raymond.png" alt="Raymond" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/tcs.png" alt="TCS" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/decathlon.svg" alt="Decathlon" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-        <div class="carousel-item">
-          <img src="/logos/ninjacart.svg" alt="Ninjacart" loading="lazy" decoding="async" style="height:27.5px;width:auto;filter:grayscale(1);opacity:0.75;" />
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
 .logo-carousel-wrap {
-  overflow:hidden;
+  background: var(--cream);
+  border-top: 1px solid var(--warm-line);
+  border-bottom: 1px solid var(--warm-line);
+  padding: 32px 24px;
+  overflow: hidden;
 }
 
 .carousel-container {
-  flex:1;
-  min-width:0;
-  overflow:hidden;
+  max-width: 1240px;
+  margin: 0 auto;
+  overflow: hidden;
 }
 
 .carousel-track {
-  display:flex;
-  gap:35px;
-  animation:scroll 20s linear infinite;
-  will-change:transform;
+  display: flex;
+  gap: 56px;
+  width: max-content;
+  animation: logo-scroll 20s linear infinite;
+  will-change: transform;
 }
 
+/* Fixed row height: every logo sits in the same band, so the strip's
+   top and bottom padding stay equal no matter each mark's aspect ratio. */
 .carousel-item {
-  flex:0 0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  flex: 0 0 auto;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* Height is set here, not per-image, so no single logo can drift taller. */
 .carousel-item img {
-  display:block;
+  display: block;
+  height: 28px;
+  width: auto;
+  filter: grayscale(1);
+  opacity: 0.75;
 }
 
-@keyframes scroll {
-  0% {
-    transform:translateX(0);
-  }
-  100% {
-    transform:translateX(-50%);
-  }
+@keyframes logo-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-/* Pause on hover */
 .carousel-track:hover {
-  animation-play-state:paused;
+  animation-play-state: paused;
 }
 
-/* Mobile: slightly slower for readability */
-@media (max-width:900px) {
-  .carousel-track {
-    animation:scroll 25s linear infinite;
-  }
-
-  .carousel-container {
-    flex:1;
-  }
+@media (max-width: 900px) {
+  .logo-carousel-wrap { padding: 24px 16px; }
+  .carousel-track { gap: 40px; animation-duration: 25s; }
 }
 
-/* Reduced motion preference */
-@media (prefers-reduced-motion:reduce) {
-  .carousel-track {
-    animation:none;
-    transform:translateX(0);
-  }
+@media (prefers-reduced-motion: reduce) {
+  .carousel-track { animation: none; }
 }
 </style>
