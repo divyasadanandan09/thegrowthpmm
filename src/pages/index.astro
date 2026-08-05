@@ -480,7 +480,21 @@ const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
     <div>
       <p style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--on-navy-mute);margin:0 0 14px;">Contact</p>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-        <a href="mailto:divya@thegrowthpmm.com">divya@thegrowthpmm.com</a>
+        {/*
+          The email_off markers below are Cloudflare's documented opt-out from
+          Email Address Obfuscation, and they MUST be real HTML comments in the
+          output, which is why they are written as raw HTML and this note is not.
+
+          Without them Cloudflare rewrites this address to a __cf_email__ span
+          and injects email-decode.min.js, which Lighthouse measured as the
+          single largest RENDER-BLOCKING request on the page at ~626ms. One
+          footer link was costing every visitor half a second.
+
+          Nothing is lost by opting out: the same address already ships in the
+          clear in the JSON-LD ProfessionalService schema in <head> on every
+          page, so any scraper that wanted it already had it. 2026-08-05.
+        */}
+        <!--email_off--><a href="mailto:divya@thegrowthpmm.com">divya@thegrowthpmm.com</a><!--/email_off-->
         <a href="https://linkedin.com/in/divyasadanandan" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
