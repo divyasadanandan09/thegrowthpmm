@@ -62,7 +62,12 @@ const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
     if (menu?.classList.contains("open")) closeMenu();
   };
   window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
+  // The initial call has to happen (a reload can restore a scrolled position),
+  // but NOT synchronously during parse. Reading window.scrollY there forces the
+  // browser to lay out a half-built document, which Lighthouse measured at 71ms
+  // of forced reflow on the critical path. rAF puts it after the first paint,
+  // where it costs nothing and the answer is the same. 2026-08-05.
+  requestAnimationFrame(onScroll);
 </script>
 
 <main>
