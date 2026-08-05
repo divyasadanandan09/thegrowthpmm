@@ -47,6 +47,31 @@ curl -L -X POST 'https://script.google.com/macros/s/YOUR_ID/exec' \
 `-L` matters. Apps Script redirects, and without it you will see a 302 and
 assume it failed.
 
+## Delivery is reported honestly (2026-08-05)
+
+The page used to say "A full written version is on its way to you@company.com"
+the moment the results rendered, whether or not the mail sent. It was a
+fire-and-forget post behind a bare `catch`, so a broken script or an exhausted
+sending quota meant the founder was told a lie and nobody found out.
+
+Now:
+
+- The script writes the sheet row **before** attempting the send, so a failed
+  send never costs the lead.
+- It checks `MailApp.getRemainingDailyQuota()` and wraps the send in try/catch.
+- Column **I, "Emailed"**, records `sent` or `NOT SENT: <reason>` per row.
+  Filter that column to find every audit that was scored but never delivered.
+- The response is `{ok, emailed}`. The page reads it and only claims the mail is
+  on its way when `emailed` is true. Otherwise it says it could not send and
+  points the founder at divya@thegrowthpmm.com.
+- A failed send also fires a GA4 event, `audit_email_failed`.
+
+**Redeploy after pasting the new script**, and run `addEmailedColumn` once to add
+the header to an existing sheet. Until you redeploy, the old script's response
+has no `emailed` field, which the page treats as success, so it behaves exactly
+as it does today. Nothing breaks in the meantime; you just do not get the
+honest signal yet.
+
 ## Payload
 
 | Field | Range |

@@ -21,6 +21,10 @@ var STAGES = [
 
 var BOOKING = 'https://calendar.app.google/LXLo1623kmwa7NWr6';
 
+// Column I, "Emailed". Sort or filter this column to see every audit that was
+// scored but never delivered. If you add a column before it, move this.
+var EMAILED_COL = 9;
+
 // <<< GENERATED FROM src/content/audit-copy.json — do not edit by hand
 var VERDICTS = {
   "strong": "Your funnel is in good shape. The gains left are specific, not structural.",
@@ -85,17 +89,37 @@ function doPost(e) {
 
     var total = scored.reduce(function (sum, s) { return sum + s.score; }, 0);
 
-    SpreadsheetApp.getActiveSheet().appendRow([
+    // Write the lead FIRST, then try to mail it. A send that fails must never
+    // cost Divya the lead, and the row is what she works from.
+    var sheet = SpreadsheetApp.getActiveSheet();
+    sheet.appendRow([
       new Date(), email,
       scored[0].score, scored[1].score, scored[2].score, scored[3].score,
-      total, data.biggestGap || ''
+      total, data.biggestGap || '', 'sending'
     ]);
+    var row = sheet.getLastRow();
 
-    sendAuditEmail(email, scored, total);
-    return json({ ok: true });
+    // MailApp fails silently-ish once the daily quota is spent: it throws, but
+    // nothing outside this script would ever see it. Check before promising.
+    var quota = MailApp.getRemainingDailyQuota();
+    if (quota < 1) {
+      sheet.getRange(row, EMAILED_COL).setValue('NOT SENT: quota exhausted');
+      return json({ ok: true, emailed: false, reason: 'quota' });
+    }
+
+    try {
+      sendAuditEmail(email, scored, total);
+    } catch (sendErr) {
+      console.error(sendErr);
+      sheet.getRange(row, EMAILED_COL).setValue('NOT SENT: ' + String(sendErr).slice(0, 200));
+      return json({ ok: true, emailed: false, reason: 'send_failed' });
+    }
+
+    sheet.getRange(row, EMAILED_COL).setValue('sent');
+    return json({ ok: true, emailed: true });
   } catch (err) {
     console.error(err);
-    return json({ ok: false, error: String(err) });
+    return json({ ok: false, emailed: false, error: String(err) });
   }
 }
 
@@ -213,5 +237,15 @@ function sendAuditEmail(email, scored, total) {
 /** Run once to write the header row. */
 function setupSheet() {
   SpreadsheetApp.getActiveSheet()
-    .appendRow(['Timestamp', 'Email', 'Acquisition', 'Activation', 'Conversion', 'Retention', 'Total', 'Biggest gap']);
+    .appendRow(['Timestamp', 'Email', 'Acquisition', 'Activation', 'Conversion', 'Retention', 'Total', 'Biggest gap', 'Emailed']);
+}
+
+/**
+ * Run once on a sheet that predates the "Emailed" column (2026-08-05). Safe to
+ * run twice: it only writes the header if I1 is empty. Existing rows stay blank,
+ * which is honest, since nothing recorded whether those actually sent.
+ */
+function addEmailedColumn() {
+  var cell = SpreadsheetApp.getActiveSheet().getRange(1, EMAILED_COL);
+  if (!cell.getValue()) cell.setValue('Emailed');
 }

@@ -392,6 +392,14 @@ const startNumber = stages.map((_, i) =>
 .res-cta-line { font-size: 16px; line-height: 1.55; color: var(--ink-deep); margin: 0 0 18px; font-weight: 600; }
 .btn-lg { display: inline-block; font-size: 17px; padding: 16px 34px; box-shadow: 0 6px 22px rgba(22,24,15,.22); }
 .res-note { font-size: 13px; color: var(--ink-mute); margin: 14px 0 0; }
+/* A failed send is not a footnote. Coral is the site's "something dropped"
+   colour, same as the leaking bars above. */
+.res-note[data-state="failed"] {
+  color: #cc4117;
+  font-weight: 600;
+  max-width: 44ch;
+  margin-inline: auto;
+}
 
 @media (max-width: 900px) {
   .audit-quiz { padding: 26px 20px; border-radius: 14px; }
@@ -600,14 +608,31 @@ const startNumber = stages.map((_, i) =>
       (root.querySelector("#gapNext") as HTMLElement).textContent =
         `Second priority: ${second.name}, at ${second.score} out of ${second.max}. Fix ${worst.name} first. Moving it usually lifts ${second.name} on its own.`;
 
-      (root.querySelector("#resNote") as HTMLElement).textContent =
-        `A full written version is on its way to ${emailInput.value.trim()}.`;
+      const email = emailInput.value.trim();
+      const note = root.querySelector("#resNote") as HTMLElement;
+      note.dataset.state = "pending";
+      note.textContent = `Sending the full written version to ${email}.`;
 
       send({
-        email: emailInput.value.trim(),
+        email,
         total,
         ...Object.fromEntries(scores.map((s) => [s.name.toLowerCase(), s.score])),
         biggestGap: worst.name,
+      }).then((outcome) => {
+        note.dataset.state = outcome === "sent" ? "sent" : outcome === "off" ? "off" : "failed";
+        if (outcome === "sent") {
+          note.textContent = `The full written version is on its way to ${email}. It usually lands within a minute. Check spam if it does not.`;
+        } else if (outcome === "off") {
+          // No endpoint configured (local dev, or a misconfigured deploy).
+          // Say nothing about email rather than promise one.
+          note.textContent = "Your results are above. Screenshot them, or bring them to the call.";
+        } else {
+          note.textContent = `I could not email the written version to ${email} just now. Your results are above. Write to divya@thegrowthpmm.com and I will send it over.`;
+          // Surfaces silent loss somewhere Divya already looks. Without this a
+          // broken webhook is invisible: the founder sees results, she sees
+          // nothing at all.
+          track("audit_email_failed", { biggest_gap: worst.name });
+        }
       });
 
       // generate_lead is GA4's recommended name for exactly this, so it slots
@@ -624,17 +649,44 @@ const startNumber = stages.map((_, i) =>
       root.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    async function send(payload: Record<string, unknown>) {
+    /**
+     * Posts the submission and reports what actually happened, so the page can
+     * word its confirmation honestly. This used to be fire-and-forget behind a
+     * bare `catch`, while the page claimed the email was on its way regardless:
+     * if the Apps Script errored or the sending quota ran out, the founder was
+     * told a lie and Divya never found out.
+     *
+     * Apps Script does not answer CORS preflight, but it does return
+     * `Access-Control-Allow-Origin: *` on the response to a simple request,
+     * so the text/plain post below is readable. Verified against the live
+     * endpoint 2026-08-05. Keep the content type as it is or the browser
+     * preflights, the preflight fails, and the response becomes unreadable.
+     */
+    async function send(payload: Record<string, unknown>): Promise<"sent" | "failed" | "off"> {
       const endpoint = import.meta.env.PUBLIC_AUDIT_ENDPOINT;
-      if (!endpoint) return;
+      if (!endpoint) return "off";
+
+      // A hung request must not leave the note stuck on "Sending" forever.
+      const abort = new AbortController();
+      const timer = setTimeout(() => abort.abort(), 12000);
+
       try {
-        await fetch(endpoint, {
+        const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload),
+          signal: abort.signal,
         });
+        if (!res.ok) return "failed";
+        // `ok` means the row was written. `emailed` is the claim the page makes,
+        // and the script sets it false when the quota is spent or MailApp threw.
+        const body = (await res.json()) as { ok?: boolean; emailed?: boolean };
+        return body.ok && body.emailed !== false ? "sent" : "failed";
       } catch {
         // Results are already on screen; a failed post must not block them.
+        return "failed";
+      } finally {
+        clearTimeout(timer);
       }
     }
 
