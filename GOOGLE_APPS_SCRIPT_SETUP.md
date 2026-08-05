@@ -66,11 +66,19 @@ Now:
   points the founder at divya@thegrowthpmm.com.
 - A failed send also fires a GA4 event, `audit_email_failed`.
 
-**Redeploy after pasting the new script**, and run `addEmailedColumn` once to add
-the header to an existing sheet. Until you redeploy, the old script's response
-has no `emailed` field, which the page treats as success, so it behaves exactly
-as it does today. Nothing breaks in the meantime; you just do not get the
-honest signal yet.
+**Both steps are already done as of 2026-08-05.** The script is deployed as
+**Version 4** on the same deployment ID, so `PUBLIC_AUDIT_ENDPOINT` is unchanged,
+and the "Emailed" header is in place. Verified live: posting a malformed body
+returns `{"ok":false,"emailed":false,...}`, and the `emailed` key only exists in
+the new code.
+
+If you ever repeat this on a fresh sheet: paste the script, **Deploy > Manage
+deployments >** pencil **> New version** (never "New deployment", which mints a
+new URL and breaks the site), then put `Emailed` in cell **I1**. The
+`addEmailedColumn` function does that last step, but note the editor's Run button
+can silently run whichever function was last *committed* to the dropdown rather
+than the one displayed, so check **Executions** to confirm what actually ran, or
+just type the header in by hand.
 
 ## Payload
 
