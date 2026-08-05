@@ -386,7 +386,10 @@ const BOOKING = "https://calendar.app.google/LXLo1623kmwa7NWr6";
       <!-- Save the chosen photo (gold-saree portrait) as public/divya.jpg for this to render. -->
       <div class="about-photo-col">
         <div class="about-photo-frame">
-          <img src="/divya.jpg" alt="Divya Sadanandan, fractional Head of Product Marketing" class="about-photo" width="480" height="480" loading="lazy" decoding="async" />
+          <!-- w/h are the file's real 395x495. The CSS crops this to a circle
+               with aspect-ratio 1/1, so the attributes do not drive layout, but
+               a wrong intrinsic ratio is still a wrong hint. Was 480x480. -->
+          <img src="/divya.jpg" alt="Divya Sadanandan, fractional Head of Product Marketing" class="about-photo" width="395" height="495" loading="lazy" decoding="async" />
         </div>
         <p style="text-align:center;margin:16px 0 0;font-weight:700;color:var(--ink-deep);">Divya Sadanandan<br /><span style="font-weight:500;color:var(--ink-mute);">The Growth PMM</span></p>
       </div>

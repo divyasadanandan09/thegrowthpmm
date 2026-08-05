@@ -107,13 +107,18 @@ const entitySchema = {
     <!-- Entity schema: Person + ProfessionalService -->
     <script type="application/ld+json" set:html={JSON.stringify(entitySchema)} />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
+    <!--
+      Fonts are self-hosted as of 2026-08-05. The @font-face rules live in
+      global.css; see the long comment at the top of that file for why the
+      Google Fonts <link> had to go (it was 1,770ms of render-blocking on
+      mobile, across two extra origins).
+
+      Only the two faces that paint above the fold are preloaded: Bricolage for
+      the H1, Inter for the body. Caveat is decorative and swaps in late, which
+      nobody notices. Preloading everything would just move the contention.
+    -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/bricolage-grotesque-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin.woff2" crossorigin />
 
     <!--
       Analytics (Google Analytics 4), property "thegrowthpmm.com" under
@@ -147,10 +152,41 @@ const entitySchema = {
       });
       gtag('consent', 'default', { analytics_storage: 'granted' });
     </script>
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-V9TFZXSKBJ"></script>
     <script is:inline>
       gtag('js', new Date());
       gtag('config', 'G-V9TFZXSKBJ');
+
+      // gtag.js is 68KB of JavaScript that measures the page rather than
+      // rendering it, and on a phone over slow 4G it competes for bandwidth
+      // during exactly the window that decides LCP. So it loads AFTER the page
+      // has painted: on window.load, or on the visitor's first interaction,
+      // whichever comes first.
+      //
+      // Nothing above is lost by waiting. gtag() here is only a dataLayer
+      // push, so the consent defaults, the config call, the consent update
+      // from the banner and any book_call_click all queue up and replay in
+      // order the moment the real script arrives. The one case that does lose
+      // a hit is a visitor who leaves before the page finishes loading and
+      // never touches anything, which is a bounce either way.
+      (function () {
+        var loaded = false;
+        function loadGtag() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-V9TFZXSKBJ';
+          document.head.appendChild(s);
+        }
+        var events = ['pointerdown', 'keydown', 'scroll'];
+        function onFirstInteraction() {
+          events.forEach(function (e) { removeEventListener(e, onFirstInteraction); });
+          loadGtag();
+        }
+        events.forEach(function (e) { addEventListener(e, onFirstInteraction, { once: true, passive: true }); });
+        if (document.readyState === 'complete') loadGtag();
+        else addEventListener('load', loadGtag, { once: true });
+      })();
 
       // Booking clicks, the primary conversion.
       //

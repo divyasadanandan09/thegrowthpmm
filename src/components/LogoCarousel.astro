@@ -2,23 +2,43 @@
 // Past-experience logo strip: a seamless marquee.
 // The track renders the list twice; the -50% keyframe lands exactly on the
 // second copy, so the loop has no visible seam or reset.
+//
+// w/h are each file's INTRINSIC size, not its rendered size. The CSS below
+// pins every logo to 28px tall, but the browser needs the natural ratio up
+// front to reserve the right width before the file arrives, otherwise the
+// strip reflows as each one lands. Lighthouse flags the missing attributes.
+// Re-measure if you replace a file: PNGs with PIL, SVGs from the viewBox.
+//
+// The four PNGs were resized to 3x their rendered height and colour-quantized
+// on 2026-08-05, taking the set from 181KB to 18KB. They are grayscaled at 75%
+// opacity on screen, so the palette reduction is invisible.
 const logos = [
-  { src: "/logos/fi-money.svg", alt: "Fi Money" },
-  { src: "/logos/practo.png", alt: "Practo" },
-  { src: "/logos/makemytrip.svg", alt: "MakeMyTrip" },
-  { src: "/logos/raymond.png", alt: "Raymond" },
-  { src: "/logos/tcs.png", alt: "TCS" },
-  { src: "/logos/decathlon.svg", alt: "Decathlon" },
-  { src: "/logos/ninjacart.png", alt: "Ninjacart" },
+  { src: "/logos/fi-money.svg", alt: "Fi Money", w: 52, h: 52 },
+  { src: "/logos/practo.png", alt: "Practo", w: 285, h: 84 },
+  { src: "/logos/makemytrip.svg", alt: "MakeMyTrip", w: 1558, h: 496 },
+  { src: "/logos/raymond.png", alt: "Raymond", w: 236, h: 80 },
+  { src: "/logos/tcs.png", alt: "TCS", w: 292, h: 84 },
+  { src: "/logos/decathlon.svg", alt: "Decathlon", w: 1958, h: 389 },
+  { src: "/logos/ninjacart.png", alt: "Ninjacart", w: 350, h: 84 },
 ];
 ---
 
 <section class="logo-carousel-wrap">
   <div class="carousel-container">
     <div class="carousel-track">
-      {[...logos, ...logos].map((logo) => (
+      {[...logos, ...logos].map((logo, i) => (
         <div class="carousel-item">
-          <img src={logo.src} alt={logo.alt} loading="lazy" decoding="async" />
+          {/* The second copy of the list is a visual duplicate of the first, so
+              it is hidden from screen readers rather than read out twice. */}
+          <img
+            src={logo.src}
+            alt={i < logos.length ? logo.alt : ""}
+            aria-hidden={i < logos.length ? undefined : "true"}
+            width={logo.w}
+            height={logo.h}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       ))}
     </div>
