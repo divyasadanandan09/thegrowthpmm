@@ -626,6 +626,13 @@ const startNumber = stages.map((_, i) =>
           // No endpoint configured (local dev, or a misconfigured deploy).
           // Say nothing about email rather than promise one.
           note.textContent = "Your results are above. Screenshot them, or bring them to the call.";
+          // This branch cost four leads between 2026-08-04 and 2026-08-17 and
+          // nobody could see it: `off` wrote no row, sent no mail and, unlike
+          // the failure branch below, fired no event. GA counted the
+          // completions, so the only trace was generate_lead totals that no
+          // sheet row explained. On a correct build this reads zero forever;
+          // any count at all means a deploy is silently dropping leads.
+          track("audit_endpoint_missing", { biggest_gap: worst.name });
         } else {
           note.textContent = `I could not email the written version to ${email} just now. Your results are above. Write to divya@thegrowthpmm.com and I will send it over.`;
           // Surfaces silent loss somewhere Divya already looks. Without this a

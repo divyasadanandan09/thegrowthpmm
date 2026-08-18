@@ -78,6 +78,14 @@ The results page used to say "A full written version is on its way to you@compan
 - The response IS readable cross-origin: Apps Script does not answer preflight but does return `Access-Control-Allow-Origin: *` to a simple request. **Keep `Content-Type: text/plain`** or the browser preflights and the response becomes unreadable again. Verified against the live endpoint 2026-08-05.
 - Backwards compatible: the old deployed script returns no `emailed` field, which the page treats as success. **Divya must paste the new `.gs`, redeploy, and run `addEmailedColumn` once** before the honest signal actually works.
 
+## Growth Audit: the silent branch that cost four leads (2026-08-18)
+Between 2026-08-04 and 2026-08-17 GA counted 7 `generate_lead` events from 3 users while the sheet gained no rows. The endpoint was fine the whole time. The culprit was `send()` returning `"off"` when `PUBLIC_AUDIT_ENDPOINT` is absent from the build: no post, no row, no email, and (unlike the `"failed"` branch) **no GA event**, so the loss was invisible. `.env` is gitignored, so a Cloudflare build is only as good as the dashboard variable.
+- `"off"` now fires **`audit_endpoint_missing`**. On a correct build it reads zero forever; any count means a deploy is dropping leads.
+- `astro.config.mjs` **throws on a production build with no `PUBLIC_AUDIT_ENDPOINT`**. It reads the value with Vite's `loadEnv`, not `process.env` — Vite puts `.env` into `import.meta.env` only, so a `process.env` check fails a local build that has the value in `.env`. Dev is ungated so a fresh clone still runs.
+- Preview branches need the variable too, or their builds now fail. It is currently set on Production only.
+- **Diagnostic trap:** `curl -L -X POST` against the `/exec` URL returns 405 and a Drive "unable to open the file" page. That is a curl artifact on Google's redirect hop, not an outage — the browser's `fetch` follows it fine. Apps Script **Executions** is the authority on whether the script ran. The script defines only `doPost`, so GET probes always log as Failed and mean nothing.
+- Every delivered audit is now copied to Divya, subject `Audit report emailed to <address>`. See `GOOGLE_APPS_SCRIPT_SETUP.md`.
+
 ## Blog (added 2026-07-03)
 - `src/pages/blog.astro` — `/blog` index; `posts` array (newest first). Footer "Blog" links here. Currently two posts.
 - `src/pages/fractional-head-of-pmm.astro` — `/fractional-head-of-pmm` pillar ("The fractional Head of PMM, explained."): what it is / signs you need one (4 monoline-icon cards) / fractional vs full-time / receipts / 4-Q FAQ + `FAQPage` JSON-LD / closing CTA. AEO target for "fractional Head of PMM". Mirrors the `/ai-product-marketing` structure and voice.

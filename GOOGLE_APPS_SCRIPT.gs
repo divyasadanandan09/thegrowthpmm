@@ -21,6 +21,12 @@ var STAGES = [
 
 var BOOKING = 'https://calendar.app.google/LXLo1623kmwa7NWr6';
 
+// Divya gets a copy of every audit that actually reaches a founder, so the
+// sheet is no longer the only place a delivered lead shows up. Sending it is
+// best effort: see doPost, where a failed copy never changes the founder's
+// delivery status.
+var NOTIFY = 'divya@thegrowthpmm.com';
+
 // Column I, "Emailed". Sort or filter this column to see every audit that was
 // scored but never delivered. If you add a column before it, move this.
 var EMAILED_COL = 9;
@@ -107,15 +113,33 @@ function doPost(e) {
       return json({ ok: true, emailed: false, reason: 'quota' });
     }
 
+    var built;
     try {
-      sendAuditEmail(email, scored, total);
+      built = sendAuditEmail(email, scored, total);
     } catch (sendErr) {
       console.error(sendErr);
       sheet.getRange(row, EMAILED_COL).setValue('NOT SENT: ' + String(sendErr).slice(0, 200));
       return json({ ok: true, emailed: false, reason: 'send_failed' });
     }
 
-    sheet.getRange(row, EMAILED_COL).setValue('sent');
+    // The founder's audit is away at this point and nothing below may undo
+    // that. The copy is a convenience for Divya, so it gets its own try/catch:
+    // an exhausted quota on the second send must not mark the first NOT SENT.
+    // A failed copy is still recorded, because a notification that stops
+    // arriving silently is exactly the failure this whole file exists to avoid.
+    var status = 'sent';
+    try {
+      MailApp.sendEmail(NOTIFY, 'Audit report emailed to ' + email, built.plain, {
+        name: 'The Growth PMM',
+        replyTo: email,
+        htmlBody: built.html
+      });
+    } catch (copyErr) {
+      console.error(copyErr);
+      status = 'sent, copy to Divya failed';
+    }
+
+    sheet.getRange(row, EMAILED_COL).setValue(status);
     return json({ ok: true, emailed: true });
   } catch (err) {
     console.error(err);
@@ -232,6 +256,10 @@ function sendAuditEmail(email, scored, total) {
     replyTo: 'divya@thegrowthpmm.com',
     htmlBody: html
   });
+
+  // Returned so doPost can forward this exact body to Divya. Rebuilding it
+  // there would let her copy drift from what the founder actually received.
+  return { html: html, plain: plain };
 }
 
 /** Run once to write the header row. */

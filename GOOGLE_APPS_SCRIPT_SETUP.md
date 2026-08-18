@@ -80,6 +80,24 @@ can silently run whichever function was last *committed* to the dropdown rather
 than the one displayed, so check **Executions** to confirm what actually ran, or
 just type the header in by hand.
 
+## A copy goes to Divya (2026-08-18)
+
+Every audit that actually reaches a founder is copied to `divya@thegrowthpmm.com`
+(the `NOTIFY` constant), subject **`Audit report emailed to <their address>`**,
+with the same body the founder received and `replyTo` set to them, so replying
+to the copy writes straight back to the founder.
+
+- The copy send has its own try/catch. The founder's mail has already gone by
+  that point, and a failed copy must never mark that row `NOT SENT`.
+- A failed copy is still recorded: column I reads `sent, copy to Divya failed`.
+  Filter for it the same way you filter for undelivered audits.
+- **Each audit now costs two of the daily MailApp quota, not one.** On Workspace
+  that is 1,500 a day, so it does not matter at current volume. On a consumer
+  account it would halve the ceiling to 50 audits a day.
+- The founder's send is attempted first and the quota check still only requires
+  1, so on the last available send of the day the founder gets their audit and
+  the copy is what fails. That ordering is deliberate.
+
 ## Payload
 
 | Field | Range |
