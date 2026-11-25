@@ -513,11 +513,11 @@ footer { padding-bottom: 64px; }
 
 /* Editorial layout: one featured pull-quote + two supporting quotes (not cards). */
 .testimonials { margin-top: 44px; }
+/* Lead quote spans the full row, edge to edge with the pair below. */
 .testimonial-lead {
   position: relative;
   margin: 0;
   padding-left: 56px;
-  max-width: 860px;
 }
 .testimonial-lead::before {
   content: "\201C";
@@ -530,6 +530,12 @@ footer { padding-bottom: 64px; }
   color: var(--navy);
   opacity: 0.5;
   pointer-events: none;
+}
+/* Wide screens have room to hang the quote mark in the margin, so the
+   quote text lines up with the left edge of the pair below. */
+@media (min-width: 1360px) {
+  .testimonial-lead { padding-left: 0; }
+  .testimonial-lead::before { left: -60px; }
 }
 .testimonial-lead blockquote {
   margin: 0;
@@ -572,10 +578,11 @@ footer { padding-bottom: 64px; }
 }
 .testimonial-pair figcaption {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 16px;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
 }
+.testimonial-pair .testimonial-avatar { width: 44px; height: 44px; box-shadow: 0 0 0 2px var(--navy); }
 .testimonial-name { font-weight: 700; font-size: 14px; color: var(--ink); }
 .testimonial-role { font-size: 13px; color: var(--ink-mute); }
 
