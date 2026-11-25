@@ -541,12 +541,20 @@ footer { padding-bottom: 64px; }
   text-wrap: pretty;
 }
 .testimonial-lead figcaption {
-  margin-top: 20px;
+  margin-top: 24px;
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
 }
+.testimonial-avatar {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 3px var(--navy);
+}
+.testimonial-id { display: flex; flex-direction: column; gap: 2px; }
 .testimonial-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -570,7 +578,6 @@ footer { padding-bottom: 64px; }
 }
 .testimonial-name { font-weight: 700; font-size: 14px; color: var(--ink); }
 .testimonial-role { font-size: 13px; color: var(--ink-mute); }
-.testimonial-lead .testimonial-role::before { content: "·"; margin-right: 10px; }
 
 /* ===== Report checklist (merged into the navy card) ===== */
 
